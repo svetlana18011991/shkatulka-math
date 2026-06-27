@@ -1828,3 +1828,21 @@ button:focus-visible {
 .logo-icon-wrap--footer {
   filter: drop-shadow(0 2px 8px rgba(201,151,58,0.4));
 }
+
+/* DIPLOMA GALLERY FIX */
+.diploma-gallery{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap:16px;
+  margin: 20px 0 40px;
+}
+.diploma-gallery img{
+  width:100%;
+  border-radius:12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  object-fit:cover;
+  transition: transform .3s ease;
+}
+.diploma-gallery img:hover{
+  transform: scale(1.03);
+}
