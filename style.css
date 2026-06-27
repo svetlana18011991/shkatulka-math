@@ -1846,3 +1846,32 @@ button:focus-visible {
 .diploma-gallery img:hover{
   transform: scale(1.03);
 }
+
+.about-badges{
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  justify-content: flex-start;
+}
+
+.img-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+.img-modal img{
+  max-width:80%;
+  max-height:80%;
+  border-radius:12px;
+}
+.img-close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+}
