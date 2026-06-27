@@ -1866,3 +1866,30 @@ button:focus-visible {
   outline:none !important;
   background:none !important;
 }
+
+
+/* FIX HERO IMAGE FRAME */
+.hero-img-wrap{
+  border:none !important;
+  box-shadow:none !important;
+  background:none !important;
+  outline:none !important;
+}
+
+.hero-image{
+  border:none !important;
+  box-shadow:none !important;
+}
+
+.hero-img-glow{
+  opacity:0 !important;
+}
+
+.hero-img-accent{
+  display:none !important;
+}
+
+.hero-image img{
+  border:none !important;
+  box-shadow:none !important;
+}
