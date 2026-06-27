@@ -1846,3 +1846,11 @@ button:focus-visible {
 .diploma-gallery img:hover{
   transform: scale(1.03);
 }
+
+
+/* remove frame around hero photo */
+.hero img, .hero-image, .hero-photo{
+  border:none !important;
+  box-shadow:none !important;
+  outline:none !important;
+}
