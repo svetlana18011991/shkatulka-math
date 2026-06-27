@@ -119,3 +119,22 @@ function observeCards() {
 // ===========================
 loadProducts();
 setTimeout(observeCards, 300);
+// DIPLOMA MODAL
+const modal = document.getElementById('imgModal');
+const modalImg = document.getElementById('modalImg');
+const closeBtn = document.querySelector('.img-close');
+
+document.querySelectorAll('.diploma-img').forEach(img=>{
+  img.addEventListener('click', ()=>{
+    modal.style.display = 'flex';
+    modalImg.src = img.src;
+  });
+});
+
+closeBtn.addEventListener('click', ()=>{
+  modal.style.display = 'none';
+});
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal) modal.style.display = 'none';
+});

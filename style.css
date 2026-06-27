@@ -1847,19 +1847,31 @@ button:focus-visible {
   transform: scale(1.03);
 }
 
-
-/* DIPLOMA SINGLE ROW FIX */
-.diploma-gallery{
-  display:flex;
-  flex-wrap:nowrap;
-  gap:16px;
-  overflow-x:auto;
-  padding-bottom:10px;
+.about-badges{
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  justify-content: flex-start;
 }
 
-.diploma-gallery img{
-  width:180px;
-  height:auto;
+.img-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+.img-modal img{
+  max-width:80%;
+  max-height:80%;
   border-radius:12px;
-  flex:0 0 auto;
+}
+.img-close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:40px;
+  color:white;
+  cursor:pointer;
 }

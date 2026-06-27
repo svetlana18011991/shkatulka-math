@@ -105,28 +105,7 @@
 </div>
 </section>
 <!-- КАТАЛОГ -->
-<section class="about" id="about">
-<div class="about-glow"></div>
-<div class="container about-inner">
-<div class="about-img-wrap">
-<div class="about-img-ring"></div>
-<img alt="Светлана Быкова" class="about-img" src="images/4.jpg"/>
-<div class="about-img-decor"></div>
-</div>
-<div class="about-text">
-<p class="section-label">Знакомьтесь</p>
-<h2 class="section-title">Светлана <span>Быкова</span></h2>
-<p class="about-lead">Я создаю интерактивные математические уроки, которые вовлекают каждого ученика и снимают нагрузку с учителя.</p>
-<div class="about-bio"><p>Я — <strong>учитель математики</strong> и автор интерактивных материалов для онлайн-уроков.</p><p>В 2012 году окончила академию образования с <strong>красным дипломом</strong>. Более <strong>6 лет</strong> работала в лицее.</p><p>С 2022 года полностью перешла в <strong>онлайн-преподавание</strong> и создание интерактивов.</p><p>«Шкатулка» — это пространство, где учителя получают <em>готовые, красивые и методически выверенные материалы</em>.</p></div>
-<div class="about-badges">
-<span class="badge">🎓 Красный диплом</span>
-<span class="badge">📐 Учитель математики</span>
-<span class="badge">💻 Онлайн с 2022 года</span>
-<span class="badge">✨ Автор интерактивов</span>
-</div>
-</div>
-</div>
-</section><section class="products" id="products">
+<section class="products" id="products">
 <div class="container">
 <div class="section-header">
 <p class="section-label">Мои разработки</p>
@@ -149,14 +128,35 @@
 </div>
 </section>
 <!-- ОБО МНЕ -->
-
+<section class="about" id="about">
+<div class="about-glow"></div>
+<div class="container about-inner">
+<div class="about-img-wrap">
+<div class="about-img-ring"></div>
+<img alt="Светлана Быкова" class="about-img" src="images/4.jpg"/>
+<div class="about-img-decor"></div>
+</div>
+<div class="about-text">
+<p class="section-label">Знакомьтесь</p>
+<h2 class="section-title">Светлана <span>Быкова</span></h2>
+<p class="about-lead">Я создаю интерактивные математические уроки, которые вовлекают каждого ученика и снимают нагрузку с учителя.</p>
+<div class="about-bio"><p>Я — <strong>учитель математики</strong> и автор интерактивных материалов для онлайн-уроков.</p><p>В 2012 году окончила академию образования с <strong>красным дипломом</strong>. Более <strong>6 лет</strong> работала в лицее.</p><p>С 2022 года полностью перешла в <strong>онлайн-преподавание</strong> и создание интерактивов.</p><p>«Шкатулка» — это пространство, где учителя получают <em>готовые, красивые и методически выверенные материалы</em>.</p></div>
+<div class="about-badges">
+<span class="badge">🎓 Красный диплом</span>
+<span class="badge">📐 Учитель математики</span>
+<span class="badge">💻 Онлайн с 2022 года</span>
+<span class="badge">✨ Автор интерактивов</span>
+</div>
+</div>
+</div>
+</section>
 <!-- ОБРАЗОВАНИЕ -->
 <section class="education" id="education">
 <div class="container">
 <div class="section-header">
 <p class="section-label">Мой путь</p>
 <h2 class="section-title">Образование и <span>опыт</span></h2>
-</div><div class="diploma-gallery"><img alt="Диплом" src="images/1.jpg"/><img alt="Диплом" src="images/2.jpg"/><img alt="Диплом" src="images/3.jpg"/></div>
+</div><div class="diploma-gallery"><img alt="Диплом" class="diploma-img" src="images/1.jpg" style="cursor:pointer;"/><img alt="Диплом" class="diploma-img" src="images/2.jpg" style="cursor:pointer;"/><img alt="Диплом" class="diploma-img" src="images/3.jpg" style="cursor:pointer;"/></div>
 <div class="edu-grid">
 <div class="edu-card">
 <div class="edu-icon">🎓</div>
@@ -168,7 +168,7 @@
 <div class="edu-icon">🏫</div>
 <div class="edu-year">2012–2018</div>
 <h3 class="edu-title">Учитель в лицее</h3>
-<p class="edu-desc">Более 6 лет преподавала математику в лицее. Параллельно — обучение в магистратуре</p>
+<p class="edu-desc">Более 6 лет работала в лицее.<br/>. Параллельно — обучение в магистратуре</p>
 </div>
 <div class="edu-card">
 <div class="edu-icon">📖</div>
@@ -204,7 +204,7 @@
 </div>
 </div>
 </div>
-<div class="review-card">
+<div class="review-card review-featured">
 <div class="review-quote">"</div>
 <div class="review-stars">★★★★★</div>
 <p class="review-text">«Попала к Светланиным гениальным урокам через коллегу года два назад, и они стали "наркотиком", боюсь пропустить какую нибудь новинку... работая в школе по 30ч времени творить такое чудо нет. Огромная благодарность за то что в нашей жизни появились такие живые и яркие искорки для уроков!»</p>
@@ -309,5 +309,5 @@
 </div>
 </footer>
 <script src="script.js"></script>
-</body>
+<div class="img-modal" id="imgModal"><span class="img-close">×</span><img id="modalImg"/></div></body>
 </html>
