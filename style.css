@@ -1870,15 +1870,49 @@ button:focus-visible {
   box-shadow:none !important;
 }
 
-.card-img{
-  height:220px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fff;
+.products-grid{
+  display:block;
 }
+
+.product-card{
+  display:flex;
+  gap:20px;
+  padding:18px;
+  align-items:flex-start;
+}
+
+.card-img{
+  width:220px;
+  flex-shrink:0;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+}
+
 .card-img img{
   width:100%;
   height:100%;
   object-fit:contain;
+}
+
+.card-body{
+  flex:1;
+}
+
+.desc{
+  margin:10px 0;
+  padding-left:18px;
+}
+
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+}
+
+.price{
+  font-size:20px;
+  font-weight:700;
+  color:#8B2635;
 }
