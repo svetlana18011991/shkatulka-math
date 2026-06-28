@@ -1,4 +1,3 @@
-
 async function loadProducts(){
 try{
 const r=await fetch('products.json');
@@ -14,7 +13,8 @@ function renderProducts(products){
 const grid=document.getElementById('productsGrid');
 grid.innerHTML=products.map(p=>`
 <div class="product-card">
-<div>${p.title}</div>
+<h3>${p.title}</h3>
+<p>${p.description}</p>
 </div>
 `).join('');
 }
@@ -28,13 +28,6 @@ const filtered=f==='all'?all:all.filter(p=>String(p.grade)===f);
 renderProducts(filtered);
 });
 });
-}
-
-const burger=document.getElementById('burger');
-const mobileNav=document.getElementById('mobileNav');
-
-if(burger){
-burger.addEventListener('click',()=>mobileNav.classList.toggle('open'));
 }
 
 loadProducts();

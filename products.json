@@ -1,9 +1,5 @@
 [
-  {
-    "id": 1,
-    "grade": 7,
-    "title": "Пакет интерактивов для 7 класса",
-    "description": "Genially материалы",
-    "price": 499
-  }
+{"id":1,"grade":7,"title":"Пакет 7 класс","description":"Интерактивы","price":499},
+{"id":2,"grade":8,"title":"Пакет 8 класс","description":"Интерактивы","price":499},
+{"id":3,"grade":"oge","title":"ОГЭ тренажёр","description":"Подготовка","price":699}
 ]

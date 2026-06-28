@@ -1,25 +1,29 @@
-/* BASE (from original simplified preserved structure) */
+body{font-family:Arial;margin:0;background:#FDF6F0;color:#1A1A2E}
 
-:root{
---primary:#8B2635;
---gold:#C9973A;
---text:#1A1A2E;
---bg:#FDF6F0;
---white:#fff;
-}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
 
-body{font-family:Arial;background:var(--bg);margin:0}
+.section-header{text-align:center;margin-bottom:40px}
 
-/* FIX: remove red emphasis for featured education card */
+/* education fix */
 .edu-card-featured{
-background: var(--bg);
-border:1px solid rgba(201,151,58,0.25);
-color: var(--text);
-box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+background:#FDF6F0;
+border:1px solid rgba(201,151,58,0.3);
+color:#1A1A2E;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
 
 .edu-card-featured .edu-title,
 .edu-card-featured .edu-desc,
 .edu-card-featured .edu-year{
-color: var(--text);
+color:#1A1A2E;
+}
+
+/* reviews fix */
+.reviews .section-title span{
+font-size:1.4em;
+}
+
+.review-heart{
+font-size:2rem;
+display:block;
 }
