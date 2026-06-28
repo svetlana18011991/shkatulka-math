@@ -1,140 +1,105 @@
-// ===========================
-// ЗАГРУЗКА И РЕНДЕР ТОВАРОВ
-// ===========================
 
-async function loadProducts() {
-  try {
-    const response = await fetch('products.json');
-    const products = await response.json();
-    renderProducts(products);
-    initFilters(products);
-  } catch (e) {
-    console.error('Ошибка загрузки товаров:', e);
-    document.getElementById('productsGrid').innerHTML =
-      '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1">Товары загружаются...</p>';
-  }
+let allProducts = [];
+let currentProducts = [];
+
+async function loadProducts(){
+  const res = await fetch('products.json');
+  const products = await res.json();
+  allProducts = products;
+  currentProducts = products;
+  renderProducts(products);
+  initFilters();
 }
 
-function renderProducts(products) {
+function renderProducts(products){
   const grid = document.getElementById('productsGrid');
-  if (!products.length) {
-    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">По этому фильтру пока нет товаров</p>';
-    return;
-  }
 
-  grid.innerHTML = products.map(p => `
-    <div class="product-card" data-grade="${p.grade}">
+  grid.innerHTML = products.map((p,i)=>`
+    <div class="product-card" data-index="${i}">
       <div class="card-img">
-        ${p.image
-          ? `<img src="${p.image}" alt="${p.title}" loading="lazy"/>`
-          : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
-        }
-        <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
+        <img src="${p.image}" alt="${p.title}">
+        <span class="card-grade-badge">${p.grade}</span>
       </div>
       <div class="card-body">
-        <div class="card-tags">
-          ${(p.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('')}
-        </div>
         <h3 class="card-title">${p.title}</h3>
-        <p class="card-desc">${p.description}</p>
         <div class="card-footer">
           <span class="card-price">${p.price} ₽</span>
-          <a href="${p.buyLink}" target="_blank" class="card-buy-btn">
-            🛒 Купить
-          </a>
+          <a class="card-buy-btn" href="${p.buyLink}" target="_blank">Купить</a>
         </div>
       </div>
     </div>
   `).join('');
+
+  currentProducts = products;
 }
 
-function gradeLabel(grade) {
-  if (grade === 'oge') return 'ОГЭ';
-  if (grade === 'ege') return 'ЕГЭ';
-  return `${grade} класс`;
-}
-
-// ===========================
-// ФИЛЬТРЫ
-// ===========================
-
-let allProducts = [];
-
-function initFilters(products) {
-  allProducts = products;
-  const buttons = document.querySelectorAll('.filter-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
+function initFilters(){
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      const filtered = filter === 'all'
-        ? allProducts
-        : allProducts.filter(p => String(p.grade) === filter);
-      renderProducts(filtered);
-    });
-  });
-}
 
-// ===========================
-// БУРГЕР МЕНЮ
-// ===========================
+      const f = btn.dataset.filter;
 
-const burger = document.getElementById('burger');
-const mobileNav = document.getElementById('mobileNav');
-
-burger.addEventListener('click', () => {
-  mobileNav.classList.toggle('open');
-});
-
-// Закрываем при клике на ссылку
-mobileNav.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => mobileNav.classList.remove('open'));
-});
-
-// ===========================
-// АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК
-// ===========================
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
+      renderProducts(
+        f === 'all'
+          ? allProducts
+          : allProducts.filter(p => String(p.grade) === f)
+      );
     }
   });
-}, { threshold: 0.1 });
-
-function observeCards() {
-  document.querySelectorAll('.product-card, .review-card').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(card);
-  });
 }
 
-// ===========================
-// ЗАПУСК
-// ===========================
+function openModal(p){
+  let modal = document.getElementById('productModal');
+
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id='productModal';
+    modal.style.cssText=`
+      position:fixed;inset:0;
+      background:rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+    `;
+
+    modal.innerHTML=`
+      <div style="background:#fff;width:92%;max-width:650px;padding:20px;border-radius:16px;position:relative;max-height:90vh;overflow:auto">
+        <button id="closeM" style="position:absolute;top:10px;right:10px">✖</button>
+        <img id="mImg" style="width:100%;max-height:350px;object-fit:contain">
+        <h2 id="mTitle"></h2>
+        <p id="mDesc" style="white-space:pre-line;color:#444"></p>
+        <strong id="mPrice"></strong>
+        <div style="text-align:right;margin-top:15px">
+          <a id="mBuy" target="_blank" style="background:#8B2635;color:#fff;padding:10px 18px;border-radius:30px;text-decoration:none">Купить</a>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.onclick=(e)=>{ if(e.target===modal) modal.style.display='none'; }
+    modal.querySelector('#closeM').onclick=()=>modal.style.display='none';
+  }
+
+  modal.querySelector('#mImg').src=p.image;
+  modal.querySelector('#mTitle').textContent=p.title;
+  modal.querySelector('#mDesc').textContent=p.description;
+  modal.querySelector('#mPrice').textContent=p.price+' ₽';
+  modal.querySelector('#mBuy').href=p.buyLink;
+
+  modal.style.display='flex';
+}
+
+document.addEventListener('click',(e)=>{
+  const card=e.target.closest('.product-card');
+  if(!card) return;
+  if(e.target.closest('.card-buy-btn')) return;
+
+  const p=currentProducts[card.dataset.index];
+  if(p) openModal(p);
+});
+
 loadProducts();
-setTimeout(observeCards, 300);
-
-const modal = document.getElementById('imgModal');
-const modalImg = document.getElementById('modalImg');
-const closeBtn = document.querySelector('#imgModal div');
-
-document.querySelectorAll('.diploma-img').forEach(img=>{
-  img.addEventListener('click', ()=>{
-    modal.style.display='flex';
-    modalImg.src=img.src;
-  });
-});
-
-closeBtn.addEventListener('click', ()=>{
-  modal.style.display='none';
-});
-
-modal.addEventListener('click',(e)=>{
-  if(e.target===modal) modal.style.display='none';
-});
