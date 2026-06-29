@@ -1,103 +1,140 @@
+// ===========================
+// ЗАГРУЗКА И РЕНДЕР ТОВАРОВ
+// ===========================
 
-let productsData=[];
-
-async function loadProducts(){
-  const r=await fetch('products.json');
-  productsData=await r.json();
-  render(productsData);
-  initFilters();
+async function loadProducts() {
+  try {
+    const response = await fetch('products.json');
+    const products = await response.json();
+    renderProducts(products);
+    initFilters(products);
+  } catch (e) {
+    console.error('Ошибка загрузки товаров:', e);
+    document.getElementById('productsGrid').innerHTML =
+      '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1">Товары загружаются...</p>';
+  }
 }
 
-function render(products){
-  const grid=document.getElementById('productsGrid');
+function renderProducts(products) {
+  const grid = document.getElementById('productsGrid');
+  if (!products.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">По этому фильтру пока нет товаров</p>';
+    return;
+  }
 
-  grid.innerHTML=products.map((p,i)=>`
-    <div class="product-card" data-i="${i}">
+  grid.innerHTML = products.map(p => `
+    <div class="product-card" data-grade="${p.grade}">
       <div class="card-img">
-        <img src="${p.image}">
+        ${p.image
+          ? `<img src="${p.image}" alt="${p.title}" loading="lazy"/>`
+          : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
+        }
+        <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
       </div>
       <div class="card-body">
-        <h3>${p.title}</h3>
-        <div class="price">${p.price} ₽</div>
-        <button class="open-btn">Смотреть</button>
-        <a class="buy" href="${p.buyLink}" target="_blank">Купить</a>
+        <div class="card-tags">
+          ${(p.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('')}
+        </div>
+        <h3 class="card-title">${p.title}</h3>
+        <p class="card-desc">${p.description}</p>
+        <div class="card-footer">
+          <span class="card-price">${p.price} ₽</span>
+          <a href="${p.buyLink}" target="_blank" class="card-buy-btn">
+            🛒 Купить
+          </a>
+        </div>
       </div>
     </div>
   `).join('');
 }
 
-function initFilters(){
-  document.querySelectorAll('.filter-btn').forEach(b=>{
-    b.onclick=()=>{
-      document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      const f=b.dataset.filter;
-      render(f==="all"?productsData:productsData.filter(p=>String(p.grade)===f));
-    }
+function gradeLabel(grade) {
+  if (grade === 'oge') return 'ОГЭ';
+  if (grade === 'ege') return 'ЕГЭ';
+  return `${grade} класс`;
+}
+
+// ===========================
+// ФИЛЬТРЫ
+// ===========================
+
+let allProducts = [];
+
+function initFilters(products) {
+  allProducts = products;
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      const filtered = filter === 'all'
+        ? allProducts
+        : allProducts.filter(p => String(p.grade) === filter);
+      renderProducts(filtered);
+    });
   });
 }
 
-document.addEventListener('click',(e)=>{
-  const card=e.target.closest('.product-card');
-  if(!card) return;
+// ===========================
+// БУРГЕР МЕНЮ
+// ===========================
 
-  const p=productsData[card.dataset.i];
-  if(!p) return;
+const burger = document.getElementById('burger');
+const mobileNav = document.getElementById('mobileNav');
 
-  openModal(p);
+burger.addEventListener('click', () => {
+  mobileNav.classList.toggle('open');
 });
 
-function formatDesc(d){
-  return d.split('\n').filter(x=>x.trim()).map(x=>`<li>${x}</li>`).join('');
+// Закрываем при клике на ссылку
+mobileNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => mobileNav.classList.remove('open'));
+});
+
+// ===========================
+// АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК
+// ===========================
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeCards() {
+  document.querySelectorAll('.product-card, .review-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
 }
 
-function openModal(p){
-  let m=document.getElementById('modal');
-
-  if(!m){
-    m=document.createElement('div');
-    m.id='modal';
-    m.style.cssText=`
-      position:fixed;inset:0;
-      background:rgba(0,0,0,.6);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-    `;
-
-    m.innerHTML=`
-      <div style="background:#fff;width:900px;max-width:95%;display:flex;border-radius:16px;overflow:hidden">
-
-        <div style="flex:1;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px">
-          <img id="mimg" style="max-width:100%;max-height:400px;object-fit:contain">
-        </div>
-
-        <div style="flex:1;padding:20px">
-          <h2 id="mtitle"></h2>
-          <ul id="mdesc"></ul>
-          <div style="margin-top:20px;font-size:22px;font-weight:700;color:#8B2635" id="mprice"></div>
-          <a id="mbuy" target="_blank"
-            style="display:inline-block;margin-top:15px;padding:12px 18px;background:#8B2635;color:#fff;border-radius:30px">
-            Купить
-          </a>
-        </div>
-
-      </div>
-    `;
-
-    document.body.appendChild(m);
-
-    m.onclick=(e)=>{ if(e.target===m) m.style.display='none'; };
-  }
-
-  m.querySelector('#mimg').src=p.image;
-  m.querySelector('#mtitle').textContent=p.title;
-  m.querySelector('#mdesc').innerHTML=formatDesc(p.description);
-  m.querySelector('#mprice').textContent=p.price+' ₽';
-  m.querySelector('#mbuy').href=p.buyLink;
-
-  m.style.display='flex';
-}
-
+// ===========================
+// ЗАПУСК
+// ===========================
 loadProducts();
+setTimeout(observeCards, 300);
+
+const modal = document.getElementById('imgModal');
+const modalImg = document.getElementById('modalImg');
+const closeBtn = document.querySelector('#imgModal div');
+
+document.querySelectorAll('.diploma-img').forEach(img=>{
+  img.addEventListener('click', ()=>{
+    modal.style.display='flex';
+    modalImg.src=img.src;
+  });
+});
+
+closeBtn.addEventListener('click', ()=>{
+  modal.style.display='none';
+});
+
+modal.addEventListener('click',(e)=>{
+  if(e.target===modal) modal.style.display='none';
+});
