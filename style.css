@@ -2725,8 +2725,20 @@ html body.dark-theme .theme-toggle {
 
 
 /* =========================================================
-   FIX: модалка товара — чистое фото без чёрных уголков + карусель
+   FIX V2: карточка + модалка товара без чёрных уголков, карусель поверх фото
 ========================================================= */
+
+/* Картинка в карточке товара: белый фон и без тёмных углов */
+.card-img {
+  background: #ffffff !important;
+}
+
+.card-img img {
+  object-fit: contain !important;
+  background: #ffffff !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
 
 .product-modal.open {
   display: flex !important;
@@ -2736,12 +2748,11 @@ html body.dark-theme .theme-toggle {
   overflow: hidden !important;
 }
 
-/* Крестик поверх всего */
 .product-modal-close {
-  z-index: 80 !important;
+  z-index: 100 !important;
 }
 
-/* Белая подложка у зоны фото: убирает тёмные/чёрные уголки по краям */
+/* Белая зона фото в модалке */
 .product-modal-image {
   position: relative !important;
   background: #ffffff !important;
@@ -2752,7 +2763,7 @@ html body.dark-theme .theme-toggle {
   overflow: hidden !important;
 }
 
-/* Белый слой под фотографией */
+/* Белый слой ПОД фото, чтобы не было тёмных уголков */
 .product-modal-image::before {
   content: '';
   position: absolute;
@@ -2761,7 +2772,7 @@ html body.dark-theme .theme-toggle {
   z-index: 1;
 }
 
-/* Само изображение без скругления и тени */
+/* Само фото */
 .product-modal-image img,
 #productModalImg {
   position: relative !important;
@@ -2775,12 +2786,12 @@ html body.dark-theme .theme-toggle {
   box-shadow: none !important;
 }
 
-/* Стрелки карусели — поверх картинки, чтобы не западали за неё */
+/* Стрелки — выше картинки, чтобы не западали за неё */
 .product-gallery-arrow {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  z-index: 20 !important;
+  z-index: 50 !important;
   width: 46px !important;
   height: 46px !important;
   border-radius: 50% !important;
@@ -2811,13 +2822,12 @@ html body.dark-theme .theme-toggle {
   right: 14px !important;
 }
 
-/* Точки карусели */
 .product-gallery-dots {
   position: absolute !important;
   left: 0 !important;
   right: 0 !important;
   bottom: 14px !important;
-  z-index: 21 !important;
+  z-index: 51 !important;
   display: flex !important;
   justify-content: center !important;
   gap: 8px !important;
@@ -2838,7 +2848,8 @@ html body.dark-theme .theme-toggle {
   transform: scale(1.25) !important;
 }
 
-/* В тёмной теме зона фото тоже остаётся белой */
+body.dark-theme .card-img,
+body.dark-theme .card-img img,
 body.dark-theme .product-modal-image,
 body.dark-theme .product-modal-image::before,
 body.dark-theme .product-modal-image img,

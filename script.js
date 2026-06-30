@@ -149,11 +149,13 @@ function openProductModal(product) {
     modal.querySelector('.product-modal-close').addEventListener('click', closeProductModal);
 
     modal.querySelector('.product-gallery-prev').addEventListener('click', e => {
+      e.preventDefault();
       e.stopPropagation();
       showProductGalleryImage(productGalleryIndex - 1);
     });
 
     modal.querySelector('.product-gallery-next').addEventListener('click', e => {
+      e.preventDefault();
       e.stopPropagation();
       showProductGalleryImage(productGalleryIndex + 1);
     });
@@ -180,6 +182,7 @@ function openProductModal(product) {
 
   dots.querySelectorAll('.product-gallery-dot').forEach(dot => {
     dot.addEventListener('click', e => {
+      e.preventDefault();
       e.stopPropagation();
       showProductGalleryImage(Number(dot.dataset.galleryIndex));
     });
@@ -240,10 +243,11 @@ document.addEventListener('click', e => {
   e.stopPropagation();
 
   const card = viewBtn.closest('.product-card');
-  const product = currentProducts[Number(card.dataset.index)];
+  if (!card) return;
 
+  const product = currentProducts[Number(card.dataset.index)];
   if (product) openProductModal(product);
-});
+}, true);
 
 
 // ===========================
