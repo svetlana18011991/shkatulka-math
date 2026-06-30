@@ -320,7 +320,7 @@ body.dark-theme #emergencyProductModal .egm-img {
 }
 
 </style>
-  <style>
+ <style>
   /* ДЕЛАЕМ КАРТИНКИ ПОЛНОСТЬЮ ВИДИМЫМИ */
   .card-img img,
   #finalProductModal .fpm-img {
@@ -332,6 +332,12 @@ body.dark-theme #emergencyProductModal .egm-img {
   
   .product-card:hover .card-img img {
     transform: scale(1.04) !important;
+  }
+
+  /* СОХРАНЯЕМ ПЕРЕНОСЫ СТРОК И АБЗАЦЫ В ОПИСАНИИ */
+  .card-desc, 
+  .fpm-desc {
+    white-space: pre-line !important;
   }
 </style>
 </head>
