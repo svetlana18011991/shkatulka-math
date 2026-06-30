@@ -546,3 +546,139 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 200);
   });
 })();
+
+
+
+
+// =========================================================
+// FIX: карусель фото в модалке товара + чистые углы фото
+// =========================================================
+let productGalleryIndex = 0;
+let productGalleryImages = [];
+
+function openProductModal(product) {
+  let modal = document.getElementById('productModal');
+
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'productModal';
+    modal.className = 'product-modal';
+
+    modal.innerHTML = `
+      <div class="product-modal-window">
+        <button type="button" class="product-modal-close" aria-label="Закрыть">×</button>
+
+        <div class="product-modal-image">
+          <button type="button" class="product-gallery-arrow product-gallery-prev" aria-label="Предыдущее фото">‹</button>
+          <img id="productModalImg" alt="">
+          <button type="button" class="product-gallery-arrow product-gallery-next" aria-label="Следующее фото">›</button>
+          <div class="product-gallery-dots" id="productGalleryDots"></div>
+        </div>
+
+        <div class="product-modal-info">
+          <h2 id="productModalTitle"></h2>
+          <p id="productModalDesc" class="product-modal-desc"></p>
+
+          <div class="product-modal-inside">
+            <h3 id="productModalInsideTitle"></h3>
+            <ul id="productModalList"></ul>
+          </div>
+
+          <div class="product-modal-bottom">
+            <div id="productModalPrice" class="product-modal-price"></div>
+            <a id="productModalBuy" class="product-modal-buy" target="_blank" rel="noopener">Купить</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeProductModal();
+    });
+
+    modal.querySelector('.product-modal-close').addEventListener('click', closeProductModal);
+
+    modal.querySelector('.product-gallery-prev').addEventListener('click', e => {
+      e.stopPropagation();
+      showProductGalleryImage(productGalleryIndex - 1);
+    });
+
+    modal.querySelector('.product-gallery-next').addEventListener('click', e => {
+      e.stopPropagation();
+      showProductGalleryImage(productGalleryIndex + 1);
+    });
+
+    document.addEventListener('keydown', e => {
+      const opened = document.getElementById('productModal')?.classList.contains('open');
+      if (!opened) return;
+      if (e.key === 'Escape') closeProductModal();
+      if (e.key === 'ArrowLeft') showProductGalleryImage(productGalleryIndex - 1);
+      if (e.key === 'ArrowRight') showProductGalleryImage(productGalleryIndex + 1);
+    });
+  }
+
+  productGalleryImages = (product.gallery && product.gallery.length)
+    ? product.gallery
+    : [product.image].filter(Boolean);
+
+  productGalleryIndex = 0;
+
+  modal.querySelector('#productModalTitle').textContent = product.title || '';
+  modal.querySelector('#productModalDesc').textContent = product.description || '';
+  modal.querySelector('#productModalInsideTitle').textContent = product.insideTitle || 'Что внутри:';
+  modal.querySelector('#productModalList').innerHTML =
+    (product.inside || []).map(item => `<li>${item}</li>`).join('');
+  modal.querySelector('#productModalPrice').textContent = `${product.price} ₽`;
+  modal.querySelector('#productModalBuy').href = product.buyLink || '#';
+
+  const dots = modal.querySelector('#productGalleryDots');
+  dots.innerHTML = productGalleryImages.map((_, i) =>
+    `<button type="button" class="product-gallery-dot" data-gallery-index="${i}" aria-label="Фото ${i + 1}"></button>`
+  ).join('');
+
+  dots.querySelectorAll('.product-gallery-dot').forEach(dot => {
+    dot.addEventListener('click', e => {
+      e.stopPropagation();
+      showProductGalleryImage(Number(dot.dataset.galleryIndex));
+    });
+  });
+
+  const arrows = modal.querySelectorAll('.product-gallery-arrow');
+  arrows.forEach(arrow => {
+    arrow.style.display = productGalleryImages.length > 1 ? 'flex' : 'none';
+  });
+  dots.style.display = productGalleryImages.length > 1 ? 'flex' : 'none';
+
+  showProductGalleryImage(0);
+
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+}
+
+function showProductGalleryImage(index) {
+  if (!productGalleryImages.length) return;
+
+  if (index < 0) index = productGalleryImages.length - 1;
+  if (index >= productGalleryImages.length) index = 0;
+
+  productGalleryIndex = index;
+
+  const modal = document.getElementById('productModal');
+  if (!modal) return;
+
+  const img = modal.querySelector('#productModalImg');
+  img.src = productGalleryImages[productGalleryIndex];
+  img.alt = `Фото товара ${productGalleryIndex + 1}`;
+
+  modal.querySelectorAll('.product-gallery-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === productGalleryIndex);
+  });
+}
+
+function closeProductModal() {
+  const modal = document.getElementById('productModal');
+  if (modal) modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+}

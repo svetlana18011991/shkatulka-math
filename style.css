@@ -2720,3 +2720,116 @@ html body.dark-theme .theme-toggle {
     height: 48px !important;
   }
 }
+
+
+
+
+/* =========================================================
+   FIX: карусель фото в модалке товара и чистые углы изображения
+========================================================= */
+
+/* Убираем чёрные уголки/подложки у фото */
+.product-modal-image {
+  position: relative;
+  background: #ffffff !important;
+  overflow: hidden;
+}
+
+.product-modal-image img,
+#productModalImg {
+  display: block;
+  background: #ffffff !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  object-fit: contain !important;
+}
+
+/* Стрелки карусели */
+.product-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid rgba(139,38,53,0.18);
+  background: rgba(255,255,255,0.92);
+  color: #8B2635;
+  font-size: 34px;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(139,38,53,0.18);
+  transition: transform .2s ease, background .2s ease, color .2s ease;
+}
+
+.product-gallery-arrow:hover {
+  background: #8B2635;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.product-gallery-prev {
+  left: 14px;
+}
+
+.product-gallery-next {
+  right: 14px;
+}
+
+/* Точки */
+.product-gallery-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  z-index: 31;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.product-gallery-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(139,38,53,0.28);
+  cursor: pointer;
+  padding: 0;
+}
+
+.product-gallery-dot.active {
+  background: #8B2635;
+  transform: scale(1.25);
+}
+
+/* Крестик точно поверх карусели */
+.product-modal-close {
+  z-index: 50 !important;
+}
+
+/* В тёмной теме фото всё равно без чёрных углов */
+body.dark-theme .product-modal-image,
+body.dark-theme .product-modal-image img,
+body.dark-theme #productModalImg {
+  background: #ffffff !important;
+}
+
+@media (max-width: 720px) {
+  .product-gallery-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 28px;
+  }
+
+  .product-gallery-prev {
+    left: 8px;
+  }
+
+  .product-gallery-next {
+    right: 8px;
+  }
+}
