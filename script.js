@@ -9,6 +9,8 @@
 let allProducts = [];
 
 let currentProducts = [];
+let activeCatalogFilter = 'all';
+let activeCatalogSearch = '';
 
 
 
@@ -36,9 +38,11 @@ async function loadProducts() {
 
 
 
-    renderProducts(products);
-
     initFilters();
+
+    initCatalogSearch();
+
+    applyCatalogFilters();
 
     setTimeout(observeCards, 300);
 
@@ -56,7 +60,7 @@ async function loadProducts() {
 
 
 
-function renderProducts(products) {
+function renderProducts(products, hasSearch = false) {
 
   const grid = document.getElementById('productsGrid');
 
@@ -64,7 +68,7 @@ function renderProducts(products) {
 
   if (!products.length) {
 
-    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">По этому фильтру пока нет товаров</p>';
+    grid.innerHTML = `<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">${hasSearch ? 'По этому запросу пока ничего не найдено. Попробуйте другое слово или выберите «Все».' : 'По этому фильтру пока нет товаров'}</p>`;
 
     return;
 
@@ -173,26 +177,106 @@ function initFilters() {
 
       btn.classList.add('active');
 
+      activeCatalogFilter = btn.dataset.filter || 'all';
 
-
-      const filter = btn.dataset.filter;
-
-      const filtered = filter === 'all'
-        ? allProducts
-        : filter === 'free'
-          ? allProducts.filter(p => String(p.grade) === 'free' || Number(p.price) <= 0)
-          : allProducts.filter(p => String(p.grade) === filter);
-
-
-
-      renderProducts(filtered);
-
-      setTimeout(observeCards, 100);
+      applyCatalogFilters();
 
     };
 
   });
 
+}
+
+function initCatalogSearch() {
+
+  const input = document.getElementById('productSearch');
+  const clearBtn = document.getElementById('productSearchClear');
+
+  if (!input) return;
+
+  const runSearch = () => {
+    activeCatalogSearch = input.value || '';
+    if (clearBtn) clearBtn.classList.toggle('show', activeCatalogSearch.trim().length > 0);
+    applyCatalogFilters();
+  };
+
+  input.addEventListener('input', runSearch);
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      input.focus();
+      runSearch();
+    });
+  }
+}
+
+function applyCatalogFilters() {
+
+  let filtered = allProducts.slice();
+
+  if (activeCatalogFilter === 'free') {
+    filtered = filtered.filter(p => String(p.grade) === 'free' || Number(p.price) <= 0);
+  } else if (activeCatalogFilter !== 'all') {
+    filtered = filtered.filter(p => String(p.grade) === activeCatalogFilter);
+  }
+
+  const queryWords = getSearchWords(activeCatalogSearch);
+  if (queryWords.length) {
+    filtered = filtered.filter(product => productMatchesSearch(product, queryWords));
+  }
+
+  renderProducts(filtered, queryWords.length > 0);
+  setTimeout(observeCards, 100);
+}
+
+function getSearchWords(value) {
+  return normalizeText(value)
+    .split(' ')
+    .map(w => w.trim())
+    .filter(w => w.length >= 2);
+}
+
+function productMatchesSearch(product, queryWords) {
+  const haystack = productSearchText(product);
+  return queryWords.every(word => {
+    const stem = makeSearchStem(word);
+    return haystack.includes(word) || (stem.length >= 3 && haystack.includes(stem));
+  });
+}
+
+function productSearchText(product) {
+  const parts = [
+    product.title,
+    product.description,
+    product.cardDescription,
+    product.insideTitle,
+    product.grade,
+    gradeLabel(product.grade),
+    Array.isArray(product.tags) ? product.tags.join(' ') : product.tags,
+    Array.isArray(product.inside) ? product.inside.join(' ') : product.inside
+  ];
+
+  const normalized = normalizeText(parts.filter(Boolean).join(' '));
+  const stems = normalized.split(' ').map(makeSearchStem).join(' ');
+  return `${normalized} ${stems}`;
+}
+
+function normalizeText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/ё/g, 'е')
+    .replace(/[^a-zа-я0-9]+/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function makeSearchStem(word) {
+  return String(word || '')
+    .replace(/(иями|ями|ами|ого|ему|ими|ыми|ией|иям|иях|ьев|ьям|ьях)$/i, '')
+    .replace(/(ая|яя|ое|ее|ые|ие|ой|ей|ую|юю|ого|его|ому|ему|ых|их|ым|им)$/i, '')
+    .replace(/(ами|ями|ах|ях|ов|ев|ей|ом|ем|ой|ам|ям|ою|ею)$/i, '')
+    .replace(/(а|я|ы|и|у|ю|е|о|ь)$/i, '');
 }
 
 
