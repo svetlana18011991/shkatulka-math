@@ -4,26 +4,32 @@ backend:
   branch: main
 
 media_folder: "images"
-public_folder: "images"
+public_folder: "/images"
 
 collections:
-  - name: "catalog"
-    label: "Каталог материалов"
-    files:
-      - label: "База товаров"
-        name: "products"
-        file: "products.json"
+  - name: "products"
+    label: "Товары"
+    file: "products.json"
+    format: "json"
+    create: true
+    fields:
+      - name: "items"
+        label: "Список товаров"
+        widget: "list"
         fields:
-          - label: "Список материалов"
-            name: "items"
+          - { name: "title", label: "Название товара", widget: "string" }
+          - { name: "price", label: "Цена", widget: "number" }
+
+          - { name: "description", label: "Описание", widget: "text", required: false }
+
+          - name: "images"
+            label: "Изображения"
             widget: "list"
-            fields:
-              - { label: "Название", name: "title", widget: "string" }
-              - { label: "Категория / Класс", name: "grade", widget: "select", options: ["5", "6", "7", "8", "9", "10", "11", "oge", "ege"] }
-              - { label: "Цена (0 если бесплатно)", name: "price", widget: "number", value_type: "int" }
-              - { label: "Описание товара (краткое, полное и состав)", name: "description", widget: "text" }
-              - { label: "Ссылка на оплату (для платных)", name: "buyLink", widget: "string", required: false }
-              - { label: "Главное фото карточки", name: "image", widget: "image" }
-              - { label: "Галерея (доп. фото и видео для карусели)", name: "gallery", widget: "list", field: { label: "Файл", name: "media", widget: "image" }, required: false }
-              - { label: "Файл для скачивания (архив или PDF)", name: "downloadFile", widget: "file", required: false }
-              - { label: "Теги для поиска и фильтрации", name: "tags", widget: "list", required: false }
+            field: { name: "image", label: "Картинка", widget: "image" }
+            required: false
+
+          - { name: "video", label: "Видео (ссылка YouTube или mp4)", widget: "string", required: false }
+
+          - { name: "category", label: "Категория", widget: "string", required: false }
+
+          - { name: "tags", label: "Теги", widget: "list", required: false }
