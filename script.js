@@ -9,7 +9,8 @@ let currentProducts = [];
 async function loadProducts() {
   try {
     const response = await fetch('products.json');
-    const products = await response.json();
+    const data = await response.json();
+const products = data.items || data;
 
     allProducts = products;
     currentProducts = products;
