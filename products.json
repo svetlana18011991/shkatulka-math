@@ -26,9 +26,10 @@
       "image": "/images/ege-sbornik-1-12.jpg",
       "gallery": [
         "/images/ege-sbornik-1-12.jpg",
-        "/images/24.jpg"
+        "/images/24.jpg",
+        "/images/не.jpg"
       ],
-      "downloadFile": "/images/не.jpg",
+      "downloadFile": "",
       "tags": [
         "егэ",
         "11"
