@@ -82,7 +82,7 @@ function renderProducts(products, hasSearch = false) {
 
   grid.innerHTML = products.map((p, index) => `
 
-    <div class="product-card" data-index="${index}" data-grade="${p.grade}">
+    <div class="product-card product-card-simple" data-index="${index}" data-grade="${p.grade}" title="${p.title || ''}">
 
       <div class="card-img">
 
@@ -100,23 +100,9 @@ function renderProducts(products, hasSearch = false) {
 
 
 
-      <div class="card-body">
+      <div class="card-body card-body-simple">
 
-        <div class="card-tags">
-
-          ${(p.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('')}
-
-        </div>
-
-
-
-        <h3 class="card-title">${p.title}</h3>
-
-        <p class="card-desc">${p.cardDescription || p.description || ''}</p>
-
-
-
-        <div class="card-footer">
+        <div class="card-footer card-footer-simple">
 
           <span class="card-price">${p.price > 0 ? p.price + ' ₽' : 'Бесплатно'}</span>
 
