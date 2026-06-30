@@ -5,9 +5,321 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Шкатулка математических интерактивов — Светлана Быкова</title>
-<link href="style.css" rel="stylesheet"/>
+<link href="style.css?v=no-black-corners-final" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Raleway:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+
+<style id="gallery-final-inline-css">
+/* FINAL INLINE FIX: карточка без чёрных уголков */
+.card-img{
+  background:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+.card-img img{
+  background:#fff!important;
+  object-fit:contain!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  transform:scale(1.025)!important;
+  clip-path:inset(3px)!important;
+}
+.product-card:hover .card-img img{
+  transform:scale(1.04)!important;
+}
+
+/* FINAL INLINE MODAL */
+#finalProductModal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:24px!important;
+  background:rgba(26,26,46,.64)!important;
+  backdrop-filter:blur(6px)!important;
+}
+#finalProductModal.open{display:flex!important;}
+#finalProductModal .fpm-window{
+  width:min(980px,96vw)!important;
+  max-height:calc(100vh - 48px)!important;
+  background:#fff!important;
+  border-radius:24px!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.25)!important;
+  border:1px solid rgba(201,151,58,.25)!important;
+  display:grid!important;
+  grid-template-columns:42% 1fr!important;
+  overflow:hidden!important;
+  position:relative!important;
+}
+#finalProductModal .fpm-close{
+  position:absolute!important;
+  top:14px!important;
+  right:14px!important;
+  z-index:200!important;
+  width:38px!important;
+  height:38px!important;
+  border-radius:50%!important;
+  border:none!important;
+  background:#fff!important;
+  color:#8B2635!important;
+  font-size:30px!important;
+  line-height:1!important;
+  cursor:pointer!important;
+  box-shadow:0 4px 18px rgba(139,38,53,.22)!important;
+}
+#finalProductModal .fpm-gallery{
+  position:relative!important;
+  background:#fff!important;
+  padding:28px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+#finalProductModal .fpm-gallery::before{
+  content:''!important;
+  position:absolute!important;
+  inset:0!important;
+  background:#fff!important;
+  z-index:1!important;
+}
+#finalProductModal .fpm-img{
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  max-height:430px!important;
+  object-fit:contain!important;
+  display:block!important;
+  background:#fff!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  transform:scale(1.018)!important;
+  clip-path:inset(4px)!important;
+}
+#finalProductModal .fpm-arrow{
+  position:absolute!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:150!important;
+  width:50px!important;
+  height:50px!important;
+  border-radius:50%!important;
+  border:2px solid rgba(139,38,53,.18)!important;
+  background:rgba(255,255,255,.98)!important;
+  color:#8B2635!important;
+  font-size:42px!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  cursor:pointer!important;
+  box-shadow:0 8px 26px rgba(139,38,53,.28)!important;
+  padding:0!important;
+}
+#finalProductModal .fpm-prev{left:12px!important;}
+#finalProductModal .fpm-next{right:12px!important;}
+#finalProductModal .fpm-arrow:hover{background:#8B2635!important;color:#fff!important;}
+#finalProductModal .fpm-dots{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:14px!important;
+  z-index:151!important;
+  display:flex!important;
+  justify-content:center!important;
+  gap:8px!important;
+}
+#finalProductModal .fpm-dot{
+  width:9px!important;
+  height:9px!important;
+  border-radius:50%!important;
+  border:none!important;
+  background:rgba(139,38,53,.28)!important;
+  cursor:pointer!important;
+  padding:0!important;
+}
+#finalProductModal .fpm-dot.active{background:#8B2635!important;transform:scale(1.25)!important;}
+#finalProductModal .fpm-info{
+  padding:34px 34px 30px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:14px!important;
+  overflow:auto!important;
+  background:#fff!important;
+}
+#finalProductModal .fpm-title{
+  font-family:var(--font-head),serif!important;
+  font-size:clamp(1.35rem,2.4vw,2rem)!important;
+  line-height:1.2!important;
+  color:#1A1A2E!important;
+  padding-right:30px!important;
+}
+#finalProductModal .fpm-desc{color:#6B7280!important;font-size:.98rem!important;line-height:1.7!important;}
+#finalProductModal .fpm-inside h3{color:#8B2635!important;font-size:1rem!important;margin-bottom:8px!important;}
+#finalProductModal .fpm-list{margin:0!important;padding-left:20px!important;color:#1A1A2E!important;}
+#finalProductModal .fpm-list li{margin-bottom:7px!important;line-height:1.55!important;}
+#finalProductModal .fpm-bottom{
+  margin-top:auto!important;
+  padding-top:18px!important;
+  border-top:1px solid rgba(201,151,58,.16)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+}
+#finalProductModal .fpm-price{
+  font-family:var(--font-head),serif!important;
+  font-size:2rem!important;
+  font-weight:700!important;
+  color:#8B2635!important;
+}
+#finalProductModal .fpm-buy{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:140px!important;
+  background:linear-gradient(135deg,#8B2635,#C0392B)!important;
+  color:#fff!important;
+  font-size:1rem!important;
+  font-weight:700!important;
+  padding:12px 28px!important;
+  border-radius:50px!important;
+  box-shadow:0 6px 22px rgba(139,38,53,.32)!important;
+}
+@media(max-width:720px){
+  #finalProductModal{
+    padding:12px!important;
+    align-items:flex-start!important;
+    overflow-y:auto!important;
+  }
+  #finalProductModal .fpm-window{
+    grid-template-columns:1fr!important;
+    max-height:none!important;
+  }
+  #finalProductModal .fpm-gallery{padding:18px!important;}
+  #finalProductModal .fpm-img{max-height:260px!important;}
+  #finalProductModal .fpm-info{padding:18px 20px 22px!important;overflow:visible!important;}
+  #finalProductModal .fpm-bottom{flex-direction:column!important;align-items:stretch!important;}
+  #finalProductModal .fpm-price{text-align:center!important;}
+  #finalProductModal .fpm-buy{width:100%!important;}
+  #finalProductModal .fpm-arrow{width:38px!important;height:38px!important;font-size:30px!important;}
+  #finalProductModal .fpm-prev{left:8px!important;}
+  #finalProductModal .fpm-next{right:8px!important;}
+}
+</style>
+
+
+<style id="no-black-corners-final-css">
+
+
+/* =========================================================
+   FINAL FIX: убираем чёрные уголки у картинок товара
+   Работает и в каталоге, и внутри модалки/карусели
+========================================================= */
+
+/* Картинка в карточке каталога */
+.card-img {
+  background: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.card-img img {
+  background: #ffffff !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: scale(1.08) !important;
+  clip-path: inset(10px) !important;
+}
+
+.product-card:hover .card-img img {
+  transform: scale(1.10) !important;
+}
+
+/* Картинка в старой модалке, если она где-то ещё вызовется */
+.product-modal-image {
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+.product-modal-image img,
+#productModalImg {
+  background: #ffffff !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: scale(1.08) !important;
+  clip-path: inset(10px) !important;
+}
+
+/* Картинка в новой рабочей модалке */
+#finalProductModal .fpm-gallery,
+#emergencyProductModal .egm-gallery {
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+#finalProductModal .fpm-gallery::before,
+#emergencyProductModal .egm-gallery::before {
+  background: #ffffff !important;
+}
+
+#finalProductModal .fpm-img,
+#emergencyProductModal .egm-img {
+  background: #ffffff !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: scale(1.08) !important;
+  clip-path: inset(10px) !important;
+}
+
+/* Стрелки оставляем поверх картинки */
+#finalProductModal .fpm-arrow,
+#emergencyProductModal .egm-arrow,
+.product-gallery-arrow {
+  z-index: 999 !important;
+}
+
+/* В тёмной теме тоже белая подложка вокруг картинки */
+body.dark-theme .card-img,
+body.dark-theme .card-img img,
+body.dark-theme .product-modal-image,
+body.dark-theme .product-modal-image img,
+body.dark-theme #productModalImg,
+body.dark-theme #finalProductModal .fpm-gallery,
+body.dark-theme #finalProductModal .fpm-gallery::before,
+body.dark-theme #finalProductModal .fpm-img,
+body.dark-theme #emergencyProductModal .egm-gallery,
+body.dark-theme #emergencyProductModal .egm-gallery::before,
+body.dark-theme #emergencyProductModal .egm-img {
+  background: #ffffff !important;
+}
+
+@media (max-width: 720px) {
+  .card-img img,
+  .product-modal-image img,
+  #productModalImg,
+  #finalProductModal .fpm-img,
+  #emergencyProductModal .egm-img {
+    transform: scale(1.10) !important;
+    clip-path: inset(12px) !important;
+  }
+}
+
+</style>
 </head>
 <body>
 <!-- ШАПКА -->
@@ -313,6 +625,173 @@
 <p class="footer-copy">© 2026 Быкова Светлана Владимировна. Все права защищены.</p>
 </div>
 </footer>
-<script src="script.js"></script>
-<div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;"><div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div><img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/></div></body>
+<script src="script.js?v=no-black-corners-final"></script>
+<div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;"><div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div><img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/></div>
+<script id="gallery-final-inline-js">
+(function(){
+  let gallery = [];
+  let idx = 0;
+  let cache = [];
+
+  function ready(fn){
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  async function getProducts(){
+    try{
+      if(Array.isArray(currentProducts) && currentProducts.length) return currentProducts;
+    }catch(e){}
+    try{
+      if(Array.isArray(allProducts) && allProducts.length) return allProducts;
+    }catch(e){}
+    if(cache.length) return cache;
+    try{
+      const r = await fetch('products.json?v=gallery-final-3');
+      cache = await r.json();
+    }catch(e){
+      console.error('products.json не загрузился для модалки', e);
+      cache = [];
+    }
+    return cache;
+  }
+
+  function ensureModal(){
+    let m = document.getElementById('finalProductModal');
+    if(m) return m;
+
+    m = document.createElement('div');
+    m.id = 'finalProductModal';
+    m.innerHTML = `
+      <div class="fpm-window">
+        <button class="fpm-close" type="button" aria-label="Закрыть">×</button>
+
+        <div class="fpm-gallery">
+          <button class="fpm-arrow fpm-prev" type="button" aria-label="Предыдущее фото">‹</button>
+          <img class="fpm-img" alt="">
+          <button class="fpm-arrow fpm-next" type="button" aria-label="Следующее фото">›</button>
+          <div class="fpm-dots"></div>
+        </div>
+
+        <div class="fpm-info">
+          <h2 class="fpm-title"></h2>
+          <p class="fpm-desc"></p>
+          <div class="fpm-inside">
+            <h3>Что внутри:</h3>
+            <ul class="fpm-list"></ul>
+          </div>
+          <div class="fpm-bottom">
+            <div class="fpm-price"></div>
+            <a class="fpm-buy" target="_blank" rel="noopener">Купить</a>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(m);
+
+    m.addEventListener('click', function(e){
+      if(e.target === m) close();
+    });
+    m.querySelector('.fpm-close').addEventListener('click', close);
+    m.querySelector('.fpm-prev').addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation(); show(idx - 1);
+    });
+    m.querySelector('.fpm-next').addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation(); show(idx + 1);
+    });
+
+    return m;
+  }
+
+  function open(product){
+    const m = ensureModal();
+
+    gallery = Array.isArray(product.gallery) && product.gallery.length
+      ? product.gallery.slice()
+      : [product.image].filter(Boolean);
+
+    if(product.title && product.title.includes('Сборник задач ЕГЭ') && !gallery.includes('images/24.jpg')){
+      gallery.push('images/24.jpg');
+    }
+
+    idx = 0;
+    m.querySelector('.fpm-title').textContent = product.title || '';
+    m.querySelector('.fpm-desc').textContent = product.description || '';
+    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+x+'</li>').join('');
+    m.querySelector('.fpm-price').textContent = (product.price || '') + ' ₽';
+    m.querySelector('.fpm-buy').href = product.buyLink || '#';
+
+    const dots = m.querySelector('.fpm-dots');
+    dots.innerHTML = gallery.map((_, i) => '<button type="button" class="fpm-dot" data-i="'+i+'" aria-label="Фото '+(i+1)+'"></button>').join('');
+    dots.querySelectorAll('.fpm-dot').forEach(function(d){
+      d.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation(); show(Number(d.dataset.i));
+      });
+    });
+
+    m.querySelectorAll('.fpm-arrow').forEach(a => a.style.display = gallery.length > 1 ? 'flex' : 'none');
+    dots.style.display = gallery.length > 1 ? 'flex' : 'none';
+
+    show(0);
+    m.classList.add('open');
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function show(i){
+    if(!gallery.length) return;
+    if(i < 0) i = gallery.length - 1;
+    if(i >= gallery.length) i = 0;
+    idx = i;
+
+    const m = document.getElementById('finalProductModal');
+    if(!m) return;
+
+    const img = m.querySelector('.fpm-img');
+    img.src = gallery[idx] + (gallery[idx].includes('?') ? '&' : '?') + 'v=gallery-final-3';
+    img.alt = 'Фото товара ' + (idx + 1);
+
+    m.querySelectorAll('.fpm-dot').forEach((d, n) => d.classList.toggle('active', n === idx));
+  }
+
+  function close(){
+    const m = document.getElementById('finalProductModal');
+    if(m) m.classList.remove('open');
+
+    const old = document.getElementById('productModal');
+    if(old) old.classList.remove('open');
+
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e){
+    const m = document.getElementById('finalProductModal');
+    if(!m || !m.classList.contains('open')) return;
+    if(e.key === 'Escape') close();
+    if(e.key === 'ArrowLeft') show(idx - 1);
+    if(e.key === 'ArrowRight') show(idx + 1);
+  });
+
+  ready(function(){
+    document.addEventListener('click', async function(e){
+      const btn = e.target.closest('.card-view-btn');
+      if(!btn) return;
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+
+      const card = btn.closest('.product-card');
+      const n = card ? Number(card.dataset.index) : 0;
+      const products = await getProducts();
+      const product = products[n] || products[0];
+
+      if(product) open(product);
+    }, true);
+  });
+})();
+</script>
+
+</body>
 </html>

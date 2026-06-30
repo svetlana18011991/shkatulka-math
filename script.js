@@ -548,195 +548,169 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-// EMERGENCY_PRODUCT_GALLERY_FIX_START
-// Полностью независимая рабочая модалка товара с каруселью.
-// Сделана поверх старой логики, чтобы кнопка «Смотреть» точно открывала товар.
-(function () {
+
+
+(function(){
   let gallery = [];
-  let galleryIndex = 0;
-  let productsCache = [];
+  let idx = 0;
+  let cache = [];
 
-  function getCurrentProducts() {
-    if (Array.isArray(window.currentProducts) && window.currentProducts.length) return window.currentProducts;
-    if (Array.isArray(currentProducts) && currentProducts.length) return currentProducts;
-    if (Array.isArray(window.allProducts) && window.allProducts.length) return window.allProducts;
-    if (Array.isArray(allProducts) && allProducts.length) return allProducts;
-    return productsCache;
+  function ready(fn){
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
   }
 
-  async function ensureProductsCache() {
-    if (productsCache.length) return productsCache;
-
-    try {
-      const r = await fetch('products.json?gallery_fix=' + Date.now());
-      productsCache = await r.json();
-    } catch (e) {
-      console.error('Не удалось загрузить products.json для модалки', e);
-      productsCache = [];
+  async function getProducts(){
+    try{
+      if(Array.isArray(currentProducts) && currentProducts.length) return currentProducts;
+    }catch(e){}
+    try{
+      if(Array.isArray(allProducts) && allProducts.length) return allProducts;
+    }catch(e){}
+    if(cache.length) return cache;
+    try{
+      const r = await fetch('products.json?v=gallery-final-3');
+      cache = await r.json();
+    }catch(e){
+      console.error('products.json не загрузился для модалки', e);
+      cache = [];
     }
-
-    return productsCache;
+    return cache;
   }
 
-  function buildModal() {
-    let modal = document.getElementById('emergencyProductModal');
-    if (modal) return modal;
+  function ensureModal(){
+    let m = document.getElementById('finalProductModal');
+    if(m) return m;
 
-    modal = document.createElement('div');
-    modal.id = 'emergencyProductModal';
-    modal.innerHTML = `
-      <div class="egm-window">
-        <button class="egm-close" type="button" aria-label="Закрыть">×</button>
+    m = document.createElement('div');
+    m.id = 'finalProductModal';
+    m.innerHTML = `
+      <div class="fpm-window">
+        <button class="fpm-close" type="button" aria-label="Закрыть">×</button>
 
-        <div class="egm-gallery">
-          <button class="egm-arrow egm-prev" type="button" aria-label="Предыдущее фото">‹</button>
-          <img class="egm-img" alt="">
-          <button class="egm-arrow egm-next" type="button" aria-label="Следующее фото">›</button>
-          <div class="egm-dots"></div>
+        <div class="fpm-gallery">
+          <button class="fpm-arrow fpm-prev" type="button" aria-label="Предыдущее фото">‹</button>
+          <img class="fpm-img" alt="">
+          <button class="fpm-arrow fpm-next" type="button" aria-label="Следующее фото">›</button>
+          <div class="fpm-dots"></div>
         </div>
 
-        <div class="egm-info">
-          <h2 class="egm-title"></h2>
-          <p class="egm-desc"></p>
-
-          <div class="egm-inside">
+        <div class="fpm-info">
+          <h2 class="fpm-title"></h2>
+          <p class="fpm-desc"></p>
+          <div class="fpm-inside">
             <h3>Что внутри:</h3>
-            <ul class="egm-list"></ul>
+            <ul class="fpm-list"></ul>
           </div>
-
-          <div class="egm-bottom">
-            <div class="egm-price"></div>
-            <a class="egm-buy" target="_blank" rel="noopener">Купить</a>
+          <div class="fpm-bottom">
+            <div class="fpm-price"></div>
+            <a class="fpm-buy" target="_blank" rel="noopener">Купить</a>
           </div>
         </div>
       </div>
     `;
+    document.body.appendChild(m);
 
-    document.body.appendChild(modal);
-
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) closeEmergencyModal();
+    m.addEventListener('click', function(e){
+      if(e.target === m) close();
+    });
+    m.querySelector('.fpm-close').addEventListener('click', close);
+    m.querySelector('.fpm-prev').addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation(); show(idx - 1);
+    });
+    m.querySelector('.fpm-next').addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation(); show(idx + 1);
     });
 
-    modal.querySelector('.egm-close').addEventListener('click', closeEmergencyModal);
-
-    modal.querySelector('.egm-prev').addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      showEmergencyImage(galleryIndex - 1);
-    });
-
-    modal.querySelector('.egm-next').addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      showEmergencyImage(galleryIndex + 1);
-    });
-
-    return modal;
+    return m;
   }
 
-  function openEmergencyModal(product) {
-    const modal = buildModal();
+  function open(product){
+    const m = ensureModal();
 
     gallery = Array.isArray(product.gallery) && product.gallery.length
-      ? product.gallery
-      : [product.image, 'images/24.jpg'].filter(Boolean);
+      ? product.gallery.slice()
+      : [product.image].filter(Boolean);
 
-    // Если products.json старый и gallery нет, всё равно добавляем 24.jpg для ЕГЭ-сборника
-    if (product.title && product.title.includes('Сборник задач ЕГЭ') && !gallery.includes('images/24.jpg')) {
+    if(product.title && product.title.includes('Сборник задач ЕГЭ') && !gallery.includes('images/24.jpg')){
       gallery.push('images/24.jpg');
     }
 
-    galleryIndex = 0;
+    idx = 0;
+    m.querySelector('.fpm-title').textContent = product.title || '';
+    m.querySelector('.fpm-desc').textContent = product.description || '';
+    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+x+'</li>').join('');
+    m.querySelector('.fpm-price').textContent = (product.price || '') + ' ₽';
+    m.querySelector('.fpm-buy').href = product.buyLink || '#';
 
-    modal.querySelector('.egm-title').textContent = product.title || '';
-    modal.querySelector('.egm-desc').textContent = product.description || '';
-    modal.querySelector('.egm-list').innerHTML = (product.inside || []).map(x => `<li>${x}</li>`).join('');
-    modal.querySelector('.egm-price').textContent = (product.price || '') + ' ₽';
-    modal.querySelector('.egm-buy').href = product.buyLink || '#';
-
-    const dots = modal.querySelector('.egm-dots');
-    dots.innerHTML = gallery.map((_, i) =>
-      `<button type="button" class="egm-dot" data-i="${i}" aria-label="Фото ${i + 1}"></button>`
-    ).join('');
-
-    dots.querySelectorAll('.egm-dot').forEach(dot => {
-      dot.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        showEmergencyImage(Number(dot.dataset.i));
+    const dots = m.querySelector('.fpm-dots');
+    dots.innerHTML = gallery.map((_, i) => '<button type="button" class="fpm-dot" data-i="'+i+'" aria-label="Фото '+(i+1)+'"></button>').join('');
+    dots.querySelectorAll('.fpm-dot').forEach(function(d){
+      d.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation(); show(Number(d.dataset.i));
       });
     });
 
-    modal.querySelectorAll('.egm-arrow').forEach(a => {
-      a.style.display = gallery.length > 1 ? 'flex' : 'none';
-    });
+    m.querySelectorAll('.fpm-arrow').forEach(a => a.style.display = gallery.length > 1 ? 'flex' : 'none');
     dots.style.display = gallery.length > 1 ? 'flex' : 'none';
 
-    showEmergencyImage(0);
-
-    modal.classList.add('open');
+    show(0);
+    m.classList.add('open');
     document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
   }
 
-  function showEmergencyImage(index) {
-    if (!gallery.length) return;
+  function show(i){
+    if(!gallery.length) return;
+    if(i < 0) i = gallery.length - 1;
+    if(i >= gallery.length) i = 0;
+    idx = i;
 
-    if (index < 0) index = gallery.length - 1;
-    if (index >= gallery.length) index = 0;
+    const m = document.getElementById('finalProductModal');
+    if(!m) return;
 
-    galleryIndex = index;
+    const img = m.querySelector('.fpm-img');
+    img.src = gallery[idx] + (gallery[idx].includes('?') ? '&' : '?') + 'v=gallery-final-3';
+    img.alt = 'Фото товара ' + (idx + 1);
 
-    const modal = document.getElementById('emergencyProductModal');
-    if (!modal) return;
-
-    const img = modal.querySelector('.egm-img');
-    img.src = gallery[galleryIndex] + (gallery[galleryIndex].includes('?') ? '&' : '?') + 'v=' + Date.now();
-    img.alt = 'Фото товара ' + (galleryIndex + 1);
-
-    modal.querySelectorAll('.egm-dot').forEach((d, i) => {
-      d.classList.toggle('active', i === galleryIndex);
-    });
+    m.querySelectorAll('.fpm-dot').forEach((d, n) => d.classList.toggle('active', n === idx));
   }
 
-  function closeEmergencyModal() {
-    const modal = document.getElementById('emergencyProductModal');
-    if (modal) modal.classList.remove('open');
+  function close(){
+    const m = document.getElementById('finalProductModal');
+    if(m) m.classList.remove('open');
 
-    // На всякий случай закрываем и старую модалку, если она успела создаться
-    const oldModal = document.getElementById('productModal');
-    if (oldModal) oldModal.classList.remove('open');
+    const old = document.getElementById('productModal');
+    if(old) old.classList.remove('open');
 
     document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
   }
 
-  document.addEventListener('keydown', function (e) {
-    const modal = document.getElementById('emergencyProductModal');
-    if (!modal || !modal.classList.contains('open')) return;
-
-    if (e.key === 'Escape') closeEmergencyModal();
-    if (e.key === 'ArrowLeft') showEmergencyImage(galleryIndex - 1);
-    if (e.key === 'ArrowRight') showEmergencyImage(galleryIndex + 1);
+  document.addEventListener('keydown', function(e){
+    const m = document.getElementById('finalProductModal');
+    if(!m || !m.classList.contains('open')) return;
+    if(e.key === 'Escape') close();
+    if(e.key === 'ArrowLeft') show(idx - 1);
+    if(e.key === 'ArrowRight') show(idx + 1);
   });
 
-  document.addEventListener('click', async function (e) {
-    const btn = e.target.closest('.card-view-btn');
-    if (!btn) return;
+  ready(function(){
+    document.addEventListener('click', async function(e){
+      const btn = e.target.closest('.card-view-btn');
+      if(!btn) return;
 
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
 
-    const card = btn.closest('.product-card');
-    const index = card ? Number(card.dataset.index) : 0;
+      const card = btn.closest('.product-card');
+      const n = card ? Number(card.dataset.index) : 0;
+      const products = await getProducts();
+      const product = products[n] || products[0];
 
-    let products = getCurrentProducts();
-    if (!products.length) products = await ensureProductsCache();
-
-    const product = products[index] || products[0];
-    if (product) openEmergencyModal(product);
-  }, true);
+      if(product) open(product);
+    }, true);
+  });
 })();
-// EMERGENCY_PRODUCT_GALLERY_FIX_END
+
