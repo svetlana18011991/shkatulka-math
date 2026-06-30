@@ -4,32 +4,27 @@ backend:
   branch: main
 
 media_folder: "images"
-public_folder: "/images"
+public_folder: "images"
 
 collections:
-  - name: "products"
-    label: "Товары"
-    file: "products.json"
-    format: "json"
-    create: true
-    fields:
-      - name: "items"
-        label: "Список товаров"
-        widget: "list"
+  - name: "catalog"
+    label: "Каталог материалов"
+    files:
+      - label: "База товаров"
+        name: "products"
+        file: "products.json"
         fields:
-          - { name: "title", label: "Название товара", widget: "string" }
-          - { name: "price", label: "Цена", widget: "number" }
-
-          - { name: "description", label: "Описание", widget: "text", required: false }
-
-          - name: "images"
-            label: "Изображения"
+          - label: "Список материалов"
+            name: "items"
             widget: "list"
-            field: { name: "image", label: "Картинка", widget: "image" }
-            required: false
-
-          - { name: "video", label: "Видео (ссылка YouTube или mp4)", widget: "string", required: false }
-
-          - { name: "category", label: "Категория", widget: "string", required: false }
-
-          - { name: "tags", label: "Теги", widget: "list", required: false }
+            fields:
+              - { label: "Название", name: "title", widget: "string" }
+              - { label: "Категория / Класс", name: "grade", widget: "select", options: ["5", "6", "7", "8", "9", "10", "11", "oge", "ege"] }
+              - { label: "Цена (0 если бесплатно)", name: "price", widget: "number", value_type: "int" }
+              - { label: "Описание карточки (краткое)", name: "description", widget: "text", required: false }
+              - { label: "Что внутри (список для модалки)", name: "inside", widget: "list", required: false }
+              - { label: "Ссылка на оплату", name: "buyLink", widget: "string", required: false }
+              - { label: "Главное фото", name: "image", widget: "image", required: false }
+              - { label: "Галерея (доп. фото)", name: "gallery", widget: "list", field: { label: "Файл", name: "media", widget: "image" }, required: false }
+              - { label: "Файл для скачивания", name: "downloadFile", widget: "file", required: false }
+              - { label: "Теги", name: "tags", widget: "list", required: false }
