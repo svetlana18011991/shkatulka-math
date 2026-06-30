@@ -2365,3 +2365,141 @@ body.dark-theme .geo-item {
     display: none;
   }
 }
+
+
+/* === FIX VISIBLE EFFECTS: видимость переключателя темы и геометрии === */
+
+/* Кнопка темы теперь в правом верхнем углу — её точно видно */
+.theme-toggle {
+  position: fixed !important;
+  top: 92px !important;
+  right: 22px !important;
+  bottom: auto !important;
+  z-index: 10000 !important;
+  width: 54px !important;
+  height: 54px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(201,151,58,0.45) !important;
+  background: rgba(255,255,255,0.94) !important;
+  color: #8B2635 !important;
+  font-size: 1.35rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 34px rgba(139,38,53,0.22) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Плавающая геометрия была слишком низко по слоям — поднимаем, но оставляем некликабельной */
+.floating-geometry {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  display: block !important;
+}
+
+.geo-item {
+  position: absolute !important;
+  display: block !important;
+  color: rgba(139,38,53,0.20) !important;
+  font-family: var(--font-head) !important;
+  font-weight: 700 !important;
+  user-select: none !important;
+  animation: geoFloat 18s ease-in-out infinite !important;
+}
+
+.geo-item:nth-child(1) { top: 18%; left: 4%; font-size: 46px; animation-delay: 0s; }
+.geo-item:nth-child(2) { top: 42%; right: 5%; font-size: 38px; animation-delay: -4s; }
+.geo-item:nth-child(3) { top: 72%; left: 8%; font-size: 34px; animation-delay: -8s; }
+.geo-item:nth-child(4) { top: 88%; right: 12%; font-size: 42px; animation-delay: -12s; }
+.geo-item:nth-child(5) { top: 32%; left: 48%; font-size: 30px; animation-delay: -6s; }
+
+/* Контент выше геометрии */
+.header,
+.hero-content,
+.about-inner,
+.products .container,
+.education .container,
+.reviews .container,
+.contact .container,
+.footer .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Тёмная тема — усиленный видимый режим */
+body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  background: radial-gradient(circle at top right, rgba(255,138,61,0.18), transparent 35%),
+              radial-gradient(circle at bottom left, rgba(255,107,157,0.10), transparent 38%),
+              #10101a !important;
+  color: var(--text) !important;
+}
+
+body.dark-theme .header,
+body.dark-theme .mobile-nav,
+body.dark-theme .product-card,
+body.dark-theme .review-card,
+body.dark-theme .edu-card,
+body.dark-theme .badge,
+body.dark-theme .product-modal-window {
+  background: rgba(23,23,38,0.94) !important;
+  color: var(--text) !important;
+  border-color: rgba(255,179,92,0.25) !important;
+}
+
+body.dark-theme .hero,
+body.dark-theme .about,
+body.dark-theme .products,
+body.dark-theme .education,
+body.dark-theme .reviews,
+body.dark-theme .contact,
+body.dark-theme .footer {
+  background-color: transparent !important;
+}
+
+body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.96) !important;
+  color: #FFD08A !important;
+  border-color: rgba(255,179,92,0.55) !important;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.40), 0 0 24px rgba(255,138,61,0.24) !important;
+}
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.25) !important;
+  text-shadow: 0 0 18px rgba(255,138,61,0.22);
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    top: 86px !important;
+    right: 14px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5) {
+    display: none !important;
+  }
+}
+
+
+/* === FIX: в тёмной теме убираем фоновую картинку top-bg.png === */
+body.dark-theme .hero {
+  background-image: none !important;
+  background:
+    radial-gradient(circle at top right, rgba(255,138,61,0.18), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(255,107,157,0.10), transparent 38%),
+    #10101a !important;
+}

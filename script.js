@@ -312,7 +312,7 @@ function initAnimatedCounters() {
     el.dataset.done = '1';
     el.classList.add('counting');
 
-    const duration = 1300;
+    const duration = 3900;
     const start = performance.now();
 
     const tick = (now) => {
@@ -367,3 +367,60 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimatedCounters();
   initFloatingGeometry();
 });
+
+
+// FORCE_VISIBLE_EFFECTS_UPDATE_2026
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  ready(function () {
+    // Переключатель темы — создаём принудительно, если его нет
+    let themeBtn = document.querySelector('.theme-toggle');
+    if (!themeBtn) {
+      themeBtn = document.createElement('button');
+      themeBtn.className = 'theme-toggle';
+      themeBtn.type = 'button';
+      themeBtn.setAttribute('aria-label', 'Переключить тему');
+      document.body.appendChild(themeBtn);
+    }
+
+    const savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+
+    themeBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+    themeBtn.onclick = function () {
+      document.body.classList.toggle('dark-theme');
+      const isDark = document.body.classList.contains('dark-theme');
+      themeBtn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+    };
+
+    // Плавающая геометрия — создаём принудительно, если её нет
+    let geo = document.querySelector('.floating-geometry');
+    if (!geo) {
+      geo = document.createElement('div');
+      geo.className = 'floating-geometry';
+      geo.innerHTML = `
+        <span class="geo-item">△</span>
+        <span class="geo-item">x²</span>
+        <span class="geo-item">π</span>
+        <span class="geo-item">∑</span>
+        <span class="geo-item">√</span>
+      `;
+      document.body.prepend(geo);
+    }
+
+    window.addEventListener('scroll', function () {
+      geo.style.transform = 'translateY(' + (window.scrollY * 0.08) + 'px)';
+    }, { passive: true });
+  });
+})();
