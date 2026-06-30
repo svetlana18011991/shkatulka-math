@@ -2187,6 +2187,544 @@ body.modal-open {
 
 
 /* =========================================================
+   ОБНОВЛЕНИЯ: счётчики, тёмная тема, геометрия, блик кнопок
+   Старые блоки не меняем — только добавляем новые эффекты
+========================================================= */
+
+/* Переключатель темы */
+.theme-toggle {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1200;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(201,151,58,0.35);
+  background: rgba(255,255,255,0.88);
+  color: var(--primary);
+  font-size: 1.35rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(139,38,53,0.16);
+  backdrop-filter: blur(10px);
+  transition: transform .3s ease, background .3s ease, color .3s ease, box-shadow .3s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-3px) rotate(10deg);
+  box-shadow: 0 16px 38px rgba(139,38,53,0.22);
+}
+
+/* Плавность перехода в тёмную тему */
+body,
+.header,
+.mobile-nav,
+.product-card,
+.review-card,
+.edu-card,
+.about-lead,
+.badge,
+.product-modal-window,
+.card-buy-btn,
+.btn,
+.filter-btn {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+/* Тёмная тема */
+body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  --primary-light: rgba(255,138,61,0.14);
+  --gold-glow: rgba(255,179,92,0.32);
+  background: radial-gradient(circle at top right, rgba(255,138,61,0.14), transparent 35%),
+              radial-gradient(circle at bottom left, rgba(255,107,157,0.08), transparent 38%),
+              #10101a;
+}
+
+body.dark-theme .header {
+  background: rgba(16,16,26,0.88);
+  border-bottom-color: rgba(255,179,92,0.2);
+}
+
+body.dark-theme .hero,
+body.dark-theme .about,
+body.dark-theme .products,
+body.dark-theme .education,
+body.dark-theme .reviews,
+body.dark-theme .contact,
+body.dark-theme .footer {
+  background-color: transparent;
+}
+
+body.dark-theme .product-card,
+body.dark-theme .review-card,
+body.dark-theme .edu-card,
+body.dark-theme .badge,
+body.dark-theme .product-modal-window,
+body.dark-theme .mobile-nav {
+  background: rgba(23,23,38,0.92);
+  border-color: rgba(255,179,92,0.22);
+  box-shadow: 0 16px 42px rgba(0,0,0,0.32), 0 0 30px rgba(255,138,61,0.06);
+}
+
+body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.92);
+  color: #FFD08A;
+  border-color: rgba(255,179,92,0.45);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35), 0 0 22px rgba(255,138,61,0.18);
+}
+
+body.dark-theme .filter-btn {
+  background: rgba(23,23,38,0.65);
+  color: var(--text-muted);
+}
+
+body.dark-theme .card-img,
+body.dark-theme .product-modal-image {
+  background: rgba(255,255,255,0.03) !important;
+}
+
+/* Плавающая геометрия */
+.floating-geometry {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.geo-item {
+  position: absolute;
+  color: rgba(139,38,53,0.12);
+  font-family: var(--font-head);
+  font-weight: 700;
+  user-select: none;
+  transform: translate3d(0,0,0);
+  animation: geoFloat 18s ease-in-out infinite;
+}
+
+.geo-item:nth-child(1) { top: 18%; left: 4%; font-size: 42px; animation-delay: 0s; }
+.geo-item:nth-child(2) { top: 42%; right: 5%; font-size: 34px; animation-delay: -4s; }
+.geo-item:nth-child(3) { top: 72%; left: 8%; font-size: 30px; animation-delay: -8s; }
+.geo-item:nth-child(4) { top: 88%; right: 12%; font-size: 38px; animation-delay: -12s; }
+.geo-item:nth-child(5) { top: 32%; left: 48%; font-size: 26px; animation-delay: -6s; }
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.16);
+  text-shadow: 0 0 18px rgba(255,138,61,0.14);
+}
+
+@keyframes geoFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: .45; }
+  50% { transform: translate3d(18px,-24px,0) rotate(4deg); opacity: .75; }
+}
+
+/* Блик на главных кнопках */
+.hero-btns .btn::before {
+  left: -120%;
+  animation: softButtonShine 5.8s ease-in-out infinite;
+}
+
+.hero-btns .btn:nth-child(2)::before {
+  animation-delay: 1.4s;
+}
+
+@keyframes softButtonShine {
+  0% { left: -120%; }
+  35% { left: -120%; }
+  52% { left: 120%; }
+  100% { left: 120%; }
+}
+
+/* Счётчики чуть живее при срабатывании */
+.stat-num.counting {
+  filter: drop-shadow(0 0 10px rgba(255,107,157,0.18));
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    right: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .geo-item {
+    opacity: .35;
+  }
+
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5) {
+    display: none;
+  }
+}
+
+
+/* === FIX VISIBLE EFFECTS: видимость переключателя темы и геометрии === */
+
+/* Кнопка темы теперь в правом верхнем углу — её точно видно */
+.theme-toggle {
+  position: fixed !important;
+  top: 92px !important;
+  right: 22px !important;
+  bottom: auto !important;
+  z-index: 10000 !important;
+  width: 54px !important;
+  height: 54px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(201,151,58,0.45) !important;
+  background: rgba(255,255,255,0.94) !important;
+  color: #8B2635 !important;
+  font-size: 1.35rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 34px rgba(139,38,53,0.22) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Плавающая геометрия была слишком низко по слоям — поднимаем, но оставляем некликабельной */
+.floating-geometry {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  display: block !important;
+}
+
+.geo-item {
+  position: absolute !important;
+  display: block !important;
+  color: rgba(139,38,53,0.20) !important;
+  font-family: var(--font-head) !important;
+  font-weight: 700 !important;
+  user-select: none !important;
+  animation: geoFloat 18s ease-in-out infinite !important;
+}
+
+.geo-item:nth-child(1) { top: 18%; left: 4%; font-size: 46px; animation-delay: 0s; }
+.geo-item:nth-child(2) { top: 42%; right: 5%; font-size: 38px; animation-delay: -4s; }
+.geo-item:nth-child(3) { top: 72%; left: 8%; font-size: 34px; animation-delay: -8s; }
+.geo-item:nth-child(4) { top: 88%; right: 12%; font-size: 42px; animation-delay: -12s; }
+.geo-item:nth-child(5) { top: 32%; left: 48%; font-size: 30px; animation-delay: -6s; }
+
+/* Контент выше геометрии */
+.header,
+.hero-content,
+.about-inner,
+.products .container,
+.education .container,
+.reviews .container,
+.contact .container,
+.footer .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Тёмная тема — усиленный видимый режим */
+body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  background: radial-gradient(circle at top right, rgba(255,138,61,0.18), transparent 35%),
+              radial-gradient(circle at bottom left, rgba(255,107,157,0.10), transparent 38%),
+              #10101a !important;
+  color: var(--text) !important;
+}
+
+body.dark-theme .header,
+body.dark-theme .mobile-nav,
+body.dark-theme .product-card,
+body.dark-theme .review-card,
+body.dark-theme .edu-card,
+body.dark-theme .badge,
+body.dark-theme .product-modal-window {
+  background: rgba(23,23,38,0.94) !important;
+  color: var(--text) !important;
+  border-color: rgba(255,179,92,0.25) !important;
+}
+
+body.dark-theme .hero,
+body.dark-theme .about,
+body.dark-theme .products,
+body.dark-theme .education,
+body.dark-theme .reviews,
+body.dark-theme .contact,
+body.dark-theme .footer {
+  background-color: transparent !important;
+}
+
+body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.96) !important;
+  color: #FFD08A !important;
+  border-color: rgba(255,179,92,0.55) !important;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.40), 0 0 24px rgba(255,138,61,0.24) !important;
+}
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.25) !important;
+  text-shadow: 0 0 18px rgba(255,138,61,0.22);
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    top: 86px !important;
+    right: 14px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5) {
+    display: none !important;
+  }
+}
+
+
+/* === FIX: в тёмной теме убираем фоновую картинку top-bg.png === */
+body.dark-theme .hero {
+  background-image: none !important;
+  background:
+    radial-gradient(circle at top right, rgba(255,138,61,0.18), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(255,107,157,0.10), transparent 38%),
+    #10101a !important;
+}
+
+
+/* =========================================================
+   СИЛЬНЫЙ ФИКС: тёмная тема без top-bg.png + видимая геометрия
+========================================================= */
+
+/* В тёмной теме полностью убираем верхнюю картинку и любые светлые подложки hero */
+html body.dark-theme .hero,
+html body.dark-theme section.hero {
+  background-image: none !important;
+  background: 
+    radial-gradient(circle at 18% 18%, rgba(255,138,61,0.18), transparent 32%),
+    radial-gradient(circle at 88% 18%, rgba(255,179,92,0.12), transparent 34%),
+    linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%) !important;
+  background-color: #10101a !important;
+}
+
+/* Убираем возможные светлые глоу-пятна в hero только в тёмной теме */
+html body.dark-theme .hero-glow,
+html body.dark-theme .hero-img-glow {
+  opacity: 0.18 !important;
+}
+
+/* Чтобы текст в hero был читаемым в тёмной теме */
+html body.dark-theme .hero-title,
+html body.dark-theme .hero-desc,
+html body.dark-theme .stat-label {
+  color: var(--text) !important;
+}
+
+html body.dark-theme .hero-title-accent,
+html body.dark-theme .stat-num {
+  color: #FF8A3D !important;
+  background: linear-gradient(135deg, #FF8A3D, #FFD08A) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Геометрия поверх фоновых секций, но под главным контентом */
+.floating-geometry {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.geo-item {
+  position: absolute !important;
+  display: block !important;
+  font-family: var(--font-head), serif !important;
+  font-weight: 700 !important;
+  color: rgba(139,38,53,0.22) !important;
+  text-shadow: 0 0 18px rgba(139,38,53,0.06);
+  user-select: none !important;
+  animation: geoFloatStrong 16s ease-in-out infinite !important;
+}
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.34) !important;
+  text-shadow: 0 0 22px rgba(255,138,61,0.22) !important;
+}
+
+.geo-item:nth-child(1) { top: 19%; left: 3%; font-size: 58px !important; animation-delay: 0s !important; }
+.geo-item:nth-child(2) { top: 40%; right: 4%; font-size: 48px !important; animation-delay: -4s !important; }
+.geo-item:nth-child(3) { top: 68%; left: 7%; font-size: 44px !important; animation-delay: -8s !important; }
+.geo-item:nth-child(4) { top: 82%; right: 10%; font-size: 56px !important; animation-delay: -12s !important; }
+.geo-item:nth-child(5) { top: 30%; left: 47%; font-size: 40px !important; animation-delay: -6s !important; }
+.geo-item:nth-child(6) { top: 58%; right: 22%; font-size: 34px !important; animation-delay: -10s !important; }
+.geo-item:nth-child(7) { top: 12%; right: 28%; font-size: 36px !important; animation-delay: -14s !important; }
+
+/* Контент выше геометрии */
+.header,
+.hero-content,
+.about-inner,
+.products .container,
+.education .container,
+.reviews .container,
+.contact .container,
+.footer .container,
+.product-modal {
+  position: relative;
+  z-index: 5;
+}
+
+@keyframes geoFloatStrong {
+  0%, 100% {
+    transform: translate3d(0,0,0) rotate(0deg);
+    opacity: .55;
+  }
+  50% {
+    transform: translate3d(24px,-30px,0) rotate(5deg);
+    opacity: .9;
+  }
+}
+
+@media (max-width: 720px) {
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5),
+  .geo-item:nth-child(7) {
+    display: none !important;
+  }
+
+  .geo-item:nth-child(1) { font-size: 42px !important; }
+  .geo-item:nth-child(3) { font-size: 36px !important; }
+  .geo-item:nth-child(4) { font-size: 40px !important; }
+}
+
+
+/* =========================================================
+   ФИНАЛЬНЫЙ ФИКС: убираем параллакс/геометрию и чиним тему
+========================================================= */
+
+/* Полностью убираем геометрию и формулы */
+.floating-geometry,
+.geo-item {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Кнопка темы */
+.theme-toggle {
+  position: fixed !important;
+  right: 22px !important;
+  bottom: 22px !important;
+  top: auto !important;
+  z-index: 10000 !important;
+  width: 52px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(201,151,58,0.45) !important;
+  background: rgba(255,255,255,0.94) !important;
+  color: #8B2635 !important;
+  font-size: 1.35rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 34px rgba(139,38,53,0.22) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Тёмная тема — без top-bg.png */
+html body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  background: #10101a !important;
+  color: var(--text) !important;
+}
+
+/* Самое главное: у hero полностью убираем фон-картинку в тёмной теме */
+html body.dark-theme .hero,
+html body.dark-theme section.hero {
+  background-image: none !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,138,61,0.16), transparent 34%),
+    radial-gradient(circle at 85% 15%, rgba(255,179,92,0.10), transparent 36%),
+    linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%) !important;
+  background-color: #10101a !important;
+}
+
+html body.dark-theme .header,
+html body.dark-theme .mobile-nav,
+html body.dark-theme .product-card,
+html body.dark-theme .review-card,
+html body.dark-theme .edu-card,
+html body.dark-theme .badge,
+html body.dark-theme .product-modal-window {
+  background: rgba(23,23,38,0.94) !important;
+  color: var(--text) !important;
+  border-color: rgba(255,179,92,0.25) !important;
+}
+
+html body.dark-theme .products,
+html body.dark-theme .about,
+html body.dark-theme .education,
+html body.dark-theme .reviews,
+html body.dark-theme .contact,
+html body.dark-theme .footer {
+  background: #10101a !important;
+}
+
+html body.dark-theme .hero-title,
+html body.dark-theme .section-title,
+html body.dark-theme .card-title,
+html body.dark-theme .edu-title,
+html body.dark-theme .review-text,
+html body.dark-theme .about-bio p,
+html body.dark-theme .hero-desc,
+html body.dark-theme .stat-label {
+  color: var(--text) !important;
+}
+
+html body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.96) !important;
+  color: #FFD08A !important;
+  border-color: rgba(255,179,92,0.55) !important;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.40), 0 0 24px rgba(255,138,61,0.24) !important;
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    right: 16px !important;
+    bottom: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
+
+
+
+
+/* =========================================================
    FIX: модалка товара — чистое фото без чёрных уголков + карусель
 ========================================================= */
 
@@ -2198,11 +2736,12 @@ body.modal-open {
   overflow: hidden !important;
 }
 
+/* Крестик поверх всего */
 .product-modal-close {
-  z-index: 60 !important;
+  z-index: 80 !important;
 }
 
-/* Вся зона изображения белая, чтобы не было чёрных/тёмных уголков по краям */
+/* Белая подложка у зоны фото: убирает тёмные/чёрные уголки по краям */
 .product-modal-image {
   position: relative !important;
   background: #ffffff !important;
@@ -2213,9 +2752,20 @@ body.modal-open {
   overflow: hidden !important;
 }
 
-/* Само фото без скругления и без тени — так не появляются тёмные углы */
+/* Белый слой под фотографией */
+.product-modal-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
+/* Само изображение без скругления и тени */
 .product-modal-image img,
 #productModalImg {
+  position: relative !important;
+  z-index: 2 !important;
   width: 100% !important;
   max-height: 430px !important;
   object-fit: contain !important;
@@ -2225,39 +2775,24 @@ body.modal-open {
   box-shadow: none !important;
 }
 
-/* Если у самой картинки есть прозрачные/тёмные края, белая подложка всё перекрывает */
-.product-modal-image::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #ffffff;
-  z-index: 0;
-}
-
-.product-modal-image img,
-.product-gallery-arrow,
-.product-gallery-dots {
-  position: relative;
-  z-index: 2;
-}
-
-/* Стрелки карусели */
+/* Стрелки карусели — поверх картинки, чтобы не западали за неё */
 .product-gallery-arrow {
   position: absolute !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  width: 44px !important;
-  height: 44px !important;
+  z-index: 20 !important;
+  width: 46px !important;
+  height: 46px !important;
   border-radius: 50% !important;
   border: 2px solid rgba(139,38,53,0.18) !important;
-  background: rgba(255,255,255,0.94) !important;
+  background: rgba(255,255,255,0.96) !important;
   color: #8B2635 !important;
-  font-size: 36px !important;
+  font-size: 38px !important;
   line-height: 1 !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
-  box-shadow: 0 8px 24px rgba(139,38,53,0.18) !important;
+  box-shadow: 0 8px 26px rgba(139,38,53,0.24) !important;
   transition: transform .2s ease, background .2s ease, color .2s ease !important;
   padding: 0 !important;
 }
@@ -2265,7 +2800,7 @@ body.modal-open {
 .product-gallery-arrow:hover {
   background: #8B2635 !important;
   color: #ffffff !important;
-  transform: translateY(-50%) scale(1.05) !important;
+  transform: translateY(-50%) scale(1.06) !important;
 }
 
 .product-gallery-prev {
@@ -2282,6 +2817,7 @@ body.modal-open {
   left: 0 !important;
   right: 0 !important;
   bottom: 14px !important;
+  z-index: 21 !important;
   display: flex !important;
   justify-content: center !important;
   gap: 8px !important;
@@ -2302,7 +2838,7 @@ body.modal-open {
   transform: scale(1.25) !important;
 }
 
-/* В тёмной теме зона фото тоже остаётся белой и без тёмных углов */
+/* В тёмной теме зона фото тоже остаётся белой */
 body.dark-theme .product-modal-image,
 body.dark-theme .product-modal-image::before,
 body.dark-theme .product-modal-image img,
@@ -2312,9 +2848,9 @@ body.dark-theme #productModalImg {
 
 @media (max-width: 720px) {
   .product-gallery-arrow {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 28px !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 30px !important;
   }
 
   .product-gallery-prev {

@@ -188,6 +188,7 @@ function openProductModal(product) {
   modal.querySelectorAll('.product-gallery-arrow').forEach(arrow => {
     arrow.style.display = productGalleryImages.length > 1 ? 'flex' : 'none';
   });
+
   dots.style.display = productGalleryImages.length > 1 ? 'flex' : 'none';
 
   showProductGalleryImage(0);
@@ -326,3 +327,292 @@ document.addEventListener('DOMContentLoaded', () => {
   initDiplomaModal();
   loadProducts();
 });
+
+
+
+
+// =========================================================
+// ОБНОВЛЕНИЯ: счётчики, тёмная тема, плавающая геометрия
+// =========================================================
+
+function initThemeToggle() {
+  if (document.querySelector('.theme-toggle')) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'theme-toggle';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Переключить тему');
+
+  const savedTheme = localStorage.getItem('site-theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+  }
+
+  btn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    btn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+  });
+
+  document.body.appendChild(btn);
+}
+
+function initAnimatedCounters() {
+  const counters = document.querySelectorAll('.stat-num');
+  if (!counters.length) return;
+
+  const animateCounter = (el) => {
+    if (el.dataset.done === '1') return;
+
+    const original = el.textContent.trim();
+    const numberMatch = original.match(/\d+/);
+
+    if (!numberMatch) return;
+
+    const target = Number(numberMatch[0]);
+    const prefix = original.slice(0, numberMatch.index);
+    const suffix = original.slice(numberMatch.index + numberMatch[0].length);
+
+    // Диапазоны вроде 5–11 не трогаем, чтобы не исказить смысл.
+    if (original.includes('–') || original.includes('-')) return;
+
+    el.dataset.done = '1';
+    el.classList.add('counting');
+
+    const duration = 3900;
+    const start = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(target * eased);
+
+      el.textContent = `${prefix}${value}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = original;
+        el.classList.remove('counting');
+      }
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  const observerCounters = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) animateCounter(entry.target);
+    });
+  }, { threshold: 0.55 });
+
+  counters.forEach(el => observerCounters.observe(el));
+}
+
+function initFloatingGeometry() {
+  if (document.querySelector('.floating-geometry')) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'floating-geometry';
+  layer.innerHTML = `
+    <span class="geo-item">△</span>
+    <span class="geo-item">x²</span>
+    <span class="geo-item">π</span>
+    <span class="geo-item">∑</span>
+    <span class="geo-item">√</span>
+  `;
+  document.body.prepend(layer);
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY * 0.08;
+    layer.style.transform = `translateY(${y}px)`;
+  }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
+  initAnimatedCounters();
+  initFloatingGeometry();
+});
+
+
+// FORCE_VISIBLE_EFFECTS_UPDATE_2026
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  ready(function () {
+    // Переключатель темы — создаём принудительно, если его нет
+    let themeBtn = document.querySelector('.theme-toggle');
+    if (!themeBtn) {
+      themeBtn = document.createElement('button');
+      themeBtn.className = 'theme-toggle';
+      themeBtn.type = 'button';
+      themeBtn.setAttribute('aria-label', 'Переключить тему');
+      document.body.appendChild(themeBtn);
+    }
+
+    const savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+
+    themeBtn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+    themeBtn.onclick = function () {
+      document.body.classList.toggle('dark-theme');
+      const isDark = document.body.classList.contains('dark-theme');
+      themeBtn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+    };
+
+    // Плавающая геометрия — создаём принудительно, если её нет
+    let geo = document.querySelector('.floating-geometry');
+    if (!geo) {
+      geo = document.createElement('div');
+      geo.className = 'floating-geometry';
+      geo.innerHTML = `
+        <span class="geo-item">△</span>
+        <span class="geo-item">x²</span>
+        <span class="geo-item">π</span>
+        <span class="geo-item">∑</span>
+        <span class="geo-item">√</span>
+      `;
+      document.body.prepend(geo);
+    }
+
+    window.addEventListener('scroll', function () {
+      geo.style.transform = 'translateY(' + (window.scrollY * 0.08) + 'px)';
+    }, { passive: true });
+  });
+})();
+
+
+// STRONG_DARK_GEO_FIX_2026
+(function () {
+  function runStrongGeoFix() {
+    let geo = document.querySelector('.floating-geometry');
+
+    if (!geo) {
+      geo = document.createElement('div');
+      geo.className = 'floating-geometry';
+      document.body.prepend(geo);
+    }
+
+    geo.innerHTML = `
+      <span class="geo-item">△</span>
+      <span class="geo-item">x²</span>
+      <span class="geo-item">π</span>
+      <span class="geo-item">∑</span>
+      <span class="geo-item">√</span>
+      <span class="geo-item">∠</span>
+      <span class="geo-item">y=kx+b</span>
+    `;
+
+    window.addEventListener('scroll', function () {
+      geo.style.transform = 'translateY(' + (window.scrollY * 0.07) + 'px)';
+    }, { passive: true });
+
+    // Если тёмная тема уже включена, принудительно убираем фоновую картинку hero инлайном.
+    function refreshDarkHero() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+
+      if (document.body.classList.contains('dark-theme')) {
+        hero.style.backgroundImage = 'none';
+        hero.style.background = 'radial-gradient(circle at 18% 18%, rgba(255,138,61,0.18), transparent 32%), radial-gradient(circle at 88% 18%, rgba(255,179,92,0.12), transparent 34%), linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%)';
+      } else {
+        hero.style.backgroundImage = '';
+        hero.style.background = '';
+      }
+    }
+
+    refreshDarkHero();
+
+    const themeBtn = document.querySelector('.theme-toggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        setTimeout(refreshDarkHero, 30);
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runStrongGeoFix);
+  } else {
+    runStrongGeoFix();
+  }
+})();
+
+
+// =========================================================
+// ФИНАЛЬНЫЙ ФИКС: без геометрии, стабильная тёмная тема
+// =========================================================
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function applyHeroDarkState() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    if (document.body.classList.contains('dark-theme')) {
+      hero.style.backgroundImage = 'none';
+      hero.style.background = 'radial-gradient(circle at 20% 20%, rgba(255,138,61,0.16), transparent 34%), radial-gradient(circle at 85% 15%, rgba(255,179,92,0.10), transparent 36%), linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%)';
+      hero.style.backgroundColor = '#10101a';
+    } else {
+      hero.style.backgroundImage = '';
+      hero.style.background = '';
+      hero.style.backgroundColor = '';
+    }
+  }
+
+  ready(function () {
+    // Удаляем геометрию/формулы, если они уже были созданы прежним кодом.
+    document.querySelectorAll('.floating-geometry, .geo-item').forEach(el => el.remove());
+
+    // Пересоздаём переключатель темы чисто, чтобы не было старых конфликтующих обработчиков.
+    document.querySelectorAll('.theme-toggle').forEach(el => el.remove());
+
+    const btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Переключить тему');
+
+    const savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+
+    btn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+    btn.addEventListener('click', function () {
+      document.body.classList.toggle('dark-theme');
+      const isDark = document.body.classList.contains('dark-theme');
+      btn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      applyHeroDarkState();
+    });
+
+    document.body.appendChild(btn);
+    applyHeroDarkState();
+
+    // На всякий случай ещё раз убираем, если старый код создаст геометрию после загрузки.
+    setTimeout(function () {
+      document.querySelectorAll('.floating-geometry, .geo-item').forEach(el => el.remove());
+    }, 200);
+  });
+})();
