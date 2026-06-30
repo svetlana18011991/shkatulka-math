@@ -481,3 +481,68 @@ document.addEventListener('DOMContentLoaded', () => {
     runStrongGeoFix();
   }
 })();
+
+
+// =========================================================
+// ФИНАЛЬНЫЙ ФИКС: без геометрии, стабильная тёмная тема
+// =========================================================
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  function applyHeroDarkState() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    if (document.body.classList.contains('dark-theme')) {
+      hero.style.backgroundImage = 'none';
+      hero.style.background = 'radial-gradient(circle at 20% 20%, rgba(255,138,61,0.16), transparent 34%), radial-gradient(circle at 85% 15%, rgba(255,179,92,0.10), transparent 36%), linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%)';
+      hero.style.backgroundColor = '#10101a';
+    } else {
+      hero.style.backgroundImage = '';
+      hero.style.background = '';
+      hero.style.backgroundColor = '';
+    }
+  }
+
+  ready(function () {
+    // Удаляем геометрию/формулы, если они уже были созданы прежним кодом.
+    document.querySelectorAll('.floating-geometry, .geo-item').forEach(el => el.remove());
+
+    // Пересоздаём переключатель темы чисто, чтобы не было старых конфликтующих обработчиков.
+    document.querySelectorAll('.theme-toggle').forEach(el => el.remove());
+
+    const btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Переключить тему');
+
+    const savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+    }
+
+    btn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+    btn.addEventListener('click', function () {
+      document.body.classList.toggle('dark-theme');
+      const isDark = document.body.classList.contains('dark-theme');
+      btn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+      applyHeroDarkState();
+    });
+
+    document.body.appendChild(btn);
+    applyHeroDarkState();
+
+    // На всякий случай ещё раз убираем, если старый код создаст геометрию после загрузки.
+    setTimeout(function () {
+      document.querySelectorAll('.floating-geometry, .geo-item').forEach(el => el.remove());
+    }, 200);
+  });
+})();

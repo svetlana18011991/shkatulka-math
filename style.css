@@ -2612,3 +2612,111 @@ body.dark-theme .geo-item {
   .geo-item:nth-child(3) { font-size: 36px !important; }
   .geo-item:nth-child(4) { font-size: 40px !important; }
 }
+
+
+/* =========================================================
+   ФИНАЛЬНЫЙ ФИКС: убираем параллакс/геометрию и чиним тему
+========================================================= */
+
+/* Полностью убираем геометрию и формулы */
+.floating-geometry,
+.geo-item {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Кнопка темы */
+.theme-toggle {
+  position: fixed !important;
+  right: 22px !important;
+  bottom: 22px !important;
+  top: auto !important;
+  z-index: 10000 !important;
+  width: 52px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(201,151,58,0.45) !important;
+  background: rgba(255,255,255,0.94) !important;
+  color: #8B2635 !important;
+  font-size: 1.35rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 34px rgba(139,38,53,0.22) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Тёмная тема — без top-bg.png */
+html body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  background: #10101a !important;
+  color: var(--text) !important;
+}
+
+/* Самое главное: у hero полностью убираем фон-картинку в тёмной теме */
+html body.dark-theme .hero,
+html body.dark-theme section.hero {
+  background-image: none !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,138,61,0.16), transparent 34%),
+    radial-gradient(circle at 85% 15%, rgba(255,179,92,0.10), transparent 36%),
+    linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%) !important;
+  background-color: #10101a !important;
+}
+
+html body.dark-theme .header,
+html body.dark-theme .mobile-nav,
+html body.dark-theme .product-card,
+html body.dark-theme .review-card,
+html body.dark-theme .edu-card,
+html body.dark-theme .badge,
+html body.dark-theme .product-modal-window {
+  background: rgba(23,23,38,0.94) !important;
+  color: var(--text) !important;
+  border-color: rgba(255,179,92,0.25) !important;
+}
+
+html body.dark-theme .products,
+html body.dark-theme .about,
+html body.dark-theme .education,
+html body.dark-theme .reviews,
+html body.dark-theme .contact,
+html body.dark-theme .footer {
+  background: #10101a !important;
+}
+
+html body.dark-theme .hero-title,
+html body.dark-theme .section-title,
+html body.dark-theme .card-title,
+html body.dark-theme .edu-title,
+html body.dark-theme .review-text,
+html body.dark-theme .about-bio p,
+html body.dark-theme .hero-desc,
+html body.dark-theme .stat-label {
+  color: var(--text) !important;
+}
+
+html body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.96) !important;
+  color: #FFD08A !important;
+  border-color: rgba(255,179,92,0.55) !important;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.40), 0 0 24px rgba(255,138,61,0.24) !important;
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    right: 16px !important;
+    bottom: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
