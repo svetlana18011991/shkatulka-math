@@ -2133,3 +2133,9 @@ body.modal-open {
     linear-gradient(rgba(253,246,240,0.62), rgba(253,246,240,0.84)),
     url("images/top-bg.png") center top / cover no-repeat !important;
 }
+
+
+/* === FIX: подложка в самом верху, путь от style.css === */
+.hero {
+  background: url("images/top-bg.png") center top / cover no-repeat !important;
+}
