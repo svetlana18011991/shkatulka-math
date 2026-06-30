@@ -6,30 +6,10 @@
 let allProducts = [];
 let currentProducts = [];
 
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/1iQC0uc8RhCumuGJxPDlyq7UerC3ivrRygvfLbWz2Z5Y/export?format=csv";
-
 async function loadProducts() {
   try {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-
-    const rows = text.split("
-").slice(1);
-
-    const products = rows.map(row => {
-      const cols = row.split(",");
-
-      return {
-        title: cols[0],
-        description: cols[1],
-        price: Number(cols[2]),
-        isFree: cols[3] === "TRUE",
-        buyLink: cols[4],
-        images: (cols[5] || "").split(";"),
-        video: cols[6],
-        downloadFiles: (cols[7] || "").split(";")
-      };
-    }).filter(p => p.title);
+    const response = await fetch('./products.json');
+    const products = await response.json();
 
     allProducts = products;
     currentProducts = products;
@@ -37,9 +17,10 @@ async function loadProducts() {
     renderProducts(products);
     initFilters();
     setTimeout(observeCards, 300);
-
   } catch (e) {
-    console.error(e);
+    console.error('Ошибка загрузки товаров:', e);
+    document.getElementById('productsGrid').innerHTML =
+      '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1">Товары загружаются...</p>';
   }
 }
 
