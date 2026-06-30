@@ -21,11 +21,9 @@ collections:
               - { label: "Название", name: "title", widget: "string" }
               - { label: "Категория / Класс", name: "grade", widget: "select", options: ["5", "6", "7", "8", "9", "10", "11", "oge", "ege"] }
               - { label: "Цена (0 если бесплатно)", name: "price", widget: "number", value_type: "int" }
-              - { label: "Краткое описание (для карточки)", name: "cardDescription", widget: "text", required: false }
-              - { label: "Полное описание (для окна)", name: "description", widget: "text", required: false }
-              - { label: "Что внутри (пункты)", name: "inside", widget: "list", required: false }
-              - { label: "Ссылка на оплату", name: "buyLink", widget: "string", required: false }
-              - { label: "Главное фото", name: "image", widget: "image" }
-              - { label: "Галерея", name: "gallery", widget: "list", field: { label: "Фото", name: "photo", widget: "image" }, required: false }
-              - { label: "Файл для скачивания", name: "downloadFile", widget: "file", required: false }
-              - { label: "Теги", name: "tags", widget: "list", required: false }
+              - { label: "Описание товара (краткое, полное и состав)", name: "description", widget: "text" }
+              - { label: "Ссылка на оплату (для платных)", name: "buyLink", widget: "string", required: false }
+              - { label: "Главное фото карточки", name: "image", widget: "image" }
+              - { label: "Галерея (доп. фото и видео для карусели)", name: "gallery", widget: "list", field: { label: "Файл", name: "media", widget: "image" }, required: false }
+              - { label: "Файл для скачивания (архив или PDF)", name: "downloadFile", widget: "file", required: false }
+              - { label: "Теги для поиска и фильтрации", name: "tags", widget: "list", required: false }
