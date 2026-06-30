@@ -2503,3 +2503,112 @@ body.dark-theme .hero {
     radial-gradient(circle at bottom left, rgba(255,107,157,0.10), transparent 38%),
     #10101a !important;
 }
+
+
+/* =========================================================
+   СИЛЬНЫЙ ФИКС: тёмная тема без top-bg.png + видимая геометрия
+========================================================= */
+
+/* В тёмной теме полностью убираем верхнюю картинку и любые светлые подложки hero */
+html body.dark-theme .hero,
+html body.dark-theme section.hero {
+  background-image: none !important;
+  background: 
+    radial-gradient(circle at 18% 18%, rgba(255,138,61,0.18), transparent 32%),
+    radial-gradient(circle at 88% 18%, rgba(255,179,92,0.12), transparent 34%),
+    linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%) !important;
+  background-color: #10101a !important;
+}
+
+/* Убираем возможные светлые глоу-пятна в hero только в тёмной теме */
+html body.dark-theme .hero-glow,
+html body.dark-theme .hero-img-glow {
+  opacity: 0.18 !important;
+}
+
+/* Чтобы текст в hero был читаемым в тёмной теме */
+html body.dark-theme .hero-title,
+html body.dark-theme .hero-desc,
+html body.dark-theme .stat-label {
+  color: var(--text) !important;
+}
+
+html body.dark-theme .hero-title-accent,
+html body.dark-theme .stat-num {
+  color: #FF8A3D !important;
+  background: linear-gradient(135deg, #FF8A3D, #FFD08A) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Геометрия поверх фоновых секций, но под главным контентом */
+.floating-geometry {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.geo-item {
+  position: absolute !important;
+  display: block !important;
+  font-family: var(--font-head), serif !important;
+  font-weight: 700 !important;
+  color: rgba(139,38,53,0.22) !important;
+  text-shadow: 0 0 18px rgba(139,38,53,0.06);
+  user-select: none !important;
+  animation: geoFloatStrong 16s ease-in-out infinite !important;
+}
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.34) !important;
+  text-shadow: 0 0 22px rgba(255,138,61,0.22) !important;
+}
+
+.geo-item:nth-child(1) { top: 19%; left: 3%; font-size: 58px !important; animation-delay: 0s !important; }
+.geo-item:nth-child(2) { top: 40%; right: 4%; font-size: 48px !important; animation-delay: -4s !important; }
+.geo-item:nth-child(3) { top: 68%; left: 7%; font-size: 44px !important; animation-delay: -8s !important; }
+.geo-item:nth-child(4) { top: 82%; right: 10%; font-size: 56px !important; animation-delay: -12s !important; }
+.geo-item:nth-child(5) { top: 30%; left: 47%; font-size: 40px !important; animation-delay: -6s !important; }
+.geo-item:nth-child(6) { top: 58%; right: 22%; font-size: 34px !important; animation-delay: -10s !important; }
+.geo-item:nth-child(7) { top: 12%; right: 28%; font-size: 36px !important; animation-delay: -14s !important; }
+
+/* Контент выше геометрии */
+.header,
+.hero-content,
+.about-inner,
+.products .container,
+.education .container,
+.reviews .container,
+.contact .container,
+.footer .container,
+.product-modal {
+  position: relative;
+  z-index: 5;
+}
+
+@keyframes geoFloatStrong {
+  0%, 100% {
+    transform: translate3d(0,0,0) rotate(0deg);
+    opacity: .55;
+  }
+  50% {
+    transform: translate3d(24px,-30px,0) rotate(5deg);
+    opacity: .9;
+  }
+}
+
+@media (max-width: 720px) {
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5),
+  .geo-item:nth-child(7) {
+    display: none !important;
+  }
+
+  .geo-item:nth-child(1) { font-size: 42px !important; }
+  .geo-item:nth-child(3) { font-size: 36px !important; }
+  .geo-item:nth-child(4) { font-size: 40px !important; }
+}

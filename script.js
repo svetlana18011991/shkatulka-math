@@ -424,3 +424,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   });
 })();
+
+
+// STRONG_DARK_GEO_FIX_2026
+(function () {
+  function runStrongGeoFix() {
+    let geo = document.querySelector('.floating-geometry');
+
+    if (!geo) {
+      geo = document.createElement('div');
+      geo.className = 'floating-geometry';
+      document.body.prepend(geo);
+    }
+
+    geo.innerHTML = `
+      <span class="geo-item">△</span>
+      <span class="geo-item">x²</span>
+      <span class="geo-item">π</span>
+      <span class="geo-item">∑</span>
+      <span class="geo-item">√</span>
+      <span class="geo-item">∠</span>
+      <span class="geo-item">y=kx+b</span>
+    `;
+
+    window.addEventListener('scroll', function () {
+      geo.style.transform = 'translateY(' + (window.scrollY * 0.07) + 'px)';
+    }, { passive: true });
+
+    // Если тёмная тема уже включена, принудительно убираем фоновую картинку hero инлайном.
+    function refreshDarkHero() {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+
+      if (document.body.classList.contains('dark-theme')) {
+        hero.style.backgroundImage = 'none';
+        hero.style.background = 'radial-gradient(circle at 18% 18%, rgba(255,138,61,0.18), transparent 32%), radial-gradient(circle at 88% 18%, rgba(255,179,92,0.12), transparent 34%), linear-gradient(135deg, #10101a 0%, #171726 55%, #0d0d16 100%)';
+      } else {
+        hero.style.backgroundImage = '';
+        hero.style.background = '';
+      }
+    }
+
+    refreshDarkHero();
+
+    const themeBtn = document.querySelector('.theme-toggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        setTimeout(refreshDarkHero, 30);
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runStrongGeoFix);
+  } else {
+    runStrongGeoFix();
+  }
+})();
