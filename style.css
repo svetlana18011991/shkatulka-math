@@ -2139,3 +2139,46 @@ body.modal-open {
 .hero {
   background: url("images/top-bg.png") center top / cover no-repeat !important;
 }
+
+
+/* === FIX: крестик закрытия модалки товара === */
+.product-modal-window {
+  position: relative;
+}
+
+.product-modal-close {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: #8B2635;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(139,38,53,0.22);
+  z-index: 20;
+}
+
+.product-modal-close:hover {
+  background: #8B2635;
+  color: #ffffff;
+}
+
+/* === FIX: убираем тёмные/чёрные уголки у фото в модалке === */
+.product-modal-image {
+  background: #ffffff !important;
+}
+
+.product-modal-image img {
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
