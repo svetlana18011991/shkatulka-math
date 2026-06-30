@@ -203,6 +203,14 @@ function applyCatalogFilters() {
 
   if (activeCatalogFilter === 'free') {
     filtered = filtered.filter(p => String(p.grade) === 'free' || Number(p.price) <= 0);
+  } else if (activeCatalogFilter === '11') {
+    // Всё, что опубликовано в ЕГЭ, автоматически показывается и в 11 классе.
+    // При этом материалы только 11 класса не попадают автоматически в ЕГЭ.
+    filtered = filtered.filter(p => String(p.grade) === '11' || String(p.grade) === 'ege');
+  } else if (activeCatalogFilter === '9') {
+    // Всё, что опубликовано в ОГЭ, автоматически показывается и в 9 классе.
+    // При этом материалы только 9 класса не попадают автоматически в ОГЭ.
+    filtered = filtered.filter(p => String(p.grade) === '9' || String(p.grade) === 'oge');
   } else if (activeCatalogFilter !== 'all') {
     filtered = filtered.filter(p => String(p.grade) === activeCatalogFilter);
   }
@@ -872,3 +880,37 @@ function initFreeHeroButton() {
 }
 
 document.addEventListener('DOMContentLoaded', initFreeHeroButton);
+
+
+// ===========================
+// ПЛАШКА COOKIE ПРИ ПЕРВОМ ВХОДЕ
+// ===========================
+function initCookieNotice() {
+  const storageKey = 'shkatulkaCookieAccepted';
+  try {
+    if (localStorage.getItem(storageKey) === '1') return;
+  } catch (e) {}
+
+  if (document.getElementById('cookieNotice')) return;
+
+  const notice = document.createElement('div');
+  notice.id = 'cookieNotice';
+  notice.className = 'cookie-notice';
+  notice.innerHTML = `
+    <span>Мы используем файлы cookie</span>
+    <button type="button" class="cookie-notice-btn">Понятно</button>
+  `;
+
+  document.body.appendChild(notice);
+
+  requestAnimationFrame(() => notice.classList.add('show'));
+
+  const btn = notice.querySelector('.cookie-notice-btn');
+  btn.addEventListener('click', () => {
+    try { localStorage.setItem(storageKey, '1'); } catch (e) {}
+    notice.classList.remove('show');
+    setTimeout(() => notice.remove(), 250);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initCookieNotice);

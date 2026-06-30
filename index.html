@@ -817,6 +817,66 @@ body.dark-theme #emergencyProductModal .egm-img {
     flex-shrink: 0 !important;
   }
 
+
+  .footer-legal {
+    margin-top: 8px !important;
+    color: rgba(255,255,255,.72) !important;
+    font-size: .86rem !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
+  }
+
+  .cookie-notice {
+    position: fixed !important;
+    left: 18px !important;
+    bottom: 18px !important;
+    z-index: 2147483000 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    max-width: calc(100vw - 36px) !important;
+    padding: 12px 14px 12px 18px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.98) !important;
+    color: #1A1A2E !important;
+    border: 1px solid rgba(201,151,58,.35) !important;
+    box-shadow: 0 12px 34px rgba(26,26,46,.16) !important;
+    font-size: .92rem !important;
+    line-height: 1.35 !important;
+    opacity: 0 !important;
+    transform: translateY(12px) !important;
+    pointer-events: none !important;
+    transition: opacity .25s ease, transform .25s ease !important;
+  }
+
+  .cookie-notice.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .cookie-notice-btn {
+    border: none !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg,#8B2635,#C0392B) !important;
+    color: #fff !important;
+    padding: 8px 14px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    box-shadow: 0 5px 18px rgba(139,38,53,.22) !important;
+  }
+
+  @media (max-width: 520px) {
+    .cookie-notice {
+      left: 10px !important;
+      right: 10px !important;
+      bottom: 10px !important;
+      justify-content: space-between !important;
+      border-radius: 18px !important;
+    }
+  }
+
   @media (max-width: 720px) {
     .filter-row-break {
       display: none !important;
@@ -1458,11 +1518,13 @@ body.dark-theme #emergencyProductModal .egm-img {
 
 <p class="footer-copy">© 2026 Быкова Светлана Владимировна. Все права защищены.</p>
 
+<p class="footer-legal">ИП Быкова Светлана Владимировна, ИНН 384800642846, ОГРНИП 326385000015200.</p>
+
 </div>
 
 </footer>
 
-<script src="script.js?v=cms-active-1"></script>
+<script src="script.js?v=rules-cookie-1"></script>
 
 <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;"><div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div><img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/></div>
 
