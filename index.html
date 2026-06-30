@@ -320,6 +320,20 @@ body.dark-theme #emergencyProductModal .egm-img {
 }
 
 </style>
+  <style>
+  /* ДЕЛАЕМ КАРТИНКИ ПОЛНОСТЬЮ ВИДИМЫМИ */
+  .card-img img,
+  #finalProductModal .fpm-img {
+    object-fit: contain !important;
+    transform: scale(1) !important;
+    clip-path: none !important;
+    padding: 10px !important;
+  }
+  
+  .product-card:hover .card-img img {
+    transform: scale(1.04) !important;
+  }
+</style>
 </head>
 <body>
 <!-- ШАПКА -->
