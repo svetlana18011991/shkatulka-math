@@ -257,3 +257,113 @@ document.addEventListener('DOMContentLoaded', () => {
   initDiplomaModal();
   loadProducts();
 });
+
+
+
+
+// =========================================================
+// ОБНОВЛЕНИЯ: счётчики, тёмная тема, плавающая геометрия
+// =========================================================
+
+function initThemeToggle() {
+  if (document.querySelector('.theme-toggle')) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'theme-toggle';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Переключить тему');
+
+  const savedTheme = localStorage.getItem('site-theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+  }
+
+  btn.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    btn.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('site-theme', isDark ? 'dark' : 'light');
+  });
+
+  document.body.appendChild(btn);
+}
+
+function initAnimatedCounters() {
+  const counters = document.querySelectorAll('.stat-num');
+  if (!counters.length) return;
+
+  const animateCounter = (el) => {
+    if (el.dataset.done === '1') return;
+
+    const original = el.textContent.trim();
+    const numberMatch = original.match(/\d+/);
+
+    if (!numberMatch) return;
+
+    const target = Number(numberMatch[0]);
+    const prefix = original.slice(0, numberMatch.index);
+    const suffix = original.slice(numberMatch.index + numberMatch[0].length);
+
+    // Диапазоны вроде 5–11 не трогаем, чтобы не исказить смысл.
+    if (original.includes('–') || original.includes('-')) return;
+
+    el.dataset.done = '1';
+    el.classList.add('counting');
+
+    const duration = 1300;
+    const start = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(target * eased);
+
+      el.textContent = `${prefix}${value}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = original;
+        el.classList.remove('counting');
+      }
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  const observerCounters = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) animateCounter(entry.target);
+    });
+  }, { threshold: 0.55 });
+
+  counters.forEach(el => observerCounters.observe(el));
+}
+
+function initFloatingGeometry() {
+  if (document.querySelector('.floating-geometry')) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'floating-geometry';
+  layer.innerHTML = `
+    <span class="geo-item">△</span>
+    <span class="geo-item">x²</span>
+    <span class="geo-item">π</span>
+    <span class="geo-item">∑</span>
+    <span class="geo-item">√</span>
+  `;
+  document.body.prepend(layer);
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY * 0.08;
+    layer.style.transform = `translateY(${y}px)`;
+  }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
+  initAnimatedCounters();
+  initFloatingGeometry();
+});

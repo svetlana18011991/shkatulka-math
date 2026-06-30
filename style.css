@@ -2182,3 +2182,186 @@ body.modal-open {
   background: #ffffff !important;
   box-shadow: none !important;
 }
+
+
+
+
+/* =========================================================
+   ОБНОВЛЕНИЯ: счётчики, тёмная тема, геометрия, блик кнопок
+   Старые блоки не меняем — только добавляем новые эффекты
+========================================================= */
+
+/* Переключатель темы */
+.theme-toggle {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1200;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(201,151,58,0.35);
+  background: rgba(255,255,255,0.88);
+  color: var(--primary);
+  font-size: 1.35rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(139,38,53,0.16);
+  backdrop-filter: blur(10px);
+  transition: transform .3s ease, background .3s ease, color .3s ease, box-shadow .3s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-3px) rotate(10deg);
+  box-shadow: 0 16px 38px rgba(139,38,53,0.22);
+}
+
+/* Плавность перехода в тёмную тему */
+body,
+.header,
+.mobile-nav,
+.product-card,
+.review-card,
+.edu-card,
+.about-lead,
+.badge,
+.product-modal-window,
+.card-buy-btn,
+.btn,
+.filter-btn {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+/* Тёмная тема */
+body.dark-theme {
+  --bg: #10101a;
+  --white: #171726;
+  --text: #F7F3EA;
+  --text-muted: #C9C0B6;
+  --primary: #FF8A3D;
+  --primary-dark: #D85E17;
+  --gold: #FFB35C;
+  --gold-light: #FFD08A;
+  --primary-light: rgba(255,138,61,0.14);
+  --gold-glow: rgba(255,179,92,0.32);
+  background: radial-gradient(circle at top right, rgba(255,138,61,0.14), transparent 35%),
+              radial-gradient(circle at bottom left, rgba(255,107,157,0.08), transparent 38%),
+              #10101a;
+}
+
+body.dark-theme .header {
+  background: rgba(16,16,26,0.88);
+  border-bottom-color: rgba(255,179,92,0.2);
+}
+
+body.dark-theme .hero,
+body.dark-theme .about,
+body.dark-theme .products,
+body.dark-theme .education,
+body.dark-theme .reviews,
+body.dark-theme .contact,
+body.dark-theme .footer {
+  background-color: transparent;
+}
+
+body.dark-theme .product-card,
+body.dark-theme .review-card,
+body.dark-theme .edu-card,
+body.dark-theme .badge,
+body.dark-theme .product-modal-window,
+body.dark-theme .mobile-nav {
+  background: rgba(23,23,38,0.92);
+  border-color: rgba(255,179,92,0.22);
+  box-shadow: 0 16px 42px rgba(0,0,0,0.32), 0 0 30px rgba(255,138,61,0.06);
+}
+
+body.dark-theme .theme-toggle {
+  background: rgba(23,23,38,0.92);
+  color: #FFD08A;
+  border-color: rgba(255,179,92,0.45);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35), 0 0 22px rgba(255,138,61,0.18);
+}
+
+body.dark-theme .filter-btn {
+  background: rgba(23,23,38,0.65);
+  color: var(--text-muted);
+}
+
+body.dark-theme .card-img,
+body.dark-theme .product-modal-image {
+  background: rgba(255,255,255,0.03) !important;
+}
+
+/* Плавающая геометрия */
+.floating-geometry {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.geo-item {
+  position: absolute;
+  color: rgba(139,38,53,0.12);
+  font-family: var(--font-head);
+  font-weight: 700;
+  user-select: none;
+  transform: translate3d(0,0,0);
+  animation: geoFloat 18s ease-in-out infinite;
+}
+
+.geo-item:nth-child(1) { top: 18%; left: 4%; font-size: 42px; animation-delay: 0s; }
+.geo-item:nth-child(2) { top: 42%; right: 5%; font-size: 34px; animation-delay: -4s; }
+.geo-item:nth-child(3) { top: 72%; left: 8%; font-size: 30px; animation-delay: -8s; }
+.geo-item:nth-child(4) { top: 88%; right: 12%; font-size: 38px; animation-delay: -12s; }
+.geo-item:nth-child(5) { top: 32%; left: 48%; font-size: 26px; animation-delay: -6s; }
+
+body.dark-theme .geo-item {
+  color: rgba(255,179,92,0.16);
+  text-shadow: 0 0 18px rgba(255,138,61,0.14);
+}
+
+@keyframes geoFloat {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg); opacity: .45; }
+  50% { transform: translate3d(18px,-24px,0) rotate(4deg); opacity: .75; }
+}
+
+/* Блик на главных кнопках */
+.hero-btns .btn::before {
+  left: -120%;
+  animation: softButtonShine 5.8s ease-in-out infinite;
+}
+
+.hero-btns .btn:nth-child(2)::before {
+  animation-delay: 1.4s;
+}
+
+@keyframes softButtonShine {
+  0% { left: -120%; }
+  35% { left: -120%; }
+  52% { left: 120%; }
+  100% { left: 120%; }
+}
+
+/* Счётчики чуть живее при срабатывании */
+.stat-num.counting {
+  filter: drop-shadow(0 0 10px rgba(255,107,157,0.18));
+}
+
+@media (max-width: 720px) {
+  .theme-toggle {
+    right: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .geo-item {
+    opacity: .35;
+  }
+
+  .geo-item:nth-child(2),
+  .geo-item:nth-child(5) {
+    display: none;
+  }
+}
