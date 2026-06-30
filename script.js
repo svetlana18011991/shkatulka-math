@@ -6,7 +6,7 @@
 let allProducts = [];
 let currentProducts = [];
 
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/PASTE_YOUR_ID_HERE/export?format=csv";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1iQC0uc8RhCumuGJxPDlyq7UerC3ivrRygvfLbWz2Z5Y/export?format=csv";
 
 async function loadProducts() {
   try {
