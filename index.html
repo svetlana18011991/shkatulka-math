@@ -709,6 +709,29 @@ body.dark-theme #emergencyProductModal .egm-img {
     white-space: nowrap !important;
   }
 
+  /* Каталог: первые фильтры сверху, 10/11/ОГЭ/ЕГЭ — аккуратно одной строкой ниже */
+  .filters {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .filter-row-break {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    height: 0 !important;
+    margin: -2px 0 !important;
+    padding: 0 !important;
+  }
+
+  @media (max-width: 720px) {
+    .filter-row-break {
+      display: none !important;
+    }
+  }
+
   @media (max-width: 520px) {
     .hero-btns {
       gap: 8px !important;
@@ -1003,6 +1026,7 @@ body.dark-theme #emergencyProductModal .egm-img {
 
 <button class="filter-btn" data-filter="9">9 класс</button>
 
+<span class="filter-row-break" aria-hidden="true"></span>
 <button class="filter-btn" data-filter="10">10 класс</button>
 
 <button class="filter-btn" data-filter="11">11 класс</button>
