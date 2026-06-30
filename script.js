@@ -1,111 +1,259 @@
 
-let allProducts=[];
+// ===========================
+// ЗАГРУЗКА И РЕНДЕР ТОВАРОВ
+// ===========================
 
-async function loadProducts(){
-  const r=await fetch('products.json');
-  const p=await r.json();
-  allProducts=p;
-  renderProducts(p);
-  initFilters();
+let allProducts = [];
+let currentProducts = [];
+
+async function loadProducts() {
+  try {
+    const response = await fetch('products.json');
+    const products = await response.json();
+
+    allProducts = products;
+    currentProducts = products;
+
+    renderProducts(products);
+    initFilters();
+    setTimeout(observeCards, 300);
+  } catch (e) {
+    console.error('Ошибка загрузки товаров:', e);
+    document.getElementById('productsGrid').innerHTML =
+      '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1">Товары загружаются...</p>';
+  }
 }
 
-function renderProducts(products){
-  const grid=document.getElementById('productsGrid');
+function renderProducts(products) {
+  const grid = document.getElementById('productsGrid');
 
-  grid.innerHTML=products.map((p,i)=>`
-    <div class="product-card">
+  if (!products.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">По этому фильтру пока нет товаров</p>';
+    return;
+  }
 
+  currentProducts = products;
+
+  grid.innerHTML = products.map((p, index) => `
+    <div class="product-card" data-index="${index}" data-grade="${p.grade}">
       <div class="card-img">
-        <img src="${p.image}" alt="${p.title}">
+        ${p.image
+          ? `<img src="${p.image}" alt="${p.title}" loading="lazy"/>`
+          : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
+        }
+        <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
       </div>
 
-      <h3>${p.title}</h3>
+      <div class="card-body">
+        <div class="card-tags">
+          ${(p.tags || []).map(t => `<span class="card-tag">${t}</span>`).join('')}
+        </div>
 
-      <div class="price">${p.price} ₽</div>
+        <h3 class="card-title">${p.title}</h3>
+        <p class="card-desc">${p.cardDescription || p.description || ''}</p>
 
-      <div class="actions">
-        <div class="btn-watch" data-i="${i}">Смотреть</div>
-        <a class="btn-buy" href="${p.buyLink}" target="_blank">Купить</a>
+        <div class="card-footer">
+          <span class="card-price">${p.price} ₽</span>
+
+          <div class="card-actions">
+            <button type="button" class="card-view-btn">Смотреть</button>
+            <a href="${p.buyLink}" target="_blank" class="card-buy-btn" rel="noopener">
+              🛒 Купить
+            </a>
+          </div>
+        </div>
       </div>
-
     </div>
   `).join('');
 }
 
-function initFilters(){
-  document.querySelectorAll('.filter-btn').forEach(b=>{
-    b.onclick=()=>{
-      document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
+function gradeLabel(grade) {
+  if (grade === 'oge') return 'ОГЭ';
+  if (grade === 'ege') return 'ЕГЭ';
+  return `${grade} класс`;
+}
 
-      const f=b.dataset.filter;
+// ===========================
+// ФИЛЬТРЫ
+// ===========================
 
-      renderProducts(
-        f==="all"
+function initFilters() {
+  const buttons = document.querySelectorAll('.filter-btn');
+
+  buttons.forEach(btn => {
+    btn.onclick = () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+      const filtered = filter === 'all'
         ? allProducts
-        : allProducts.filter(x=>String(x.grade)===f)
-      );
-    }
+        : allProducts.filter(p => String(p.grade) === filter);
+
+      renderProducts(filtered);
+      setTimeout(observeCards, 100);
+    };
   });
 }
 
-function openModal(p){
-  let m=document.getElementById('modal');
+// ===========================
+// МОДАЛЬНОЕ ОКНО ТОВАРА
+// ===========================
 
-  if(!m){
-    m=document.createElement('div');
-    m.id='modal';
-    m.style.cssText=`
-      position:fixed;inset:0;
-      background:rgba(0,0,0,.6);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-    `;
+function openProductModal(product) {
+  let modal = document.getElementById('productModal');
 
-    m.innerHTML=`
-      <div style="background:#fff;width:900px;max-width:95%;display:flex;border-radius:16px;overflow:hidden">
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'productModal';
+    modal.className = 'product-modal';
 
-        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:20px">
-          <img id="mimg" style="max-width:100%;max-height:400px;object-fit:contain">
+    modal.innerHTML = `
+      <div class="product-modal-window">
+        <button type="button" class="product-modal-close" aria-label="Закрыть">×</button>
+
+        <div class="product-modal-image">
+          <img id="productModalImg" alt="">
         </div>
 
-        <div style="flex:1;padding:20px">
-          <h2 id="mtitle"></h2>
-          <div id="mdesc" style="white-space:pre-line;margin-top:10px"></div>
-          <div id="mprice" style="font-size:22px;font-weight:700;color:#8B2635;margin-top:15px"></div>
-          <a id="mbuy" target="_blank"
-             style="display:inline-block;margin-top:15px;background:#8B2635;color:#fff;padding:10px 18px;border-radius:30px">
-            Купить
-          </a>
-        </div>
+        <div class="product-modal-info">
+          <h2 id="productModalTitle"></h2>
+          <p id="productModalDesc" class="product-modal-desc"></p>
 
+          <div class="product-modal-inside">
+            <h3 id="productModalInsideTitle"></h3>
+            <ul id="productModalList"></ul>
+          </div>
+
+          <div class="product-modal-bottom">
+            <div id="productModalPrice" class="product-modal-price"></div>
+            <a id="productModalBuy" class="product-modal-buy" target="_blank" rel="noopener">Купить</a>
+          </div>
+        </div>
       </div>
     `;
 
-    document.body.appendChild(m);
+    document.body.appendChild(modal);
 
-    m.onclick=(e)=>{if(e.target===m)m.style.display='none';};
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeProductModal();
+    });
+
+    modal.querySelector('.product-modal-close').addEventListener('click', closeProductModal);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeProductModal();
+    });
   }
 
-  m.querySelector('#mimg').src=p.image;
-  m.querySelector('#mtitle').textContent=p.title;
-  m.querySelector('#mdesc').textContent=p.description||'';
-  m.querySelector('#mprice').textContent=p.price+' ₽';
-  m.querySelector('#mbuy').href=p.buyLink;
+  modal.querySelector('#productModalImg').src = product.image || '';
+  modal.querySelector('#productModalImg').alt = product.title || '';
+  modal.querySelector('#productModalTitle').textContent = product.title || '';
+  modal.querySelector('#productModalDesc').textContent = product.description || '';
+  modal.querySelector('#productModalInsideTitle').textContent = product.insideTitle || 'Что внутри:';
+  modal.querySelector('#productModalList').innerHTML =
+    (product.inside || []).map(item => `<li>${item}</li>`).join('');
+  modal.querySelector('#productModalPrice').textContent = `${product.price} ₽`;
+  modal.querySelector('#productModalBuy').href = product.buyLink || '#';
 
-  m.style.display='flex';
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
 }
 
-document.addEventListener('click',(e)=>{
-  const b=e.target.closest('.btn-watch');
-  if(!b) return;
+function closeProductModal() {
+  const modal = document.getElementById('productModal');
+  if (modal) modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+}
 
-  const card=b.closest('.product-card');
-  const i=[...document.querySelectorAll('.product-card')].indexOf(card);
+document.addEventListener('click', e => {
+  const viewBtn = e.target.closest('.card-view-btn');
+  if (!viewBtn) return;
 
-  openModal(allProducts[i]);
+  const card = viewBtn.closest('.product-card');
+  const product = currentProducts[Number(card.dataset.index)];
+
+  if (product) openProductModal(product);
 });
 
-loadProducts();
+// ===========================
+// БУРГЕР МЕНЮ
+// ===========================
+
+function initMobileMenu() {
+  const burger = document.getElementById('burger');
+  const mobileNav = document.getElementById('mobileNav');
+
+  if (!burger || !mobileNav) return;
+
+  burger.onclick = () => {
+    burger.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+  };
+
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.onclick = () => {
+      burger.classList.remove('open');
+      mobileNav.classList.remove('open');
+    };
+  });
+}
+
+// ===========================
+// АНИМАЦИЯ ПОЯВЛЕНИЯ КАРТОЧЕК
+// ===========================
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeCards() {
+  document.querySelectorAll('.product-card, .review-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(card);
+  });
+}
+
+// ===========================
+// МОДАЛЬНОЕ ОКНО ДИПЛОМОВ
+// ===========================
+
+function initDiplomaModal() {
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('modalImg');
+  const closeBtn = document.querySelector('#imgModal div');
+
+  if (!modal || !modalImg || !closeBtn) return;
+
+  document.querySelectorAll('.diploma-img').forEach(img => {
+    img.onclick = () => {
+      modal.style.display = 'flex';
+      modalImg.src = img.src;
+    };
+  });
+
+  closeBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  modal.onclick = e => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
+}
+
+// ===========================
+// ЗАПУСК
+// ===========================
+
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileMenu();
+  initDiplomaModal();
+  loadProducts();
+});
