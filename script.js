@@ -104,6 +104,8 @@ function renderProducts(products, hasSearch = false) {
 
       <div class="card-body card-body-simple">
 
+        <h3 class="card-title card-title-simple">${p.title || ''}</h3>
+
         <div class="card-footer card-footer-simple">
 
           <span class="card-price">${p.price > 0 ? p.price + ' ₽' : 'Бесплатно'}</span>
