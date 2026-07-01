@@ -20,7 +20,9 @@ async function loadProducts() {
 
     // Добавлен сброс кэша, чтобы новые товары появлялись сразу
 
-    const response = await fetch('products.json?t=' + new Date().getTime());
+    const response = await fetch('products.json?t=' + new Date().getTime(), { cache: 'no-store' });
+
+    if (!response.ok) throw new Error('products.json не загрузился: ' + response.status);
 
     const data = await response.json();
 
@@ -421,21 +423,27 @@ function initMobileMenu() {
 
 // ===========================
 
-const observer = new IntersectionObserver((entries) => {
+let observer = null;
 
-  entries.forEach(entry => {
+if ('IntersectionObserver' in window) {
 
-    if (entry.isIntersecting) {
+  observer = new IntersectionObserver((entries) => {
 
-      entry.target.style.opacity = '1';
+    entries.forEach(entry => {
 
-      entry.target.style.transform = 'translateY(0)';
+      if (entry.isIntersecting) {
 
-    }
+        entry.target.style.opacity = '1';
 
-  });
+        entry.target.style.transform = 'translateY(0)';
 
-}, { threshold: 0.1 });
+      }
+
+    });
+
+  }, { threshold: 0.1 });
+
+}
 
 
 
@@ -449,7 +457,17 @@ function observeCards() {
 
     card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
 
-    observer.observe(card);
+    if (observer) {
+
+      observer.observe(card);
+
+    } else {
+
+      card.style.opacity = '1';
+
+      card.style.transform = 'translateY(0)';
+
+    }
 
   });
 
