@@ -34,6 +34,10 @@ async function loadProducts() {
   }
 }
 
+// ===========================
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ===========================
+
 function hasFileForDownload(product) {
   return Boolean(String(product && product.downloadFile ? product.downloadFile : '').trim());
 }
@@ -41,6 +45,28 @@ function hasFileForDownload(product) {
 function isPaidProduct(product) {
   return Number(product && product.price ? product.price : 0) > 0;
 }
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function makeLinksClickable(text) {
+  const escaped = escapeHtml(text);
+
+  return escaped.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+  );
+}
+
+// ===========================
+// РЕНДЕР КАТАЛОГА
+// ===========================
 
 function renderProducts(products, hasSearch = false) {
   const grid = document.getElementById('productsGrid');
@@ -222,7 +248,7 @@ function makeSearchStem(word) {
 }
 
 // ===========================
-// МОДАЛЬНОЕ ОКНО ТОВАРА (Старое, резервное)
+// МОДАЛЬНОЕ ОКНО ТОВАРА (СТАРОЕ, РЕЗЕРВНОЕ)
 // ===========================
 
 function openProductModal(product) {
@@ -278,9 +304,9 @@ function openProductModal(product) {
   modal.querySelector('#productModalImg').src = product.image || '';
   modal.querySelector('#productModalImg').alt = product.title || '';
   modal.querySelector('#productModalTitle').textContent = product.title || '';
-  modal.querySelector('#productModalDesc').textContent = product.description || '';
+  modal.querySelector('#productModalDesc').innerHTML = makeLinksClickable(product.description || '');
   modal.querySelector('#productModalInsideTitle').textContent = product.insideTitle || 'Что внутри:';
-  modal.querySelector('#productModalList').innerHTML = (product.inside || []).map(item => `<li>${item}</li>`).join('');
+  modal.querySelector('#productModalList').innerHTML = (product.inside || []).map(item => `<li>${escapeHtml(item)}</li>`).join('');
   modal.querySelector('#productModalPrice').textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
 
   if (isPaid) {
@@ -391,7 +417,7 @@ function initDiplomaModal() {
 }
 
 // ===========================
-// СТИЛИ ДЛЯ КНОПОК БЕСПЛАТНЫХ МАТЕРИАЛОВ
+// СТИЛИ ДЛЯ КНОПОК И ССЫЛОК
 // ===========================
 
 function initDownloadButtonLayoutCss() {
@@ -419,6 +445,20 @@ function initDownloadButtonLayoutCss() {
 
     .card-actions-free-single {
       justify-content: flex-end !important;
+    }
+
+    .fpm-desc a,
+    .product-modal-desc a {
+      color: #8B2635 !important;
+      font-weight: 700 !important;
+      text-decoration: underline !important;
+      text-underline-offset: 3px !important;
+      word-break: break-word !important;
+    }
+
+    .fpm-desc a:hover,
+    .product-modal-desc a:hover {
+      color: #C0392B !important;
     }
 
     @media (max-width: 520px) {
@@ -449,7 +489,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
 });
 
-// Анимация чисел
+// ===========================
+// АНИМАЦИЯ ЧИСЕЛ
+// ===========================
 
 function initAnimatedCounters() {
   const counters = document.querySelectorAll('.stat-num');
@@ -613,8 +655,8 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
     idx = 0;
 
     m.querySelector('.fpm-title').textContent = product.title || '';
-    m.querySelector('.fpm-desc').textContent = product.description || '';
-    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + x + '</li>').join('');
+    m.querySelector('.fpm-desc').innerHTML = makeLinksClickable(product.description || '');
+    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + escapeHtml(x) + '</li>').join('');
 
     const isPaid = isPaidProduct(product);
     const hasDownloadFile = hasFileForDownload(product);
