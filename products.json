@@ -223,6 +223,23 @@
         "7",
         "сумма углов"
       ]
+    },
+    {
+      "title": "ОГЭ задания 1-5 \"Листы\"",
+      "grade": "oge",
+      "price": 0,
+      "description": "Три интерактивных варианта заданий 1-5 по теме \"Листы\"\nСсылка: https://view.genially.com/67fbb907c2e20bb7b08573d8/interactive-content-listy-bumagi",
+      "inside": [],
+      "buyLink": "",
+      "image": "/images/ввув.jpg",
+      "gallery": [],
+      "downloadFile": "",
+      "tags": [
+        "9",
+        "огэ",
+        "листы",
+        "задания 1-5"
+      ]
     }
   ]
 }
