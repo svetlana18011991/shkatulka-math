@@ -240,6 +240,23 @@
         "листы",
         "задания 1-5"
       ]
+    },
+    {
+      "title": "ОГЭ задания 1-5 \"Участки\"",
+      "grade": "oge",
+      "price": 0,
+      "description": "Три интерактивных варианта заданий 1-5 по теме \"Листы\"\nСсылка: https://view.genially.com/67f7e790982e98baeae2efe0/interactive-content-uchastki",
+      "inside": [],
+      "buyLink": "",
+      "image": "/images/уча.jpg",
+      "gallery": [],
+      "downloadFile": "",
+      "tags": [
+        "огэ",
+        "9",
+        "задания 1-5",
+        "участки"
+      ]
     }
   ]
 }
