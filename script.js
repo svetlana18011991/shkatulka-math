@@ -42,51 +42,6 @@ function isPaidProduct(product) {
   return Number(product && product.price ? product.price : 0) > 0;
 }
 
-
-function escapeHtml(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function normalizeLinkHref(rawUrl) {
-  const url = String(rawUrl || '').trim();
-
-  if (/^https?:\/\//i.test(url)) return url;
-  if (/^www\./i.test(url)) return 'https://' + url;
-
-  return '';
-}
-
-function stripTrailingUrlPunctuation(url) {
-  let cleanUrl = String(url || '');
-  let trailing = '';
-
-  while (/[.,!?;:)]$/.test(cleanUrl)) {
-    trailing = cleanUrl.slice(-1) + trailing;
-    cleanUrl = cleanUrl.slice(0, -1);
-  }
-
-  return { cleanUrl, trailing };
-}
-
-function linkifyPlainText(value) {
-  const escaped = escapeHtml(value);
-  const urlPattern = /(?:https?:\/\/|www\.)[^\s<]+/gi;
-
-  return escaped.replace(urlPattern, match => {
-    const parts = stripTrailingUrlPunctuation(match);
-    const href = normalizeLinkHref(parts.cleanUrl);
-
-    if (!href) return match;
-
-    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" class="product-desc-link">${parts.cleanUrl}</a>${parts.trailing}`;
-  });
-}
-
 // Новая функция для проверки класса (поддерживает массив классов)
 function hasGrade(product, gradeToCheck) {
   if (Array.isArray(product.grade)) {
@@ -337,7 +292,7 @@ function openProductModal(product) {
   modal.querySelector('#productModalImg').src = product.image || '';
   modal.querySelector('#productModalImg').alt = product.title || '';
   modal.querySelector('#productModalTitle').textContent = product.title || '';
-  modal.querySelector('#productModalDesc').innerHTML = linkifyPlainText(product.description || '');
+  modal.querySelector('#productModalDesc').textContent = product.description || '';
   modal.querySelector('#productModalInsideTitle').textContent = product.insideTitle || 'Что внутри:';
   modal.querySelector('#productModalList').innerHTML = (product.inside || []).map(item => `<li>${item}</li>`).join('');
   modal.querySelector('#productModalPrice').textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
@@ -672,7 +627,7 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
     idx = 0;
 
     m.querySelector('.fpm-title').textContent = product.title || '';
-    m.querySelector('.fpm-desc').innerHTML = linkifyPlainText(product.description || '');
+    m.querySelector('.fpm-desc').textContent = product.description || '';
     m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + x + '</li>').join('');
 
     const isPaid = isPaidProduct(product);
