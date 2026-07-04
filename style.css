@@ -3031,3 +3031,19 @@ body.dark-theme #emergencyProductModal .egm-img {
     clip-path: inset(12px) !important;
   }
 }
+
+
+/* Кликабельные ссылки в описании товара */
+.fpm-desc a,
+.product-modal-desc a {
+  color: #8B2635 !important;
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  overflow-wrap: anywhere !important;
+}
+
+.fpm-desc a:hover,
+.product-modal-desc a:hover {
+  color: #C0392B !important;
+}

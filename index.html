@@ -698,6 +698,17 @@ body.dark-theme #emergencyProductModal .egm-img {
 
 
 
+
+
+  .fpm-desc a,
+  .product-modal-desc a {
+    color: #8B2635 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    overflow-wrap: anywhere !important;
+  }
+
   /* УБИРАЕМ ЛИШНЮЮ НАДПИСЬ "ЧТО ВНУТРИ:" */
 
   .fpm-inside h3,
@@ -1695,7 +1706,36 @@ body.dark-theme #emergencyProductModal .egm-img {
 
 (function(){
 
-  let gallery = [];
+  
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function makeDescriptionLinksClickable(value) {
+  const escaped = escapeHtml(value);
+  const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
+
+  return escaped.replace(urlRegex, function (match) {
+    let urlText = match;
+    let tail = '';
+
+    while (/[.,!?;:)\]]$/.test(urlText)) {
+      tail = urlText.slice(-1) + tail;
+      urlText = urlText.slice(0, -1);
+    }
+
+    const href = /^https?:\/\//i.test(urlText) ? urlText : 'https://' + urlText;
+
+    return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + urlText + '</a>' + tail;
+  });
+}
+
+let gallery = [];
 
   let idx = 0;
 
@@ -1869,7 +1909,7 @@ body.dark-theme #emergencyProductModal .egm-img {
 
     m.querySelector('.fpm-title').textContent = product.title || '';
 
-    m.querySelector('.fpm-desc').textContent = product.description || '';
+    m.querySelector('.fpm-desc').innerHTML = makeDescriptionLinksClickable(product.description || '');
 
     m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+x+'</li>').join('');
 
