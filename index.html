@@ -1060,6 +1060,25 @@ body.dark-theme #emergencyProductModal .egm-img {
 }
 </style>
 
+
+<style id="clickable-product-description-links-css">
+  .product-modal-desc a,
+  .fpm-desc a,
+  .product-desc-link {
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .product-modal-desc a:hover,
+  .fpm-desc a:hover,
+  .product-desc-link:hover {
+    color: var(--primary-dark) !important;
+  }
+</style>
+
 </head>
 
 <body>
@@ -1691,6 +1710,44 @@ body.dark-theme #emergencyProductModal .egm-img {
 
 <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;"><div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div><img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/></div>
 
+<script id="clickable-product-description-links">
+(function(){
+  window.escapeProductDescriptionHtml = window.escapeProductDescriptionHtml || function(value){
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
+  window.linkifyProductDescription = window.linkifyProductDescription || function(value){
+    var escaped = window.escapeProductDescriptionHtml(value);
+    var urlPattern = /(?:https?:\/\/|www\.)[^\s<]+/gi;
+
+    return escaped.replace(urlPattern, function(match){
+      var cleanUrl = String(match || '');
+      var trailing = '';
+
+      while(/[.,!?;:)]$/.test(cleanUrl)){
+        trailing = cleanUrl.slice(-1) + trailing;
+        cleanUrl = cleanUrl.slice(0, -1);
+      }
+
+      var href = /^https?:\/\//i.test(cleanUrl)
+        ? cleanUrl
+        : /^www\./i.test(cleanUrl)
+          ? 'https://' + cleanUrl
+          : '';
+
+      if(!href) return match;
+
+      return '<a href="' + window.escapeProductDescriptionHtml(href) + '" target="_blank" rel="noopener noreferrer" class="product-desc-link">' + cleanUrl + '</a>' + trailing;
+    });
+  };
+})();
+</script>
+
 <script id="gallery-final-inline-js">
 
 (function(){
@@ -1869,7 +1926,7 @@ body.dark-theme #emergencyProductModal .egm-img {
 
     m.querySelector('.fpm-title').textContent = product.title || '';
 
-    m.querySelector('.fpm-desc').textContent = product.description || '';
+    m.querySelector('.fpm-desc').innerHTML = window.linkifyProductDescription ? window.linkifyProductDescription(product.description || '') : (product.description || '');
 
     m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+x+'</li>').join('');
 
@@ -2058,6 +2115,9 @@ body.dark-theme #emergencyProductModal .egm-img {
   }, true);
 })();
 </script>
+
+
+
 
 </body>
 
