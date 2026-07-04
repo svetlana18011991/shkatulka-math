@@ -9,6 +9,7 @@ let activeCatalogSearch = '';
 
 async function loadProducts() {
   try {
+    // Добавлен сброс кэша, чтобы новые товары появлялись сразу
     const response = await fetch('products.json?t=' + new Date().getTime(), { cache: 'no-store' });
 
     if (!response.ok) throw new Error('products.json не загрузился: ' + response.status);
@@ -33,10 +34,6 @@ async function loadProducts() {
   }
 }
 
-// ===========================
-// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// ===========================
-
 function hasFileForDownload(product) {
   return Boolean(String(product && product.downloadFile ? product.downloadFile : '').trim());
 }
@@ -45,62 +42,13 @@ function isPaidProduct(product) {
   return Number(product && product.price ? product.price : 0) > 0;
 }
 
-function escapeHtml(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function makeLinksClickable(text) {
-  const escaped = escapeHtml(text);
-
-  return escaped.replace(
-    /(https?:\/\/[^\s<]+)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-  );
-}
-
-function renderModalBottom(container, product) {
-  if (!container) return;
-
-  const isPaid = isPaidProduct(product);
-  const hasDownloadFile = hasFileForDownload(product);
-
-  container.innerHTML = '';
-
-  const price = document.createElement('div');
-  price.className = 'fpm-price';
-  price.textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
-  container.appendChild(price);
-
-  if (isPaid) {
-    const buyBtn = document.createElement('a');
-    buyBtn.className = 'fpm-buy';
-    buyBtn.href = product.buyLink || '#';
-    buyBtn.target = '_blank';
-    buyBtn.rel = 'noopener';
-    buyBtn.textContent = 'Купить';
-    container.appendChild(buyBtn);
-    return;
+// Новая функция для проверки класса (поддерживает массив классов)
+function hasGrade(product, gradeToCheck) {
+  if (Array.isArray(product.grade)) {
+    return product.grade.includes(gradeToCheck);
   }
-
-  if (hasDownloadFile) {
-    const downloadBtn = document.createElement('a');
-    downloadBtn.className = 'fpm-buy';
-    downloadBtn.href = product.downloadFile;
-    downloadBtn.target = '_blank';
-    downloadBtn.rel = 'noopener';
-    downloadBtn.textContent = 'Скачать';
-    container.appendChild(downloadBtn);
-  }
+  return String(product.grade) === gradeToCheck;
 }
-
-// ===========================
-// РЕНДЕР КАТАЛОГА
-// ===========================
 
 function renderProducts(products, hasSearch = false) {
   const grid = document.getElementById('productsGrid');
@@ -115,6 +63,9 @@ function renderProducts(products, hasSearch = false) {
   grid.innerHTML = products.map((p, index) => {
     const isPaid = isPaidProduct(p);
     const hasDownloadFile = hasFileForDownload(p);
+    
+    // Поддержка атрибута data-grade для массива классов
+    const dataGrade = Array.isArray(p.grade) ? p.grade.join(',') : p.grade;
 
     const actionButton = isPaid
       ? `<a href="${p.buyLink || '#'}" target="_blank" class="card-buy-btn" rel="noopener">🛒 Купить</a>`
@@ -123,7 +74,7 @@ function renderProducts(products, hasSearch = false) {
         : '';
 
     return `
-      <div class="product-card product-card-simple" data-index="${index}" data-grade="${p.grade}" title="${p.title || ''}">
+      <div class="product-card product-card-simple" data-index="${index}" data-grade="${dataGrade}" title="${p.title || ''}">
         <div class="card-img">
           ${p.image
             ? `<img src="${p.image}" alt="${p.title || ''}" loading="lazy"/>`
@@ -151,11 +102,16 @@ function renderProducts(products, hasSearch = false) {
 }
 
 function gradeLabel(grade) {
-  if (grade === 'free') return 'Бесплатно';
-  if (grade === 'oge') return 'ОГЭ';
-  if (grade === 'ege') return 'ЕГЭ';
-
-  return `${grade} класс`;
+  if (!grade) return '';
+  // Превращаем в массив, даже если класс один, чтобы вывести всё через запятую
+  let grades = Array.isArray(grade) ? grade : [grade];
+  
+  return grades.map(g => {
+    if (g === 'free') return 'Бесплатно';
+    if (g === 'oge') return 'ОГЭ';
+    if (g === 'ege') return 'ЕГЭ';
+    return `${g} класс`;
+  }).join(', ');
 }
 
 // ===========================
@@ -207,13 +163,15 @@ function applyCatalogFilters() {
   let filtered = allProducts.slice();
 
   if (activeCatalogFilter === 'free') {
-    filtered = filtered.filter(p => String(p.grade) === 'free' || Number(p.price) <= 0);
+    filtered = filtered.filter(p => hasGrade(p, 'free') || Number(p.price) <= 0);
   } else if (activeCatalogFilter === '11') {
-    filtered = filtered.filter(p => String(p.grade) === '11' || String(p.grade) === 'ege');
+    // Всё, что опубликовано в ЕГЭ, автоматически показывается и в 11 классе.
+    filtered = filtered.filter(p => hasGrade(p, '11') || hasGrade(p, 'ege'));
   } else if (activeCatalogFilter === '9') {
-    filtered = filtered.filter(p => String(p.grade) === '9' || String(p.grade) === 'oge');
+    // Всё, что опубликовано в ОГЭ, автоматически показывается и в 9 классе.
+    filtered = filtered.filter(p => hasGrade(p, '9') || hasGrade(p, 'oge'));
   } else if (activeCatalogFilter !== 'all') {
-    filtered = filtered.filter(p => String(p.grade) === activeCatalogFilter);
+    filtered = filtered.filter(p => hasGrade(p, activeCatalogFilter));
   }
 
   const queryWords = getSearchWords(activeCatalogSearch);
@@ -248,7 +206,7 @@ function productSearchText(product) {
     product.description,
     product.cardDescription,
     product.insideTitle,
-    product.grade,
+    Array.isArray(product.grade) ? product.grade.join(' ') : product.grade,
     gradeLabel(product.grade),
     Array.isArray(product.tags) ? product.tags.join(' ') : product.tags,
     Array.isArray(product.inside) ? product.inside.join(' ') : product.inside
@@ -278,7 +236,7 @@ function makeSearchStem(word) {
 }
 
 // ===========================
-// МОДАЛЬНОЕ ОКНО ТОВАРА (СТАРОЕ, РЕЗЕРВНОЕ)
+// МОДАЛЬНОЕ ОКНО ТОВАРА (Старое, резервное)
 // ===========================
 
 function openProductModal(product) {
@@ -306,7 +264,10 @@ function openProductModal(product) {
             <ul id="productModalList"></ul>
           </div>
 
-          <div class="product-modal-bottom" id="productModalBottom"></div>
+          <div class="product-modal-bottom">
+            <div id="productModalPrice" class="product-modal-price"></div>
+            <a id="productModalBuy" class="product-modal-buy" target="_blank" rel="noopener">Купить</a>
+          </div>
         </div>
       </div>
     `;
@@ -324,45 +285,29 @@ function openProductModal(product) {
     });
   }
 
+  const isPaid = isPaidProduct(product);
+  const hasDownloadFile = hasFileForDownload(product);
+  const modalBuy = modal.querySelector('#productModalBuy');
+
   modal.querySelector('#productModalImg').src = product.image || '';
   modal.querySelector('#productModalImg').alt = product.title || '';
   modal.querySelector('#productModalTitle').textContent = product.title || '';
-  modal.querySelector('#productModalDesc').innerHTML = makeLinksClickable(product.description || '');
+  modal.querySelector('#productModalDesc').textContent = product.description || '';
   modal.querySelector('#productModalInsideTitle').textContent = product.insideTitle || 'Что внутри:';
-  modal.querySelector('#productModalList').innerHTML = (product.inside || []).map(item => `<li>${escapeHtml(item)}</li>`).join('');
+  modal.querySelector('#productModalList').innerHTML = (product.inside || []).map(item => `<li>${item}</li>`).join('');
+  modal.querySelector('#productModalPrice').textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
 
-  const oldBottom = modal.querySelector('.product-modal-bottom');
-  if (oldBottom) {
-    oldBottom.innerHTML = '';
-
-    const isPaid = isPaidProduct(product);
-    const hasDownloadFile = hasFileForDownload(product);
-
-    const price = document.createElement('div');
-    price.id = 'productModalPrice';
-    price.className = 'product-modal-price';
-    price.textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
-    oldBottom.appendChild(price);
-
-    if (isPaid) {
-      const buyBtn = document.createElement('a');
-      buyBtn.id = 'productModalBuy';
-      buyBtn.className = 'product-modal-buy';
-      buyBtn.href = product.buyLink || '#';
-      buyBtn.target = '_blank';
-      buyBtn.rel = 'noopener';
-      buyBtn.textContent = 'Купить';
-      oldBottom.appendChild(buyBtn);
-    } else if (hasDownloadFile) {
-      const downloadBtn = document.createElement('a');
-      downloadBtn.id = 'productModalBuy';
-      downloadBtn.className = 'product-modal-buy';
-      downloadBtn.href = product.downloadFile;
-      downloadBtn.target = '_blank';
-      downloadBtn.rel = 'noopener';
-      downloadBtn.textContent = 'Скачать';
-      oldBottom.appendChild(downloadBtn);
-    }
+  if (isPaid) {
+    modalBuy.style.display = '';
+    modalBuy.href = product.buyLink || '#';
+    modalBuy.textContent = 'Купить';
+  } else if (hasDownloadFile) {
+    modalBuy.style.display = '';
+    modalBuy.href = product.downloadFile;
+    modalBuy.textContent = 'Скачать';
+  } else {
+    modalBuy.style.display = 'none';
+    modalBuy.removeAttribute('href');
   }
 
   modal.classList.add('open');
@@ -460,7 +405,7 @@ function initDiplomaModal() {
 }
 
 // ===========================
-// СТИЛИ ДЛЯ КНОПОК И ССЫЛОК
+// СТИЛИ ДЛЯ КНОПОК БЕСПЛАТНЫХ МАТЕРИАЛОВ
 // ===========================
 
 function initDownloadButtonLayoutCss() {
@@ -488,20 +433,6 @@ function initDownloadButtonLayoutCss() {
 
     .card-actions-free-single {
       justify-content: flex-end !important;
-    }
-
-    .fpm-desc a,
-    .product-modal-desc a {
-      color: #8B2635 !important;
-      font-weight: 700 !important;
-      text-decoration: underline !important;
-      text-underline-offset: 3px !important;
-      word-break: break-word !important;
-    }
-
-    .fpm-desc a:hover,
-    .product-modal-desc a:hover {
-      color: #C0392B !important;
     }
 
     @media (max-width: 520px) {
@@ -532,9 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
 });
 
-// ===========================
-// АНИМАЦИЯ ЧИСЕЛ
-// ===========================
+// Анимация чисел
 
 function initAnimatedCounters() {
   const counters = document.querySelectorAll('.stat-num');
@@ -615,7 +544,8 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
     if (cache.length) return cache;
 
     try {
-      const r = await fetch('products.json?t=' + new Date().getTime(), { cache: 'no-store' });
+      // Сброс кэша и поддержка Sveltia
+      const r = await fetch('products.json?t=' + new Date().getTime());
       const data = await r.json();
 
       cache = data.items || (Array.isArray(data) ? data : []);
@@ -655,7 +585,10 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
             <ul class="fpm-list"></ul>
           </div>
 
-          <div class="fpm-bottom"></div>
+          <div class="fpm-bottom">
+            <div class="fpm-price"></div>
+            <a class="fpm-buy" target="_blank" rel="noopener">Купить</a>
+          </div>
         </div>
       </div>
     `;
@@ -686,6 +619,7 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
   function open(product) {
     const m = ensureModal();
 
+    // Формируем галерею
     gallery = Array.isArray(product.gallery) && product.gallery.length
       ? product.gallery.map(g => g.media ? g.media : g).filter(Boolean)
       : [product.image].filter(Boolean);
@@ -693,10 +627,27 @@ document.addEventListener('DOMContentLoaded', initAnimatedCounters);
     idx = 0;
 
     m.querySelector('.fpm-title').textContent = product.title || '';
-    m.querySelector('.fpm-desc').innerHTML = makeLinksClickable(product.description || '');
-    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + escapeHtml(x) + '</li>').join('');
+    m.querySelector('.fpm-desc').textContent = product.description || '';
+    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + x + '</li>').join('');
 
-    renderModalBottom(m.querySelector('.fpm-bottom'), product);
+    const isPaid = isPaidProduct(product);
+    const hasDownloadFile = hasFileForDownload(product);
+    const modalBuy = m.querySelector('.fpm-buy');
+
+    m.querySelector('.fpm-price').textContent = isPaid ? `${product.price} ₽` : 'Бесплатно';
+
+    if (isPaid) {
+      modalBuy.style.display = '';
+      modalBuy.href = product.buyLink || '#';
+      modalBuy.textContent = 'Купить';
+    } else if (hasDownloadFile) {
+      modalBuy.style.display = '';
+      modalBuy.href = product.downloadFile;
+      modalBuy.textContent = 'Скачать';
+    } else {
+      modalBuy.style.display = 'none';
+      modalBuy.removeAttribute('href');
+    }
 
     const dots = m.querySelector('.fpm-dots');
 
