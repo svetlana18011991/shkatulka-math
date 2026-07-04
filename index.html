@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-
-
 <html lang="ru">
 
 <head>
@@ -329,7 +327,6 @@
   line-height:1.2!important;
 
   color:#1A1A2E!important;
-
   padding-right:30px!important;
 
 }
@@ -697,17 +694,6 @@ body.dark-theme #emergencyProductModal .egm-img {
   }
 
 
-
-
-
-  .fpm-desc a,
-  .product-modal-desc a {
-    color: #8B2635 !important;
-    font-weight: 700 !important;
-    text-decoration: underline !important;
-    text-underline-offset: 3px !important;
-    overflow-wrap: anywhere !important;
-  }
 
   /* УБИРАЕМ ЛИШНЮЮ НАДПИСЬ "ЧТО ВНУТРИ:" */
 
@@ -1703,365 +1689,179 @@ body.dark-theme #emergencyProductModal .egm-img {
 <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;"><div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div><img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/></div>
 
 <script id="gallery-final-inline-js">
-
 (function(){
-
-  
-function escapeHtml(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function makeDescriptionLinksClickable(value) {
-  const escaped = escapeHtml(value);
-  const urlRegex = /((https?:\/\/|www\.)[^\s<]+)/gi;
-
-  return escaped.replace(urlRegex, function (match) {
-    let urlText = match;
-    let tail = '';
-
-    while (/[.,!?;:)\]]$/.test(urlText)) {
-      tail = urlText.slice(-1) + tail;
-      urlText = urlText.slice(0, -1);
-    }
-
-    const href = /^https?:\/\//i.test(urlText) ? urlText : 'https://' + urlText;
-
-    return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + urlText + '</a>' + tail;
-  });
-}
-
-let gallery = [];
-
+  let gallery = [];
   let idx = 0;
-
   let cache = [];
 
-
-
   function ready(fn){
-
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
-
     else fn();
-
   }
-
-
 
   async function getProducts(){
-
     try{
-
       if(Array.isArray(currentProducts) && currentProducts.length) return currentProducts;
-
     }catch(e){}
-
     try{
-
       if(Array.isArray(allProducts) && allProducts.length) return allProducts;
-
     }catch(e){}
-
     if(cache.length) return cache;
-
     try{
-
       const r = await fetch('products.json?v=gallery-final-3');
-
       cache = await r.json();
-
     }catch(e){
-
       console.error('products.json не загрузился для модалки', e);
-
       cache = [];
-
     }
-
     return cache;
-
   }
-
-
 
   function ensureModal(){
-
     let m = document.getElementById('finalProductModal');
-
     if(m) return m;
 
-
-
     m = document.createElement('div');
-
     m.id = 'finalProductModal';
-
     m.innerHTML = `
-
       <div class="fpm-window">
-
         <button class="fpm-close" type="button" aria-label="Закрыть">×</button>
 
-
-
         <div class="fpm-gallery">
-
           <button class="fpm-arrow fpm-prev" type="button" aria-label="Предыдущее фото">‹</button>
-
           <img class="fpm-img" alt="">
-
           <button class="fpm-arrow fpm-next" type="button" aria-label="Следующее фото">›</button>
-
           <div class="fpm-dots"></div>
-
         </div>
-
-
 
         <div class="fpm-info">
-
           <h2 class="fpm-title"></h2>
-
           <p class="fpm-desc"></p>
-
           <div class="fpm-inside">
-
             <h3>Что внутри:</h3>
-
             <ul class="fpm-list"></ul>
-
           </div>
-
           <div class="fpm-bottom">
-
             <div class="fpm-price"></div>
-
             <a class="fpm-buy" target="_blank" rel="noopener">Купить</a>
-
           </div>
-
         </div>
-
       </div>
-
     `;
-
     document.body.appendChild(m);
 
-
-
     m.addEventListener('click', function(e){
-
       if(e.target === m) close();
-
     });
-
     m.querySelector('.fpm-close').addEventListener('click', close);
-
     m.querySelector('.fpm-prev').addEventListener('click', function(e){
-
       e.preventDefault(); e.stopPropagation(); show(idx - 1);
-
     });
-
     m.querySelector('.fpm-next').addEventListener('click', function(e){
-
       e.preventDefault(); e.stopPropagation(); show(idx + 1);
-
     });
-
-
 
     return m;
-
   }
-
-
 
   function open(product){
-
     const m = ensureModal();
 
-
-
     gallery = Array.isArray(product.gallery) && product.gallery.length
-
       ? product.gallery.slice()
-
       : [product.image].filter(Boolean);
 
-
-
     if(product.title && product.title.includes('Сборник задач ЕГЭ') && !gallery.includes('images/24.jpg')){
-
       gallery.push('images/24.jpg');
-
     }
 
-
+    // Функция для поиска ссылок и превращения их в кликабельные теги
+    function linkify(text) {
+      if (!text) return '';
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      return String(text).replace(urlRegex, function(url) {
+        return '<a href="' + url + '" target="_blank" rel="noopener" style="color: #8B2635; text-decoration: underline;">' + url + '</a>';
+      });
+    }
 
     idx = 0;
-
     m.querySelector('.fpm-title').textContent = product.title || '';
-
-    m.querySelector('.fpm-desc').innerHTML = makeDescriptionLinksClickable(product.description || '');
-
-    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+x+'</li>').join('');
-
+    m.querySelector('.fpm-desc').innerHTML = linkify(product.description || '');
+    m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>'+linkify(x)+'</li>').join('');
     m.querySelector('.fpm-price').textContent = (product.price || '') + ' ₽';
-
     m.querySelector('.fpm-buy').href = product.buyLink || '#';
 
-
-
     const dots = m.querySelector('.fpm-dots');
-
     dots.innerHTML = gallery.map((_, i) => '<button type="button" class="fpm-dot" data-i="'+i+'" aria-label="Фото '+(i+1)+'"></button>').join('');
-
     dots.querySelectorAll('.fpm-dot').forEach(function(d){
-
       d.addEventListener('click', function(e){
-
         e.preventDefault(); e.stopPropagation(); show(Number(d.dataset.i));
-
       });
-
     });
 
-
-
     m.querySelectorAll('.fpm-arrow').forEach(a => a.style.display = gallery.length > 1 ? 'flex' : 'none');
-
     dots.style.display = gallery.length > 1 ? 'flex' : 'none';
 
-
-
     show(0);
-
     m.classList.add('open');
-
     document.body.classList.add('modal-open');
-
     document.body.style.overflow = 'hidden';
-
   }
-
-
 
   function show(i){
-
     if(!gallery.length) return;
-
     if(i < 0) i = gallery.length - 1;
-
     if(i >= gallery.length) i = 0;
-
     idx = i;
 
-
-
     const m = document.getElementById('finalProductModal');
-
     if(!m) return;
 
-
-
     const img = m.querySelector('.fpm-img');
-
     img.src = gallery[idx] + (gallery[idx].includes('?') ? '&' : '?') + 'v=gallery-final-3';
-
     img.alt = 'Фото товара ' + (idx + 1);
 
-
-
     m.querySelectorAll('.fpm-dot').forEach((d, n) => d.classList.toggle('active', n === idx));
-
   }
-
-
 
   function close(){
-
     const m = document.getElementById('finalProductModal');
-
     if(m) m.classList.remove('open');
 
-
-
     const old = document.getElementById('productModal');
-
     if(old) old.classList.remove('open');
 
-
-
     document.body.classList.remove('modal-open');
-
     document.body.style.overflow = '';
-
   }
 
-
-
   document.addEventListener('keydown', function(e){
-
     const m = document.getElementById('finalProductModal');
-
     if(!m || !m.classList.contains('open')) return;
-
     if(e.key === 'Escape') close();
-
     if(e.key === 'ArrowLeft') show(idx - 1);
-
     if(e.key === 'ArrowRight') show(idx + 1);
-
   });
-
-
 
   ready(function(){
-
     document.addEventListener('click', async function(e){
-
       const btn = e.target.closest('.card-view-btn');
-
       if(!btn) return;
 
-
-
       e.preventDefault();
-
       e.stopImmediatePropagation();
-
       e.stopPropagation();
 
-
-
       const card = btn.closest('.product-card');
-
       const n = card ? Number(card.dataset.index) : 0;
-
       const products = await getProducts();
-
       const product = products[n] || products[0];
 
-
-
       if(product) open(product);
-
     }, true);
-
   });
-
 })();
-
 </script>
-
-
 
 <script id="catalog-title-and-image-zoom-fix">
 (function(){
@@ -2101,4 +1901,4 @@ let gallery = [];
 
 </body>
 
-</html> 
+</html>
