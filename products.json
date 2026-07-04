@@ -393,8 +393,10 @@
       "inside": [],
       "buyLink": "",
       "image": "/images/трт.jpg",
-      "gallery": [],
-      "downloadFile": "/images/124.jpg",
+      "gallery": [
+        "/images/124.jpg"
+      ],
+      "downloadFile": "",
       "tags": [
         "8"
       ]
