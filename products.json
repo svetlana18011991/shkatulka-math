@@ -400,6 +400,28 @@
       "tags": [
         "8"
       ]
+    },
+    {
+      "title": "Квест-комната \"Умножение десятичных дробей\"",
+      "grade": [
+        "5"
+      ],
+      "price": 0,
+      "description": "Квест комната «Музей», при прохождении которой ученику необходимо выполнить ряд заданий на умножение десятичных дробей. Ориентировочно 30 минут.\nСсылка: https://view.genial.ly/6373ba542ebc1d0011fdd307/interactive-content-umnozhenie-desyatichnyh-drobej",
+      "inside": [],
+      "buyLink": "",
+      "image": "/images/музей.jpg",
+      "gallery": [
+        "/images/музей.jpg",
+        "/images/музей1.jpg",
+        "/images/музей2.jpg"
+      ],
+      "downloadFile": "",
+      "tags": [
+        "5",
+        "десятичные дроби",
+        "умножение"
+      ]
     }
   ]
 }
