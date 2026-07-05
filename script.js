@@ -42,6 +42,7 @@ async function loadProducts() {
 
     allProducts = products;
     currentProducts = products;
+    renderHomePopularProducts(products);
 
     initFilters();
     initCatalogSearch();
@@ -69,6 +70,52 @@ function hasGrade(product, gradeToCheck) {
     return product.grade.includes(gradeToCheck);
   }
   return String(product.grade) === gradeToCheck;
+}
+
+
+function renderHomePopularProducts(products) {
+  const grid = document.getElementById('homePopularGrid');
+  if (!grid) return;
+
+  const popular = (products || []).slice(0, 3);
+  if (!popular.length) {
+    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:30px">Популярные материалы скоро появятся.</p>';
+    return;
+  }
+
+  grid.innerHTML = popular.map((p, index) => {
+    const isPaid = isPaidProduct(p);
+    const hasDownloadFile = hasFileForDownload(p);
+    const dataGrade = Array.isArray(p.grade) ? p.grade.join(',') : p.grade;
+
+    const actionButton = isPaid
+      ? `<a href="${p.buyLink || '#'}" target="_blank" class="card-buy-btn" rel="noopener">🛒 Купить</a>`
+      : hasDownloadFile
+        ? `<a href="${p.downloadFile}" target="_blank" class="card-buy-btn card-download-btn" rel="noopener">📥 Скачать</a>`
+        : '';
+
+    return `
+      <div class="product-card product-card-simple" data-index="${index}" data-grade="${dataGrade}" title="${p.title || ''}">
+        <div class="card-img">
+          ${p.image
+            ? `<img src="${p.image}" alt="${p.title || ''}" loading="lazy"/>`
+            : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
+          }
+          <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
+        </div>
+        <div class="card-body card-body-simple">
+          <h3 class="card-title card-title-simple">${p.title || ''}</h3>
+          <div class="card-footer card-footer-simple">
+            <span class="card-price">${isPaid ? p.price + ' ₽' : 'Бесплатно'}</span>
+            <div class="card-actions ${!isPaid ? 'card-actions-free' : ''} ${!isPaid && !hasDownloadFile ? 'card-actions-free-single' : ''}">
+              <button type="button" class="card-view-btn">Смотреть</button>
+              ${actionButton}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderProducts(products, hasSearch = false) {
