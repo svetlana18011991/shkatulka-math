@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Статья</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="container">
+<a href="articles.html">← Ко всем статьям</a>
+<div id="article"></div>
+</div>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+const id=params.get('id');
+
+fetch('articles.json')
+.then(r=>r.json())
+.then(data=>{
+  const art=data.find(x=>x.id===id);
+  const wrap=document.getElementById('article');
+  wrap.innerHTML=`
+    <img src="${art.image}" style="max-width:100%">
+    <h1>${art.title}</h1>
+    <p>${art.description}</p>
+  `;
+});
+</script>
+</body>
+</html>
