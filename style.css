@@ -3315,6 +3315,22 @@ body.dark-theme .about-card-highlight {
   }
 }
 
+/* Home page: about preview uses the same layout as the About page hero */
+.home-about-preview {
+  padding-top: 86px;
+  padding-bottom: 86px;
+}
+
+.home-about-preview .about-actions {
+  margin-top: 28px;
+}
+
+@media (max-width: 560px) {
+  .home-about-preview .about-actions .btn {
+    width: 100%;
+  }
+}
+
 
 /* Home about teaser */
 .home-about-teaser {
