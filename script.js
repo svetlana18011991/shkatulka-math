@@ -6,6 +6,18 @@ let currentProducts = [];
 let activeCatalogFilter = 'all';
 let activeCatalogSearch = '';
 
+function initCatalogFilterFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const filter = params.get('filter');
+  if (!filter) return;
+  activeCatalogFilter = filter;
+  const btn = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
+  if (btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
 // Функция для поиска ссылок и превращения их в кликабельные (с вашим цветом)
 function linkify(text) {
   if (!text) return '';
@@ -33,11 +45,13 @@ async function loadProducts() {
 
     initFilters();
     initCatalogSearch();
+    initCatalogFilterFromUrl();
     applyCatalogFilters();
     setTimeout(observeCards, 300);
   } catch (e) {
     console.error('Ошибка загрузки товаров:', e);
-    document.getElementById('productsGrid').innerHTML =
+    const grid = document.getElementById('productsGrid');
+    if (grid) grid.innerHTML =
       '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;padding:40px">Материалы скоро появятся. Если они уже добавлены в админке, подождите минуту и обновите страницу.</p>';
   }
 }
