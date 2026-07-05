@@ -1,33 +1,29 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Статьи</title>
-<link rel="stylesheet" href="style.css"/>
+
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Статьи</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
 <h1>Статьи</h1>
-<div id="articles"></div>
-<a href="index.html">← На главную</a>
+<div class="products-grid">
+</div>
+<a href="index.html">← Назад</a>
 </div>
 
 <script>
-fetch('articles.json')
-.then(r=>r.json())
-.then(data=>{
-  const wrap=document.getElementById('articles');
-  data.forEach(a=>{
-    wrap.innerHTML+=`
-      <div class="card">
-        <img src="${a.image}">
-        <h3>${a.title}</h3>
-        <p>${a.description}</p>
-        <a href="article.html?id=${a.id}">Читать</a>
-      </div>`;
-  });
+fetch('articles.json').then(r=>r.json()).then(data=>{
+let grid=document.querySelector('.products-grid');
+data.forEach(a=>{
+grid.innerHTML+=`
+<div class="product-card">
+<img src="${a.image}">
+<h3>${a.title}</h3>
+<p>${a.description}</p>
+<a class="btn" href="article.html?id=${a.id}">Читать</a>
+</div>`;
+});
 });
 </script>
-</body>
-</html>
+
+</body></html>
