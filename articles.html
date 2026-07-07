@@ -39,7 +39,6 @@
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <p class="section-label">Блог</p>
       <h1 class="section-title">Статьи</h1>
       <p class="section-desc">Идеи, методические заметки и практические решения для уроков математики.</p>
     </div>
@@ -83,5 +82,31 @@
 </div>
 </footer>
 <script src="script.js"></script>
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление об использовании cookie">
+  <div class="cookie-banner__text">
+    <strong>Мы используем cookie</strong>
+    <span>Они помогают сайту работать корректно, запоминать ваши настройки и делать просмотр удобнее. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie.</span>
+  </div>
+  <button class="cookie-banner__btn" id="cookieAcceptBtn" type="button">Понятно</button>
+</div>
+<script>
+(function(){
+  var banner = document.getElementById('cookieBanner');
+  var btn = document.getElementById('cookieAcceptBtn');
+  if (!banner || !btn) return;
+  if (localStorage.getItem('cookieAccepted') === 'yes') {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.classList.add('is-visible');
+  btn.addEventListener('click', function(){
+    localStorage.setItem('cookieAccepted', 'yes');
+    banner.classList.remove('is-visible');
+    setTimeout(function(){ banner.style.display = 'none'; }, 250);
+  });
+})();
+</script>
+
 </body>
 </html>

@@ -1237,4 +1237,30 @@ body.dark-theme #emergencyProductModal .egm-img {
 </footer><script src="script.js?v=final-version-clean"></script><div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;">
 <div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div>
 <img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/>
-</div></body></html>
+</div>
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление об использовании cookie">
+  <div class="cookie-banner__text">
+    <strong>Мы используем cookie</strong>
+    <span>Они помогают сайту работать корректно, запоминать ваши настройки и делать просмотр удобнее. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie.</span>
+  </div>
+  <button class="cookie-banner__btn" id="cookieAcceptBtn" type="button">Понятно</button>
+</div>
+<script>
+(function(){
+  var banner = document.getElementById('cookieBanner');
+  var btn = document.getElementById('cookieAcceptBtn');
+  if (!banner || !btn) return;
+  if (localStorage.getItem('cookieAccepted') === 'yes') {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.classList.add('is-visible');
+  btn.addEventListener('click', function(){
+    localStorage.setItem('cookieAccepted', 'yes');
+    banner.classList.remove('is-visible');
+    setTimeout(function(){ banner.style.display = 'none'; }, 250);
+  });
+})();
+</script>
+
+</body></html>
