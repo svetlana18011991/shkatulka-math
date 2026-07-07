@@ -3755,16 +3755,6 @@ body.dark-theme .home-about-teaser {
 /* ===========================
    DONATE TAB IN CATALOG
 =========================== */
-.filter-btn-donate {
-  border-color: rgba(139, 38, 53, .26) !important;
-  background: rgba(139, 38, 53, .06);
-}
-
-.filter-btn-donate.active {
-  background: var(--burgundy) !important;
-  color: #fff !important;
-}
-
 .donate-catalog-panel {
   grid-column: 1 / -1;
   background: linear-gradient(135deg, rgba(255, 247, 240, .98), rgba(255, 236, 232, .9));
@@ -3874,4 +3864,36 @@ body.dark-theme .home-about-teaser {
   .donate-options {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===========================
+   DONATE BUTTON VISIBILITY + NAV ORDER FIX
+=========================== */
+.filters .filter-btn.filter-btn-donate {
+  background: linear-gradient(135deg, #ffe2d4, #fff2ea) !important;
+  border-color: rgba(201, 151, 58, .42) !important;
+  color: #8B2635 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 10px 26px rgba(139, 38, 53, .12) !important;
+}
+
+.filters .filter-btn.filter-btn-donate:hover,
+.filters .filter-btn.filter-btn-donate.active {
+  background: linear-gradient(135deg, #ffd2bd, #ffeade) !important;
+  border-color: rgba(139, 38, 53, .32) !important;
+  color: #8B2635 !important;
+  box-shadow: 0 14px 32px rgba(139, 38, 53, .18) !important;
+}
+
+.nav a[href*="filter=donate"],
+.mobile-nav a[href*="filter=donate"] {
+  color: #8B2635;
+  font-weight: 700;
+}
+
+
+/* Fix top family photo crop */
+.about-photo-collage--family img:first-child {
+  object-position: center top;
+  height: 320px;
 }
