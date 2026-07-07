@@ -87,6 +87,7 @@ function renderHomePopularProducts(products) {
     const isPaid = isPaidProduct(p);
     const hasDownloadFile = hasFileForDownload(p);
     const dataGrade = Array.isArray(p.grade) ? p.grade.join(',') : p.grade;
+    const productUrl = productPageUrl(p, index);
 
     const actionButton = isPaid
       ? `<a href="${p.buyLink || '#'}" target="_blank" class="card-buy-btn" rel="noopener">🛒 Купить</a>`
@@ -96,19 +97,19 @@ function renderHomePopularProducts(products) {
 
     return `
       <div class="product-card product-card-simple" data-index="${index}" data-grade="${dataGrade}" title="${p.title || ''}">
-        <div class="card-img">
+        <a class="card-img card-img-link" href="${productUrl}" aria-label="Открыть страницу материала ${p.title || ''}">
           ${p.image
             ? `<img src="${p.image}" alt="${p.title || ''}" loading="lazy"/>`
             : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
           }
           <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
-        </div>
+        </a>
         <div class="card-body card-body-simple">
-          <h3 class="card-title card-title-simple">${p.title || ''}</h3>
+          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productUrl}">${p.title || ''}</a></h3>
           <div class="card-footer card-footer-simple">
             <span class="card-price">${isPaid ? p.price + ' ₽' : 'Бесплатно'}</span>
             <div class="card-actions ${!isPaid ? 'card-actions-free' : ''} ${!isPaid && !hasDownloadFile ? 'card-actions-free-single' : ''}">
-              <button type="button" class="card-view-btn">Смотреть</button>
+              <a href="${productUrl}" class="card-view-btn card-details-link">Подробнее</a>
               ${actionButton}
             </div>
           </div>
@@ -118,6 +119,19 @@ function renderHomePopularProducts(products) {
   }).join('');
 }
 
+
+
+function productSlug(product, index) {
+  const raw = String(product && product.title ? product.title : 'material').trim().toLowerCase();
+  const map = {'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'c','ч':'ch','ш':'sh','щ':'sch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'};
+  let slug = raw.split('').map(ch => map[ch] !== undefined ? map[ch] : ch).join('');
+  slug = slug.replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  return slug || ('material-' + (index + 1));
+}
+
+function productPageUrl(product, index) {
+  return 'product.html?id=' + encodeURIComponent(productSlug(product, index));
+}
 
 function renderDonateSection() {
   const grid = document.getElementById('productsGrid');

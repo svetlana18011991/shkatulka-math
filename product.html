@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Материал — Шкатулка математических интерактивов</title>
+<meta name="description" content="Страница материала из каталога Шкатулки математических интерактивов: описание, изображения, цена и ссылка на покупку или скачивание."/>
+<link rel="stylesheet" href="style.css?v=no-black-corners-final"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="header">
+<div class="header-inner container">
+<a aria-label="На главную" class="logo" href="index.html">
+<div class="logo-icon-wrap">
+<svg fill="none" height="36" viewbox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#8B2635" height="18" rx="4" width="28" x="4" y="14"></rect>
+<rect fill="#A93226" height="18" rx="3" width="22" x="7" y="14"></rect>
+<path d="M4 18C4 15.8 5.8 14 8 14H28C30.2 14 32 15.8 32 18V20H4V18Z" fill="#C0392B"></path>
+<rect fill="#E8B84B" height="18" rx="2" width="6" x="15" y="14"></rect>
+<rect fill="#E8B84B" height="6" rx="2" width="8" x="14" y="10"></rect>
+<path d="M18 4C18 4 12 8 14 12C15 14 21 14 22 12C24 8 18 4 18 4Z" fill="#F0C040"></path>
+<circle cx="18" cy="10" fill="#8B2635" r="2"></circle>
+</svg>
+</div>
+<div class="logo-text">
+<span class="logo-title">Шкатулка</span>
+<span class="logo-sub">математических интерактивов</span>
+</div>
+</a>
+<nav class="nav"><a href="about.html">Об авторе</a><a href="education.html">Образование</a><a class="active" href="catalog.html">Каталог</a><a href="catalog.html?filter=donate">Донат</a><a href="articles.html">Статьи</a><a href="reviews.html">Отзывы</a><a href="contact.html">Контакты</a></nav>
+<button class="burger" id="burger">
+<span></span><span></span><span></span>
+</button>
+</div>
+<div class="mobile-nav" id="mobileNav"><a href="about.html">Об авторе</a><a href="education.html">Образование</a><a href="catalog.html">Каталог</a><a href="catalog.html?filter=donate">Донат</a><a href="articles.html">Статьи</a><a href="reviews.html">Отзывы</a><a href="contact.html">Контакты</a></div>
+</header>
+<main>
+<section class="section product-page-section">
+  <div class="container">
+    <a class="article-back" href="catalog.html">← Вернуться в каталог</a>
+    <div id="productPageRoot" class="product-page-root">
+      <p class="product-page-loading">Загружаем материал...</p>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer">
+<div class="container footer-inner">
+<a aria-label="На главную" class="logo" href="index.html">
+<div class="logo-icon-wrap logo-icon-wrap--footer">
+<svg fill="none" height="30" viewbox="0 0 36 36" width="30" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#C9973A" height="18" rx="4" width="28" x="4" y="14"></rect>
+<rect fill="#E8B84B" height="18" rx="3" width="22" x="7" y="14"></rect>
+<path d="M4 18C4 15.8 5.8 14 8 14H28C30.2 14 32 15.8 32 18V20H4V18Z" fill="#F0C040"></path>
+<rect fill="#8B2635" height="18" rx="2" width="6" x="15" y="14"></rect>
+<rect fill="#8B2635" height="6" rx="2" width="8" x="14" y="10"></rect>
+<path d="M18 4C18 4 12 8 14 12C15 14 21 14 22 12C24 8 18 4 18 4Z" fill="#A93226"></path>
+<circle cx="18" cy="10" fill="#E8B84B" r="2"></circle>
+</svg>
+</div>
+<div class="logo-text">
+<span class="logo-title">Шкатулка</span>
+<span class="logo-sub">математических интерактивов</span>
+</div>
+</a>
+<p class="footer-copy">© 2026 Быкова Светлана Владимировна. Все права защищены.</p>
+<p class="footer-legal">ИП Быкова Светлана Владимировна, ИНН 384800642846, ОГРНИП 326385000015200.</p>
+</div>
+</footer>
+<script src="product-page.js"></script>
+
+<script src="script.js?v=final-version-clean"></script>
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление об использовании cookie">
+  <div class="cookie-banner__text">
+    <strong>Мы используем cookie</strong>
+    <span>Они помогают сайту работать корректно, запоминать ваши настройки и делать просмотр удобнее. Продолжая пользоваться сайтом, вы соглашаетесь с использованием cookie.</span>
+  </div>
+  <button class="cookie-banner__btn" id="cookieAcceptBtn" type="button">Понятно</button>
+</div>
+<script>
+(function(){
+  var banner = document.getElementById('cookieBanner');
+  var btn = document.getElementById('cookieAcceptBtn');
+  if (!banner || !btn) return;
+  if (localStorage.getItem('cookieAccepted') === 'yes') {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.classList.add('is-visible');
+  btn.addEventListener('click', function(){
+    localStorage.setItem('cookieAccepted', 'yes');
+    banner.classList.remove('is-visible');
+    setTimeout(function(){ banner.style.display = 'none'; }, 250);
+  });
+})();
+</script>
+
+</body>
+</html>
