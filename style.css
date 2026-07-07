@@ -3751,3 +3751,127 @@ body.dark-theme .home-about-teaser {
   margin-top: 34px;
   text-align: center;
 }
+
+/* ===========================
+   DONATE TAB IN CATALOG
+=========================== */
+.filter-btn-donate {
+  border-color: rgba(139, 38, 53, .26) !important;
+  background: rgba(139, 38, 53, .06);
+}
+
+.filter-btn-donate.active {
+  background: var(--burgundy) !important;
+  color: #fff !important;
+}
+
+.donate-catalog-panel {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(255, 247, 240, .98), rgba(255, 236, 232, .9));
+  border: 1px solid rgba(201, 151, 58, .18);
+  border-radius: 30px;
+  box-shadow: var(--card-shadow);
+  padding: 38px;
+  overflow: hidden;
+  position: relative;
+}
+
+.donate-catalog-panel::before {
+  content: '💛';
+  position: absolute;
+  right: 28px;
+  top: 18px;
+  font-size: 3rem;
+  opacity: .16;
+}
+
+.donate-catalog-intro {
+  max-width: 980px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.donate-catalog-intro .section-title {
+  margin-bottom: 18px;
+}
+
+.donate-catalog-intro p {
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 1.02rem;
+  margin: 0 auto 14px;
+}
+
+.donate-thanks {
+  color: var(--burgundy) !important;
+  font-weight: 700;
+}
+
+.donate-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+  align-items: stretch;
+}
+
+.donate-option-card {
+  background: #fff;
+  border-radius: 26px;
+  border: 1px solid rgba(201, 151, 58, .18);
+  box-shadow: 0 16px 40px rgba(26, 26, 46, .08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.donate-option-img {
+  background: #fff;
+  padding: 16px;
+}
+
+.donate-option-img img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+  background: #fff7f0;
+}
+
+.donate-option-body {
+  padding: 0 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  text-align: center;
+}
+
+.donate-option-body h3 {
+  color: var(--dark);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.donate-option-body p {
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0 0 8px;
+}
+
+.donate-btn {
+  justify-content: center;
+  margin-top: auto;
+  width: 100%;
+}
+
+@media (max-width: 860px) {
+  .donate-catalog-panel {
+    padding: 28px 18px;
+  }
+
+  .donate-options {
+    grid-template-columns: 1fr;
+  }
+}

@@ -118,6 +118,51 @@ function renderHomePopularProducts(products) {
   }).join('');
 }
 
+
+function renderDonateSection() {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+
+  currentProducts = [];
+  grid.innerHTML = `
+    <div class="donate-catalog-panel">
+      <div class="donate-catalog-intro">
+        <p class="section-label">Закрытые подписки</p>
+        <h2 class="section-title">Поддержать проект и получить больше материалов</h2>
+        <p>В «Шкатулке математических интерактивов» есть закрытые подписки для учителей и репетиторов. Внутри я делюсь материалами, которые помогают быстрее готовиться к урокам и делать занятия математики живыми, понятными и методически продуманными.</p>
+        <p>В подписке вы получаете готовые разработки, разминки, интерактивы, карточки, текстовые материалы, редактируемые шаблоны и обучающие видео по работе с Genially. Всё это можно использовать на уроках, индивидуальных занятиях, в классе, на онлайн-занятиях и при подготовке к ОГЭ/ЕГЭ.</p>
+        <p><strong>Выберите удобный формат подписки: через Telegram или VK Donut.</strong></p>
+        <p class="donate-thanks">Спасибо за вашу поддержку 💛 Благодаря ей я продолжаю создавать новые материалы, интерактивы и полезные разработки для коллег.</p>
+      </div>
+
+      <div class="donate-options">
+        <article class="donate-option-card">
+          <div class="donate-option-img">
+            <img src="images/тг.png" alt="Telegram-подписка «Гениальные уроки»" loading="lazy">
+          </div>
+          <div class="donate-option-body">
+            <h3>Telegram-подписка</h3>
+            <p>Удобный формат для тех, кто чаще пользуется Telegram.</p>
+            <a class="btn btn-primary donate-btn" href="https://t.me/tribute/app?startapp=ssLj" target="_blank" rel="noopener">Подписаться 599 ₽/месяц</a>
+          </div>
+        </article>
+
+        <article class="donate-option-card">
+          <div class="donate-option-img">
+            <img src="images/вк.png" alt="VK Donut «Гениальные уроки»" loading="lazy">
+          </div>
+          <div class="donate-option-body">
+            <h3>VK Donut</h3>
+            <p>Подписка через сообщество ВКонтакте.</p>
+            <a class="btn btn-primary donate-btn" href="https://vk.com/interaktiv_matematika?w=donut_payment-224352105&source=unspecified&levelId=1785" target="_blank" rel="noopener">Подписаться 599 ₽/месяц</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  `;
+}
+
+
 function renderProducts(products, hasSearch = false) {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
@@ -212,6 +257,11 @@ function initCatalogSearch() {
 }
 
 function applyCatalogFilters() {
+  if (activeCatalogFilter === 'donate') {
+    renderDonateSection();
+    return;
+  }
+
   let filtered = allProducts.slice();
 
   if (activeCatalogFilter === 'free') {
