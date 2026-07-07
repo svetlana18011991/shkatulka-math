@@ -3615,3 +3615,32 @@ body.dark-theme .home-about-teaser {
   background: rgba(201, 151, 58, .12);
   color: var(--dark);
 }
+
+/* ===========================
+   FINAL ARTICLE + HOME REVIEWS FIX
+=========================== */
+.article-main-title {
+  text-align: center !important;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article-hero-img {
+  display: block;
+  width: min(100%, 760px) !important;
+  max-height: 360px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  margin: 0 auto 32px !important;
+  border-radius: 24px !important;
+}
+
+.home-reviews .reviews-grid {
+  margin-top: 28px;
+}
+
+.home-reviews .home-popular-actions {
+  margin-top: 34px;
+  text-align: center;
+}
