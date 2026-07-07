@@ -3894,8 +3894,10 @@ body.dark-theme .home-about-teaser {
 
 /* Fix top family photo crop */
 .about-photo-collage--family img:first-child {
-  object-position: center top;
+  grid-column: span 2;
   height: 320px;
+  object-fit: cover;
+  object-position: center 26%;
 }
 
 /* ===========================
