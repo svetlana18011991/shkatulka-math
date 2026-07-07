@@ -3897,3 +3897,54 @@ body.dark-theme .home-about-teaser {
   object-position: center top;
   height: 320px;
 }
+
+/* ===========================
+   DONATE FILTER TEXT HARD FIX
+=========================== */
+.filters .filter-btn.filter-btn-donate,
+.filters .filter-btn.filter-btn-donate.active,
+.filters .filter-btn.filter-btn-donate:hover,
+.filters .filter-btn[data-filter="donate"],
+.filters .filter-btn[data-filter="donate"].active,
+.filters .filter-btn[data-filter="donate"]:hover {
+  min-width: 112px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  background: linear-gradient(135deg, #ffe0d1, #fff2ea) !important;
+  border-color: rgba(201, 151, 58, .45) !important;
+  color: #8B2635 !important;
+  -webkit-text-fill-color: #8B2635 !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.filters .filter-btn.filter-btn-donate .donate-filter-text,
+.filters .filter-btn[data-filter="donate"] .donate-filter-text {
+  display: inline-block !important;
+  color: #8B2635 !important;
+  -webkit-text-fill-color: #8B2635 !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.filters .filter-btn.filter-btn-donate::after,
+.filters .filter-btn[data-filter="donate"]::after {
+  content: none !important;
+}
+
+/* ===========================
+   STATIC REVIEWS FIX
+   Отзывы всегда видны сразу, без анимации появления
+=========================== */
+.review-card,
+.reviews .review-card,
+.home-reviews .review-card {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
