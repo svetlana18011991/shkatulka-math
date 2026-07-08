@@ -6,6 +6,10 @@
     return slug.replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'material';
   }
 
+  function productPageUrl(product) {
+    return 'product.html?id=' + encodeURIComponent(slugify(product && product.title ? product.title : 'material'));
+  }
+
   function isPaidProduct(product) {
     return Number(product && product.price ? product.price : 0) > 0;
   }
@@ -14,8 +18,12 @@
     return Boolean(String(product && product.downloadFile ? product.downloadFile : '').trim());
   }
 
+  function escapeHtml(text) {
+    return String(text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   function linkify(text) {
-    const safe = String(text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const safe = escapeHtml(text);
     return safe
       .replace(/\n/g, '<br>')
       .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
@@ -24,7 +32,7 @@
   function gradeLabel(grade) {
     if (!grade) return '';
     const g = Array.isArray(grade) ? grade.join(', ') : String(grade);
-    return g.replace('oge', 'ОГЭ').replace('ege', 'ЕГЭ');
+    return g.replace(/oge/gi, 'ОГЭ').replace(/ege/gi, 'ЕГЭ');
   }
 
   function normalizeGallery(product) {
@@ -32,6 +40,65 @@
       return product.gallery.map(item => item && item.media ? item.media : item).filter(Boolean);
     }
     return [product.image].filter(Boolean);
+  }
+
+  function normalizeList(value) {
+    if (Array.isArray(value)) return value.map(x => String(x || '').trim().toLowerCase()).filter(Boolean);
+    return String(value || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
+  }
+
+  function commonCount(a, b) {
+    const set = new Set(a);
+    return b.filter(x => set.has(x)).length;
+  }
+
+  function textWords(text) {
+    return String(text || '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\s]+/gu, ' ')
+      .split(/\s+/)
+      .filter(w => w.length > 3);
+  }
+
+  function findRelatedProducts(product, products, limit) {
+    const currentSlug = slugify(product.title || '');
+    const currentTags = normalizeList(product.tags);
+    const currentGrades = normalizeList(product.grade);
+    const currentWords = textWords(product.title || '');
+
+    const candidates = (products || [])
+      .filter(item => item && slugify(item.title || '') !== currentSlug)
+      .map((item, originalIndex) => {
+        const itemTags = normalizeList(item.tags);
+        const itemGrades = normalizeList(item.grade);
+        const itemWords = textWords(item.title || '');
+        const tagMatches = commonCount(currentTags, itemTags);
+        const gradeMatches = commonCount(currentGrades, itemGrades);
+        const wordMatches = commonCount(currentWords, itemWords);
+
+        return {
+          product: item,
+          score: tagMatches * 4 + gradeMatches * 3 + wordMatches,
+          originalIndex
+        };
+      });
+
+    const scored = candidates
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex)
+      .map(item => item.product);
+
+    const fallback = candidates
+      .sort((a, b) => a.originalIndex - b.originalIndex)
+      .map(item => item.product);
+
+    const result = [];
+    [...scored, ...fallback].forEach(item => {
+      if (result.length >= (limit || 3)) return;
+      if (!result.some(x => slugify(x.title || '') === slugify(item.title || ''))) result.push(item);
+    });
+
+    return result;
   }
 
   function updateSeo(product) {
@@ -56,51 +123,14 @@
     canonical.setAttribute('href', location.origin + location.pathname + '?id=' + encodeURIComponent(slugify(title)));
   }
 
-
-  function productPageUrl(product) {
-    return 'product.html?id=' + encodeURIComponent(slugify(product && product.title ? product.title : 'material'));
-  }
-
-  function normalizeList(value) {
-    if (Array.isArray(value)) return value.map(x => String(x || '').trim().toLowerCase()).filter(Boolean);
-    return String(value || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
-  }
-
-  function commonCount(a, b) {
-    const set = new Set(a);
-    return b.filter(x => set.has(x)).length;
-  }
-
-  function findRelatedProducts(product, products, limit) {
-    const currentSlug = slugify(product.title || '');
-    const currentTags = normalizeList(product.tags);
-    const currentGrades = normalizeList(product.grade);
-
-    return (products || [])
-      .filter(item => item && slugify(item.title || '') !== currentSlug)
-      .map(item => {
-        const itemTags = normalizeList(item.tags);
-        const itemGrades = normalizeList(item.grade);
-        const tagMatches = commonCount(currentTags, itemTags);
-        const gradeMatches = commonCount(currentGrades, itemGrades);
-        return {
-          product: item,
-          score: tagMatches * 3 + gradeMatches * 2
-        };
-      })
-      .filter(item => item.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit || 3)
-      .map(item => item.product);
-  }
-
   function renderRelatedCard(product) {
     const isPaid = isPaidProduct(product);
     const hasDownload = hasFileForDownload(product);
     const priceText = isPaid ? product.price + ' ₽' : 'Бесплатно';
     const img = product.image
-      ? `<img src="${product.image}" alt="${product.title || 'Материал'}" loading="lazy">`
+      ? `<img src="${product.image}" alt="${escapeHtml(product.title || 'Материал')}" loading="lazy">`
       : `<div class="card-img-placeholder">${product.emoji || '📐'}</div>`;
+
     return `
       <article class="product-card product-card-simple product-related-card">
         <a class="card-img card-img-link" href="${productPageUrl(product)}">
@@ -108,7 +138,7 @@
           <span class="card-grade-badge">${gradeLabel(product.grade)}</span>
         </a>
         <div class="card-body card-body-simple">
-          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productPageUrl(product)}">${product.title || ''}</a></h3>
+          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productPageUrl(product)}">${escapeHtml(product.title || '')}</a></h3>
           <div class="card-footer card-footer-simple">
             <span class="card-price">${priceText}</span>
             <div class="card-actions ${!isPaid ? 'card-actions-free' : ''} ${!isPaid && !hasDownload ? 'card-actions-free-single' : ''}">
@@ -117,21 +147,47 @@
           </div>
         </div>
       </article>
-
-      ${related.length ? `
-        <section class="product-related-section">
-          <div class="section-header product-related-header">
-            <p class="section-label">Можно посмотреть ещё</p>
-            <h2 class="section-title">Похожие материалы</h2>
-          </div>
-          <div class="products-grid product-related-grid">
-            ${related.map(renderRelatedCard).join('')}
-          </div>
-        </section>
-      ` : ''}
     `;
   }
 
+  function ensureZoomModal() {
+    let modal = document.getElementById('productImageZoomModal');
+    if (modal) return modal;
+
+    modal = document.createElement('div');
+    modal.id = 'productImageZoomModal';
+    modal.className = 'product-image-zoom-modal';
+    modal.innerHTML = `
+      <button class="product-image-zoom-close" type="button" aria-label="Закрыть">×</button>
+      <img class="product-image-zoom-img" alt="Увеличенное изображение материала">
+    `;
+    document.body.appendChild(modal);
+
+    function close() {
+      modal.classList.remove('open');
+      document.body.classList.remove('product-image-zoom-open');
+    }
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal || e.target.classList.contains('product-image-zoom-close')) close();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+
+    return modal;
+  }
+
+  function openZoom(src, alt) {
+    if (!src) return;
+    const modal = ensureZoomModal();
+    const img = modal.querySelector('.product-image-zoom-img');
+    img.src = src;
+    img.alt = alt || 'Увеличенное изображение материала';
+    modal.classList.add('open');
+    document.body.classList.add('product-image-zoom-open');
+  }
 
   function render(product, products) {
     const root = document.getElementById('productPageRoot');
@@ -151,7 +207,7 @@
       <article class="product-page-card">
         <div class="product-page-gallery">
           <div class="product-page-main-img-wrap">
-            ${gallery[0] ? `<img id="productPageMainImg" class="product-page-main-img" src="${gallery[0]}" alt="${product.title || 'Материал'}">` : `<div class="product-page-placeholder">📐</div>`}
+            ${gallery[0] ? `<img id="productPageMainImg" class="product-page-main-img product-page-main-img--zoomable" src="${gallery[0]}" alt="${escapeHtml(product.title || 'Материал')}" title="Нажмите, чтобы увеличить">` : `<div class="product-page-placeholder">📐</div>`}
           </div>
           ${gallery.length > 1 ? `
             <div class="product-page-thumbs">
@@ -162,7 +218,7 @@
 
         <div class="product-page-info">
           <p class="section-label">${gradeLabel(product.grade) || 'Материал'}</p>
-          <h1 class="section-title product-page-title">${product.title || ''}</h1>
+          <h1 class="section-title product-page-title">${escapeHtml(product.title || '')}</h1>
           <div class="product-page-desc">${linkify(product.description || '')}</div>
 
           ${inside.length ? `
@@ -178,6 +234,18 @@
           </div>
         </div>
       </article>
+
+      ${related.length ? `
+        <section class="product-related-section">
+          <div class="section-header product-related-header">
+            <p class="section-label">Можно посмотреть ещё</p>
+            <h2 class="section-title">Похожие материалы</h2>
+          </div>
+          <div class="products-grid product-related-grid">
+            ${related.map(renderRelatedCard).join('')}
+          </div>
+        </section>
+      ` : ''}
     `;
 
     document.querySelectorAll('.product-page-thumb').forEach(btn => {
@@ -188,6 +256,11 @@
         btn.classList.add('active');
       });
     });
+
+    const mainImg = document.getElementById('productPageMainImg');
+    if (mainImg) {
+      mainImg.addEventListener('click', () => openZoom(mainImg.src, mainImg.alt));
+    }
   }
 
   function renderNotFound() {
