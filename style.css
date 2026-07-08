@@ -4934,3 +4934,58 @@ body.dark-theme .home-about-teaser {
     width: 100% !important;
   }
 }
+
+
+/* ===========================
+   DETAILS BUTTON FINAL VISIBILITY FIX
+=========================== */
+.products-grid .product-card .card-actions .card-details-btn,
+.product-card .card-details-btn {
+  position: relative !important;
+  z-index: 2 !important;
+  background: rgba(139, 38, 53, .08) !important;
+  color: var(--burgundy) !important;
+  border: 1px solid rgba(139, 38, 53, .22) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.products-grid .product-card .card-actions .card-details-btn:hover,
+.products-grid .product-card .card-actions .card-details-btn:focus,
+.products-grid .product-card .card-actions .card-details-btn:focus-visible,
+.product-card .card-details-btn:hover,
+.product-card .card-details-btn:focus,
+.product-card .card-details-btn:focus-visible {
+  background: var(--burgundy) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: var(--burgundy) !important;
+  opacity: 1 !important;
+  box-shadow: 0 8px 22px rgba(139, 38, 53, .28) !important;
+  text-shadow: none !important;
+}
+
+.products-grid .product-card .card-actions .card-details-btn:hover *,
+.product-card .card-details-btn:hover * {
+  color: #fff !important;
+}
+
+.filters .filter-btn.filter-btn-donate.active,
+.filters .filter-btn.filter-btn-donate.active:hover,
+.filters .filter-btn.filter-btn-donate.active:focus,
+.filters .filter-btn.filter-btn-donate.active:focus-visible {
+  background: linear-gradient(135deg, var(--primary), #C0392B) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+.filters .filter-btn.filter-btn-donate.active,
+.filters .filter-btn.filter-btn-donate.active .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active:hover,
+.filters .filter-btn.filter-btn-donate.active:hover .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active:focus,
+.filters .filter-btn.filter-btn-donate.active:focus .donate-filter-text {
+  color: #fff !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
