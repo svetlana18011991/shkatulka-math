@@ -4485,3 +4485,83 @@ body.dark-theme .home-about-teaser {
   margin: 18px auto 26px;
   text-align: center;
 }
+
+
+/* ===========================
+   ARTICLES PAGE CARDS PRETTY FIX
+=========================== */
+.articles-grid {
+  align-items: stretch;
+}
+
+.articles-grid .article-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.articles-grid .article-card .card-img {
+  height: 210px !important;
+  min-height: 210px !important;
+  padding: 14px;
+  background: #fffaf6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.articles-grid .article-card .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center center !important;
+  border-radius: 18px;
+  display: block;
+}
+
+.articles-grid .article-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px 24px 24px;
+}
+
+.articles-grid .article-card .card-body p {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.articles-grid .article-card .btn,
+.articles-grid .article-card .btn-primary {
+  align-self: center;
+  width: auto !important;
+  min-width: 150px;
+  max-width: 200px;
+  min-height: 40px;
+  padding: 9px 24px;
+  margin-top: auto;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  line-height: 1.1;
+}
+
+@media (min-width: 900px) {
+  .articles-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .articles-grid .article-card .card-img {
+    height: 180px !important;
+    min-height: 180px !important;
+  }
+
+  .articles-grid .article-card .btn,
+  .articles-grid .article-card .btn-primary {
+    width: 100% !important;
+    max-width: none;
+  }
+}
