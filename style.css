@@ -4565,3 +4565,85 @@ body.dark-theme .home-about-teaser {
     max-width: none;
   }
 }
+
+
+
+
+/* Карточки в разделе "Статьи": картинки полностью, кнопки меньше и ровно */
+.products-grid.articles-grid {
+  align-items: stretch !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  border-radius: 26px !important;
+  overflow: hidden !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card > .card-img {
+  height: 210px !important;
+  min-height: 210px !important;
+  padding: 12px !important;
+  background: #fffaf6 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card > .card-img img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  border-radius: 18px !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card > .card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  padding: 22px 24px 24px !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card > .card-body p {
+  flex: 1 1 auto !important;
+  margin-bottom: 20px !important;
+}
+
+.products-grid.articles-grid > .product-card.article-card > .card-body .btn,
+.products-grid.articles-grid > .product-card.article-card > .card-body a.btn,
+.products-grid.articles-grid > .product-card.article-card > .card-body .btn-primary,
+.products-grid.articles-grid > .product-card.article-card > .card-body a.btn-primary {
+  width: auto !important;
+  min-width: 150px !important;
+  max-width: 190px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 24px !important;
+  margin: auto auto 0 !important;
+  align-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  font-size: 0.92rem !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 560px) {
+  .products-grid.articles-grid > .product-card.article-card > .card-img {
+    height: 180px !important;
+    min-height: 180px !important;
+  }
+
+  .products-grid.articles-grid > .product-card.article-card > .card-body .btn,
+  .products-grid.articles-grid > .product-card.article-card > .card-body a.btn-primary {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
