@@ -12,7 +12,7 @@ let activeCatalogSort = 'default';
 // ЯНДЕКС.МЕТРИКА + СОБЫТИЯ ТОВАРОВ
 // ===========================
 // Вставим номер счётчика сюда отдельным маленьким патчем, когда он будет создан в Яндекс.Метрике.
-window.SHKT_METRIKA_ID = window.SHKT_METRIKA_ID || '';
+window.SHKT_METRIKA_ID = window.SHKT_METRIKA_ID || '110517614';
 
 function getShkatulkaMetrikaId() {
   const id = String(window.SHKT_METRIKA_ID || '').trim();
