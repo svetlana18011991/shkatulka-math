@@ -104,8 +104,8 @@ function forceCatalogButtonsVisibility() {
       btn.style.setProperty('display', 'inline-flex', 'important');
       btn.style.setProperty('align-items', 'center', 'important');
       btn.style.setProperty('justify-content', 'center', 'important');
-      btn.style.setProperty('min-height', '42px', 'important');
-      btn.style.setProperty('padding', '10px 22px', 'important');
+      btn.style.setProperty('min-height', '36px', 'important');
+      btn.style.setProperty('padding', '8px 13px', 'important');
       btn.style.setProperty('border-radius', '999px', 'important');
       btn.style.setProperty('background', '#fff6f3', 'important');
       btn.style.setProperty('background-image', 'none', 'important');
@@ -113,6 +113,9 @@ function forceCatalogButtonsVisibility() {
       btn.style.setProperty('-webkit-text-fill-color', '#8B2635', 'important');
       btn.style.setProperty('border', '1px solid rgba(139, 38, 53, .28)', 'important');
       btn.style.setProperty('font-weight', '800', 'important');
+      btn.style.setProperty('font-size', '.8rem', 'important');
+      btn.style.setProperty('line-height', '1', 'important');
+      btn.style.setProperty('white-space', 'nowrap', 'important');
       btn.style.setProperty('opacity', '1', 'important');
       btn.style.setProperty('visibility', 'visible', 'important');
       btn.style.setProperty('text-shadow', 'none', 'important');
