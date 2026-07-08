@@ -4802,3 +4802,135 @@ body.dark-theme .home-about-teaser {
     max-width: 58%;
   }
 }
+
+
+/* ===========================
+   BUTTON HOVER + COOKIE + DONATE ACTIVE FIX
+=========================== */
+.btn:hover,
+.btn-primary:hover,
+.card-buy-btn:hover,
+.card-details-btn:hover,
+.product-page-action:hover,
+.article-card .btn:hover,
+.cookie-banner__btn:hover,
+.cookie-notice-btn:hover {
+  color: #fff !important;
+}
+
+.card-details-btn:hover,
+.card-details-btn:focus-visible {
+  background: var(--burgundy) !important;
+  color: #fff !important;
+  border-color: var(--burgundy) !important;
+}
+
+.card-buy-btn:hover,
+.card-buy-btn:focus-visible,
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.product-page-action:hover,
+.product-page-action:focus-visible {
+  background: linear-gradient(135deg, var(--primary), #C0392B) !important;
+  color: #fff !important;
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+}
+
+.cookie-banner__btn,
+.cookie-notice-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 42px !important;
+  padding: 11px 22px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, var(--primary), #C0392B) !important;
+  color: #fff !important;
+  font-family: var(--font-body) !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  box-shadow: 0 10px 26px rgba(139, 38, 53, .24) !important;
+  opacity: 1 !important;
+}
+
+.cookie-banner__btn:hover,
+.cookie-notice-btn:hover {
+  background: linear-gradient(135deg, #9d2b3d, #C0392B) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.cookie-notice {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgba(255, 250, 245, .97);
+  border: 1px solid rgba(139, 38, 53, .18);
+  box-shadow: 0 18px 50px rgba(26, 26, 46, .18);
+  color: var(--text);
+  font-weight: 700;
+  transform: translateY(16px);
+  opacity: 0;
+  transition: .25s ease;
+}
+
+.cookie-notice.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.filters .filter-btn.filter-btn-donate.active {
+  background: linear-gradient(135deg, var(--primary), #C0392B) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 10px 28px rgba(139, 38, 53, .32) !important;
+}
+
+.filters .filter-btn.filter-btn-donate.active .donate-filter-text {
+  color: #fff !important;
+}
+
+.nav a.donate-active,
+.mobile-nav a.donate-active,
+.nav a[href*="filter=donate"].active,
+.mobile-nav a[href*="filter=donate"].active {
+  color: var(--primary) !important;
+  font-weight: 800 !important;
+}
+
+.nav a.donate-active::after,
+.nav a[href*="filter=donate"].active::after {
+  width: 100% !important;
+}
+
+@media (max-width: 720px) {
+  .cookie-notice {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    max-width: none;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cookie-notice-btn {
+    width: 100% !important;
+  }
+}

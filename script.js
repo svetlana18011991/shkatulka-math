@@ -91,7 +91,31 @@ function initCatalogFilterFromUrl() {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
+  updateDonateNavState();
 }
+
+
+function updateDonateNavState() {
+  const isDonate = activeCatalogFilter === 'donate';
+  const desktopLinks = document.querySelectorAll('.nav a');
+  const mobileLinks = document.querySelectorAll('.mobile-nav a');
+
+  [...desktopLinks, ...mobileLinks].forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const isCatalogPlain = href === 'catalog.html' || href.endsWith('/catalog.html');
+    const isDonateLink = href.includes('filter=donate');
+
+    if (isDonate && isCatalogPlain) {
+      link.classList.remove('active');
+    }
+
+    if (isDonateLink) {
+      link.classList.toggle('active', isDonate);
+      link.classList.toggle('donate-active', isDonate);
+    }
+  });
+}
+
 
 // Функция для поиска ссылок и превращения их в кликабельные (с вашим цветом)
 function linkify(text) {
@@ -325,6 +349,7 @@ function initFilters() {
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeCatalogFilter = btn.dataset.filter || 'all';
+      updateDonateNavState();
       applyCatalogFilters();
     };
   });
@@ -427,6 +452,7 @@ function initCatalogProductAnalytics(renderedProducts) {
 
 
 function applyCatalogFilters() {
+  updateDonateNavState();
   if (activeCatalogFilter === 'donate') {
     renderDonateSection();
     return;
