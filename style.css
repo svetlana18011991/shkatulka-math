@@ -4462,3 +4462,15 @@ body.dark-theme .home-about-teaser {
     width: 100%;
   }
 }
+
+
+/* ===========================
+   ARTICLE 3 HERO NO CROP
+=========================== */
+.article-hero-img--nocrop {
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: transparent !important;
+}
