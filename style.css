@@ -4647,3 +4647,28 @@ body.dark-theme .home-about-teaser {
   }
 }
 
+
+
+/* ===========================
+   ARTICLE 3 HERO COMPACT FULL
+=========================== */
+.article-full .article3-hero-compact-full {
+  display: block !important;
+  width: min(100%, 760px) !important;
+  max-width: 760px !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  margin: 0 auto 30px !important;
+  border-radius: 24px !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+@media (max-width: 768px) {
+  .article-full .article3-hero-compact-full {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px !important;
+  }
+}
