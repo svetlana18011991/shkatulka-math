@@ -4176,3 +4176,41 @@ body.dark-theme .home-about-teaser {
     width: 100%;
   }
 }
+
+/* ===========================
+   PRODUCT PAGE LINK BUTTON FIX
+=========================== */
+.card-details-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: rgba(139,38,53,.08);
+  color: var(--burgundy);
+  border: 1px solid rgba(139,38,53,.18);
+  font-weight: 800;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.card-details-btn:hover {
+  background: var(--burgundy);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.card-img-link,
+.card-title-link {
+  text-decoration: none;
+}
+
+.card-title-link {
+  color: inherit;
+}
+
+.card-title-link:hover {
+  color: var(--burgundy);
+}
