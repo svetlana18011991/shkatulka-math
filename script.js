@@ -5,6 +5,81 @@ let allProducts = [];
 let currentProducts = [];
 let activeCatalogFilter = 'all';
 let activeCatalogSearch = '';
+let activeCatalogSort = 'default';
+
+
+// ===========================
+// ЯНДЕКС.МЕТРИКА + СОБЫТИЯ ТОВАРОВ
+// ===========================
+// Вставим номер счётчика сюда отдельным маленьким патчем, когда он будет создан в Яндекс.Метрике.
+window.SHKT_METRIKA_ID = window.SHKT_METRIKA_ID || '';
+
+function getShkatulkaMetrikaId() {
+  const id = String(window.SHKT_METRIKA_ID || '').trim();
+  return /^\d+$/.test(id) ? id : '';
+}
+
+function initShkatulkaMetrika() {
+  const id = getShkatulkaMetrikaId();
+  if (!id || window.__shkatulkaMetrikaInitialized) return;
+  window.__shkatulkaMetrikaInitialized = true;
+
+  (function(m,e,t,r,i,k,a){
+    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    k=e.createElement(t);
+    a=e.getElementsByTagName(t)[0];
+    k.async=1;
+    k.src=r;
+    a.parentNode.insertBefore(k,a);
+  })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+  window.ym(Number(id), 'init', {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  });
+}
+
+function productPriceValue(product) {
+  const raw = String(product && product.price !== undefined ? product.price : '0').replace(',', '.').replace(/[^\d.]+/g, '');
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function productAnalyticsPayload(product) {
+  if (!product) return {};
+  const originalIndex = Number.isFinite(Number(product._shktOriginalIndex)) ? Number(product._shktOriginalIndex) : 0;
+  const grade = Array.isArray(product.grade) ? product.grade.join(', ') : String(product.grade || '');
+  const tags = Array.isArray(product.tags) ? product.tags.join(', ') : String(product.tags || '');
+
+  return {
+    id: productSlug(product, originalIndex),
+    title: String(product.title || ''),
+    price: productPriceValue(product),
+    grade: grade,
+    tags: tags,
+    type: productPriceValue(product) > 0 ? 'paid' : 'free'
+  };
+}
+
+function trackProductEvent(goal, product, extra) {
+  initShkatulkaMetrika();
+
+  const id = getShkatulkaMetrikaId();
+  if (!id || typeof window.ym !== 'function') return;
+
+  const payload = Object.assign({
+    product: productAnalyticsPayload(product)
+  }, extra || {});
+
+  window.ym(Number(id), 'reachGoal', goal, payload);
+}
+
+window.shkatulkaTrackProductEvent = trackProductEvent;
+initShkatulkaMetrika();
+
 
 function initCatalogFilterFromUrl() {
   const params = new URLSearchParams(window.location.search);
@@ -40,12 +115,15 @@ async function loadProducts() {
     // ЖЕЛЕЗНАЯ ПРОВЕРКА ДЛЯ SVELTIA CMS: вытаскиваем массив из ключа items
     const products = data.items || (Array.isArray(data) ? data : []);
 
-    allProducts = products;
-    currentProducts = products;
-    renderHomePopularProducts(products);
+    const normalizedProducts = products.map((product, index) => Object.assign({}, product, { _shktOriginalIndex: index }));
+
+    allProducts = normalizedProducts;
+    currentProducts = normalizedProducts;
+    renderHomePopularProducts(normalizedProducts);
 
     initFilters();
     initCatalogSearch();
+    initCatalogSort();
     initCatalogFilterFromUrl();
     applyCatalogFilters();
     setTimeout(observeCards, 300);
@@ -90,14 +168,14 @@ function renderHomePopularProducts(products) {
     const productUrl = productPageUrl(p, index);
 
     const actionButton = isPaid
-      ? `<a href="${p.buyLink || '#'}" target="_blank" class="card-buy-btn" rel="noopener">🛒 Купить</a>`
+      ? `<a href="${p.buyLink || '#'}" target="_blank" class="card-buy-btn" rel="noopener" data-track-goal="product_buy_click" data-track-index="${index}">🛒 Купить</a>`
       : hasDownloadFile
-        ? `<a href="${p.downloadFile}" target="_blank" class="card-buy-btn card-download-btn" rel="noopener">📥 Скачать</a>`
+        ? `<a href="${p.downloadFile}" target="_blank" class="card-buy-btn card-download-btn" rel="noopener" data-track-goal="product_download_click" data-track-index="${index}">📥 Скачать</a>`
         : '';
 
     return `
       <div class="product-card product-card-simple" data-index="${index}" data-grade="${dataGrade}" title="${p.title || ''}">
-        <a class="card-img card-img-link" href="${productUrl}" aria-label="Открыть страницу материала ${p.title || ''}">
+        <a class="card-img card-img-link" href="${productUrl}" aria-label="Открыть страницу материала ${p.title || ''}" data-track-goal="product_card_open_click" data-track-index="${index}">
           ${p.image
             ? `<img src="${p.image}" alt="${p.title || ''}" loading="lazy"/>`
             : `<div class="card-img-placeholder">${p.emoji || '📐'}</div>`
@@ -105,11 +183,11 @@ function renderHomePopularProducts(products) {
           <span class="card-grade-badge">${gradeLabel(p.grade)}</span>
         </a>
         <div class="card-body card-body-simple">
-          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productUrl}">${p.title || ''}</a></h3>
+          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productUrl}" data-track-goal="product_card_open_click" data-track-index="${index}">${p.title || ''}</a></h3>
           <div class="card-footer card-footer-simple">
             <span class="card-price">${isPaid ? p.price + ' ₽' : 'Бесплатно'}</span>
             <div class="card-actions ${!isPaid ? 'card-actions-free' : ''} ${!isPaid && !hasDownloadFile ? 'card-actions-free-single' : ''}">
-              <a href="${productUrl}" class="card-details-btn">Подробнее</a>
+              <a href="${productUrl}" class="card-details-btn" data-track-goal="product_detail_click" data-track-index="${index}">Подробнее</a>
               ${actionButton}
             </div>
           </div>
@@ -117,6 +195,8 @@ function renderHomePopularProducts(products) {
       </div>
     `;
   }).join('');
+
+  initCatalogProductAnalytics(products);
 }
 
 
@@ -271,6 +351,81 @@ function initCatalogSearch() {
   }
 }
 
+
+function initCatalogSort() {
+  const select = document.getElementById('catalogSort');
+  if (!select) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const sortFromUrl = params.get('sort');
+  if (sortFromUrl && select.querySelector(`option[value="${sortFromUrl}"]`)) {
+    activeCatalogSort = sortFromUrl;
+  }
+
+  select.value = activeCatalogSort;
+  select.addEventListener('change', () => {
+    activeCatalogSort = select.value || 'default';
+    applyCatalogFilters();
+  });
+}
+
+function sortCatalogProducts(products) {
+  const sorted = (products || []).slice();
+
+  if (activeCatalogSort === 'new') {
+    return sorted.sort((a, b) => Number(b._shktOriginalIndex || 0) - Number(a._shktOriginalIndex || 0));
+  }
+
+  if (activeCatalogSort === 'cheap') {
+    return sorted.sort((a, b) => productPriceValue(a) - productPriceValue(b));
+  }
+
+  if (activeCatalogSort === 'expensive') {
+    return sorted.sort((a, b) => productPriceValue(b) - productPriceValue(a));
+  }
+
+  if (activeCatalogSort === 'free-first') {
+    return sorted.sort((a, b) => {
+      const af = productPriceValue(a) <= 0 ? 0 : 1;
+      const bf = productPriceValue(b) <= 0 ? 0 : 1;
+      return af - bf || Number(a._shktOriginalIndex || 0) - Number(b._shktOriginalIndex || 0);
+    });
+  }
+
+  if (activeCatalogSort === 'paid-first') {
+    return sorted.sort((a, b) => {
+      const ap = productPriceValue(a) > 0 ? 0 : 1;
+      const bp = productPriceValue(b) > 0 ? 0 : 1;
+      return ap - bp || Number(a._shktOriginalIndex || 0) - Number(b._shktOriginalIndex || 0);
+    });
+  }
+
+  if (activeCatalogSort === 'title') {
+    return sorted.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'ru'));
+  }
+
+  return sorted.sort((a, b) => Number(a._shktOriginalIndex || 0) - Number(b._shktOriginalIndex || 0));
+}
+
+function initCatalogProductAnalytics(renderedProducts) {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+
+  grid.querySelectorAll('[data-track-goal][data-track-index]').forEach(link => {
+    link.addEventListener('click', () => {
+      const index = Number(link.dataset.trackIndex);
+      const product = renderedProducts[index];
+      if (!product) return;
+
+      trackProductEvent(link.dataset.trackGoal, product, {
+        location: 'catalog'
+      });
+    });
+  });
+}
+
+
+
 function applyCatalogFilters() {
   if (activeCatalogFilter === 'donate') {
     renderDonateSection();
@@ -293,6 +448,8 @@ function applyCatalogFilters() {
   if (queryWords.length) {
     filtered = filtered.filter(product => productMatchesSearch(product, queryWords));
   }
+
+  filtered = sortCatalogProducts(filtered);
 
   renderProducts(filtered, queryWords.length > 0);
   setTimeout(observeCards, 100);

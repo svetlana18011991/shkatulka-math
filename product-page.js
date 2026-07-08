@@ -6,6 +6,29 @@
     return slug.replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'material';
   }
 
+
+  function trackProductEventOnPage(goal, product, extra) {
+    if (typeof window.shkatulkaTrackProductEvent === 'function') {
+      window.shkatulkaTrackProductEvent(goal, product, extra || {});
+      return;
+    }
+
+    const id = String(window.SHKT_METRIKA_ID || '').trim();
+    if (!/^\d+$/.test(id) || typeof window.ym !== 'function') return;
+
+    window.ym(Number(id), 'reachGoal', goal, {
+      product: {
+        id: slugify(product && product.title ? product.title : 'material'),
+        title: String(product && product.title ? product.title : ''),
+        price: Number(product && product.price ? product.price : 0),
+        grade: Array.isArray(product && product.grade ? product.grade : []) ? (product.grade || []).join(', ') : String(product && product.grade ? product.grade : ''),
+        type: Number(product && product.price ? product.price : 0) > 0 ? 'paid' : 'free'
+      },
+      location: extra && extra.location ? extra.location : 'product_page'
+    });
+  }
+
+
   function productPageUrl(product) {
     return 'product.html?id=' + encodeURIComponent(slugify(product && product.title ? product.title : 'material'));
   }
@@ -194,6 +217,7 @@
     if (!root) return;
 
     updateSeo(product);
+    trackProductEventOnPage('product_page_view', product, { location: 'product_page' });
 
     const gallery = normalizeGallery(product);
     const isPaid = isPaidProduct(product);
@@ -256,6 +280,16 @@
         btn.classList.add('active');
       });
     });
+
+
+    const productPageAction = root.querySelector('.product-page-action');
+    if (productPageAction) {
+      productPageAction.addEventListener('click', () => {
+        trackProductEventOnPage(isPaid ? 'product_buy_click' : 'product_download_click', product, {
+          location: 'product_page'
+        });
+      });
+    }
 
     const mainImg = document.getElementById('productPageMainImg');
     if (mainImg) {
