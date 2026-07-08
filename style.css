@@ -4477,52 +4477,25 @@ body.dark-theme .home-about-teaser {
 
 
 /* ===========================
-   ARTICLES CARDS BUTTONS FIX
+   ARTICLE 3 HERO FULL IMAGE FIX
 =========================== */
-.articles-grid {
-  align-items: stretch;
+.article-full .article-hero-img.article-hero-img--nocrop {
+  display: block !important;
+  width: min(100%, 980px) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  margin: 0 auto 32px !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  box-shadow: var(--card-shadow) !important;
 }
 
-.article-card {
-  height: 100%;
-}
-
-.article-card .card-body {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.article-card .card-body p {
-  flex: 1;
-}
-
-.article-card .btn,
-.article-card .btn-primary {
-  align-self: center;
-  width: auto;
-  min-width: 170px;
-  max-width: 220px;
-  min-height: 42px;
-  padding: 10px 26px;
-  margin-top: auto;
-  border-radius: 999px;
-  font-size: 0.94rem;
-  line-height: 1.1;
-}
-
-.home-articles .article-card .btn,
-.home-articles .article-card .btn-primary {
-  min-width: 160px;
-  max-width: 210px;
-}
-
-@media (max-width: 560px) {
-  .article-card .btn,
-  .article-card .btn-primary,
-  .home-articles .article-card .btn,
-  .home-articles .article-card .btn-primary {
-    width: 100%;
-    max-width: none;
+@media (max-width: 768px) {
+  .article-full .article-hero-img.article-hero-img--nocrop {
+    width: 100% !important;
+    border-radius: 18px !important;
   }
 }
