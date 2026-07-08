@@ -4465,37 +4465,23 @@ body.dark-theme .home-about-teaser {
 
 
 /* ===========================
-   ARTICLE 3 HERO NO CROP
+   AUTHOR SEO TEXT
 =========================== */
-.article-hero-img--nocrop {
-  height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  background: transparent !important;
+.hero-author-line,
+.about-seo-intro {
+  max-width: 780px;
+  margin: 18px 0 0;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
 }
 
-
-/* ===========================
-   ARTICLE 3 HERO FULL IMAGE FIX
-=========================== */
-.article-full .article-hero-img.article-hero-img--nocrop {
-  display: block !important;
-  width: min(100%, 980px) !important;
-  max-width: 100% !important;
-  height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  margin: 0 auto 32px !important;
-  border-radius: 24px !important;
-  background: transparent !important;
-  box-shadow: var(--card-shadow) !important;
+.hero-author-line strong,
+.about-seo-intro strong {
+  color: var(--burgundy);
 }
 
-@media (max-width: 768px) {
-  .article-full .article-hero-img.article-hero-img--nocrop {
-    width: 100% !important;
-    border-radius: 18px !important;
-  }
+.about-seo-intro {
+  margin: 18px auto 26px;
+  text-align: center;
 }
