@@ -56,7 +56,84 @@
     canonical.setAttribute('href', location.origin + location.pathname + '?id=' + encodeURIComponent(slugify(title)));
   }
 
-  function render(product) {
+
+  function productPageUrl(product) {
+    return 'product.html?id=' + encodeURIComponent(slugify(product && product.title ? product.title : 'material'));
+  }
+
+  function normalizeList(value) {
+    if (Array.isArray(value)) return value.map(x => String(x || '').trim().toLowerCase()).filter(Boolean);
+    return String(value || '').split(',').map(x => x.trim().toLowerCase()).filter(Boolean);
+  }
+
+  function commonCount(a, b) {
+    const set = new Set(a);
+    return b.filter(x => set.has(x)).length;
+  }
+
+  function findRelatedProducts(product, products, limit) {
+    const currentSlug = slugify(product.title || '');
+    const currentTags = normalizeList(product.tags);
+    const currentGrades = normalizeList(product.grade);
+
+    return (products || [])
+      .filter(item => item && slugify(item.title || '') !== currentSlug)
+      .map(item => {
+        const itemTags = normalizeList(item.tags);
+        const itemGrades = normalizeList(item.grade);
+        const tagMatches = commonCount(currentTags, itemTags);
+        const gradeMatches = commonCount(currentGrades, itemGrades);
+        return {
+          product: item,
+          score: tagMatches * 3 + gradeMatches * 2
+        };
+      })
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit || 3)
+      .map(item => item.product);
+  }
+
+  function renderRelatedCard(product) {
+    const isPaid = isPaidProduct(product);
+    const hasDownload = hasFileForDownload(product);
+    const priceText = isPaid ? product.price + ' ₽' : 'Бесплатно';
+    const img = product.image
+      ? `<img src="${product.image}" alt="${product.title || 'Материал'}" loading="lazy">`
+      : `<div class="card-img-placeholder">${product.emoji || '📐'}</div>`;
+    return `
+      <article class="product-card product-card-simple product-related-card">
+        <a class="card-img card-img-link" href="${productPageUrl(product)}">
+          ${img}
+          <span class="card-grade-badge">${gradeLabel(product.grade)}</span>
+        </a>
+        <div class="card-body card-body-simple">
+          <h3 class="card-title card-title-simple"><a class="card-title-link" href="${productPageUrl(product)}">${product.title || ''}</a></h3>
+          <div class="card-footer card-footer-simple">
+            <span class="card-price">${priceText}</span>
+            <div class="card-actions ${!isPaid ? 'card-actions-free' : ''} ${!isPaid && !hasDownload ? 'card-actions-free-single' : ''}">
+              <a href="${productPageUrl(product)}" class="card-details-btn">Подробнее</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      ${related.length ? `
+        <section class="product-related-section">
+          <div class="section-header product-related-header">
+            <p class="section-label">Можно посмотреть ещё</p>
+            <h2 class="section-title">Похожие материалы</h2>
+          </div>
+          <div class="products-grid product-related-grid">
+            ${related.map(renderRelatedCard).join('')}
+          </div>
+        </section>
+      ` : ''}
+    `;
+  }
+
+
+  function render(product, products) {
     const root = document.getElementById('productPageRoot');
     if (!root) return;
 
@@ -68,7 +145,7 @@
     const actionHref = isPaid ? (product.buyLink || '#') : (hasDownload ? product.downloadFile : '');
     const actionText = isPaid ? 'Купить' : (hasDownload ? 'Скачать' : '');
     const inside = Array.isArray(product.inside) ? product.inside : [];
-    const tags = Array.isArray(product.tags) ? product.tags : [];
+    const related = findRelatedProducts(product, products || [], 3);
 
     root.innerHTML = `
       <article class="product-page-card">
@@ -86,7 +163,6 @@
         <div class="product-page-info">
           <p class="section-label">${gradeLabel(product.grade) || 'Материал'}</p>
           <h1 class="section-title product-page-title">${product.title || ''}</h1>
-          ${tags.length ? `<div class="product-page-tags">${tags.map(tag => `<span>${tag}</span>`).join('')}</div>` : ''}
           <div class="product-page-desc">${linkify(product.description || '')}</div>
 
           ${inside.length ? `
@@ -148,7 +224,7 @@
         if (!Number.isNaN(n) && products[n]) product = products[n];
       }
 
-      if (product) render(product);
+      if (product) render(product, products);
       else renderNotFound();
     } catch (e) {
       renderNotFound();

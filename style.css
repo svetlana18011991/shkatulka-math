@@ -4214,3 +4214,32 @@ body.dark-theme .home-about-teaser {
 .card-title-link:hover {
   color: var(--burgundy);
 }
+
+/* ===========================
+   RELATED PRODUCTS
+=========================== */
+.product-page-tags {
+  display: none !important;
+}
+
+.product-related-section {
+  margin-top: 54px;
+}
+
+.product-related-header {
+  margin-bottom: 24px;
+}
+
+.product-related-grid {
+  margin-top: 10px;
+}
+
+.product-related-card .card-title {
+  min-height: auto;
+}
+
+@media (max-width: 560px) {
+  .product-related-section {
+    margin-top: 36px;
+  }
+}
