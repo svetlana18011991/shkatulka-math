@@ -4413,3 +4413,52 @@ body.dark-theme .home-about-teaser {
     min-height: 140px !important;
   }
 }
+
+/* ===========================
+   ARTICLE CTA BOX
+=========================== */
+.article-cta-box {
+  margin: 34px 0;
+  padding: 28px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(255,247,240,.98), rgba(255,236,232,.9));
+  border: 1px solid rgba(201,151,58,.28);
+  box-shadow: 0 14px 38px rgba(26,26,46,.08);
+}
+
+.article-cta-box h3 {
+  margin: 0 0 12px;
+  font-family: var(--font-head);
+  color: var(--primary);
+  font-size: 1.45rem;
+}
+
+.article-cta-box p {
+  margin-bottom: 18px;
+}
+
+.article-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.article-content ul {
+  margin: 14px 0 22px;
+  padding-left: 24px;
+}
+
+.article-content li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+@media (max-width: 560px) {
+  .article-cta-box {
+    padding: 22px;
+  }
+
+  .article-cta-actions .btn {
+    width: 100%;
+  }
+}
