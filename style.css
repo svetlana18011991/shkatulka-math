@@ -4474,3 +4474,55 @@ body.dark-theme .home-about-teaser {
   object-position: center center !important;
   background: transparent !important;
 }
+
+
+/* ===========================
+   ARTICLES CARDS BUTTONS FIX
+=========================== */
+.articles-grid {
+  align-items: stretch;
+}
+
+.article-card {
+  height: 100%;
+}
+
+.article-card .card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.article-card .card-body p {
+  flex: 1;
+}
+
+.article-card .btn,
+.article-card .btn-primary {
+  align-self: center;
+  width: auto;
+  min-width: 170px;
+  max-width: 220px;
+  min-height: 42px;
+  padding: 10px 26px;
+  margin-top: auto;
+  border-radius: 999px;
+  font-size: 0.94rem;
+  line-height: 1.1;
+}
+
+.home-articles .article-card .btn,
+.home-articles .article-card .btn-primary {
+  min-width: 160px;
+  max-width: 210px;
+}
+
+@media (max-width: 560px) {
+  .article-card .btn,
+  .article-card .btn-primary,
+  .home-articles .article-card .btn,
+  .home-articles .article-card .btn-primary {
+    width: 100%;
+    max-width: none;
+  }
+}
