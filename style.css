@@ -4989,3 +4989,48 @@ body.dark-theme .home-about-teaser {
   opacity: 1 !important;
   text-shadow: none !important;
 }
+
+
+/* ===========================
+   CATALOG BUTTONS DIRECT FINAL FIX
+=========================== */
+#productsGrid .card-details-btn {
+  background: #fff6f3 !important;
+  background-image: none !important;
+  color: #8B2635 !important;
+  -webkit-text-fill-color: #8B2635 !important;
+  border: 1px solid rgba(139, 38, 53, .28) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+}
+
+#productsGrid .card-details-btn:hover,
+#productsGrid .card-details-btn:focus,
+#productsGrid .card-details-btn:focus-visible {
+  background: #8B2635 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #8B2635 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active,
+.filters .filter-btn.filter-btn-donate.active,
+.filters .filter-btn[data-filter="donate"].active:hover,
+.filters .filter-btn.filter-btn-donate.active:hover {
+  background: linear-gradient(135deg, #8B2635, #C0392B) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active .donate-filter-text,
+.filters .filter-btn[data-filter="donate"].active:hover .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active:hover .donate-filter-text {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}

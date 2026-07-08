@@ -95,6 +95,75 @@ function initCatalogFilterFromUrl() {
 }
 
 
+
+function forceCatalogButtonsVisibility() {
+  const detailButtons = document.querySelectorAll('#productsGrid .card-details-btn');
+
+  detailButtons.forEach(btn => {
+    const base = () => {
+      btn.style.setProperty('display', 'inline-flex', 'important');
+      btn.style.setProperty('align-items', 'center', 'important');
+      btn.style.setProperty('justify-content', 'center', 'important');
+      btn.style.setProperty('min-height', '42px', 'important');
+      btn.style.setProperty('padding', '10px 22px', 'important');
+      btn.style.setProperty('border-radius', '999px', 'important');
+      btn.style.setProperty('background', '#fff6f3', 'important');
+      btn.style.setProperty('background-image', 'none', 'important');
+      btn.style.setProperty('color', '#8B2635', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#8B2635', 'important');
+      btn.style.setProperty('border', '1px solid rgba(139, 38, 53, .28)', 'important');
+      btn.style.setProperty('font-weight', '800', 'important');
+      btn.style.setProperty('opacity', '1', 'important');
+      btn.style.setProperty('visibility', 'visible', 'important');
+      btn.style.setProperty('text-shadow', 'none', 'important');
+      btn.style.setProperty('box-shadow', 'none', 'important');
+      btn.style.setProperty('text-decoration', 'none', 'important');
+    };
+
+    const hover = () => {
+      btn.style.setProperty('background', '#8B2635', 'important');
+      btn.style.setProperty('background-image', 'none', 'important');
+      btn.style.setProperty('color', '#ffffff', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      btn.style.setProperty('border-color', '#8B2635', 'important');
+      btn.style.setProperty('opacity', '1', 'important');
+      btn.style.setProperty('visibility', 'visible', 'important');
+      btn.style.setProperty('box-shadow', '0 8px 22px rgba(139, 38, 53, .28)', 'important');
+    };
+
+    base();
+    btn.onmouseenter = hover;
+    btn.onfocus = hover;
+    btn.onmouseleave = base;
+    btn.onblur = base;
+  });
+
+  const donateButtons = document.querySelectorAll('.filter-btn-donate, .filter-btn[data-filter="donate"]');
+  donateButtons.forEach(btn => {
+    const text = btn.querySelector('.donate-filter-text') || btn;
+    const isActive = btn.classList.contains('active') || activeCatalogFilter === 'donate';
+
+    if (isActive) {
+      btn.style.setProperty('background', 'linear-gradient(135deg, #8B2635, #C0392B)', 'important');
+      btn.style.setProperty('border-color', 'transparent', 'important');
+      btn.style.setProperty('color', '#ffffff', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      text.style.setProperty('color', '#ffffff', 'important');
+      text.style.setProperty('-webkit-text-fill-color', '#ffffff', 'important');
+      text.style.setProperty('opacity', '1', 'important');
+      text.style.setProperty('visibility', 'visible', 'important');
+    } else {
+      btn.style.setProperty('background', 'linear-gradient(135deg, #ffe2d4, #fff2ea)', 'important');
+      btn.style.setProperty('border-color', 'rgba(201, 151, 58, .42)', 'important');
+      btn.style.setProperty('color', '#8B2635', 'important');
+      btn.style.setProperty('-webkit-text-fill-color', '#8B2635', 'important');
+      text.style.setProperty('color', '#8B2635', 'important');
+      text.style.setProperty('-webkit-text-fill-color', '#8B2635', 'important');
+    }
+  });
+}
+
+
 function updateDonateNavState() {
   const isDonate = activeCatalogFilter === 'donate';
   const desktopLinks = document.querySelectorAll('.nav a');
@@ -221,6 +290,7 @@ function renderHomePopularProducts(products) {
   }).join('');
 
   initCatalogProductAnalytics(products);
+  forceCatalogButtonsVisibility();
 }
 
 
@@ -342,6 +412,8 @@ function gradeLabel(grade) {
 // ===========================
 // ФИЛЬТРЫ И ПОИСК
 // ===========================
+forceCatalogButtonsVisibility();
+
 function initFilters() {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => {
@@ -351,6 +423,7 @@ function initFilters() {
       activeCatalogFilter = btn.dataset.filter || 'all';
       updateDonateNavState();
       applyCatalogFilters();
+      setTimeout(forceCatalogButtonsVisibility, 50);
     };
   });
 }
@@ -830,4 +903,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initFreeHeroButton();
   initCookieNotice();
   loadProducts();
+  setTimeout(forceCatalogButtonsVisibility, 500);
 });

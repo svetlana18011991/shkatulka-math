@@ -18,7 +18,7 @@
 <meta content="Каталог материалов — Шкатулка математических интерактивов" name="twitter:title"/>
 <meta content="Каталог интерактивов и готовых материалов для уроков математики, ОГЭ и ЕГЭ." name="twitter:description"/>
 <meta content="https://shkatulka.sistema-math.ru/images/svetlana.jpg" name="twitter:image"/>
-<link href="style.css?v=details-donate-final-20260709" rel="stylesheet"/>
+<link href="style.css?v=direct-buttons-fix-20260709-2" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Raleway:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <style id="gallery-final-inline-css">
@@ -1044,7 +1044,56 @@ body.dark-theme #emergencyProductModal .egm-img {
 .nav a.active::after{width:100%;}
 .nav a.active{color:var(--primary);}
 .mobile-nav a.active{color:var(--primary);font-weight:700;}
-</style></head><body><header class="header">
+</style>
+<style id="catalog-buttons-direct-fix">
+#productsGrid .card-details-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 42px !important;
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  background: #fff6f3 !important;
+  background-image: none !important;
+  color: #8B2635 !important;
+  -webkit-text-fill-color: #8B2635 !important;
+  border: 1px solid rgba(139, 38, 53, .28) !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+  text-decoration: none !important;
+}
+
+#productsGrid .card-details-btn:hover,
+#productsGrid .card-details-btn:focus,
+#productsGrid .card-details-btn:focus-visible {
+  background: #8B2635 !important;
+  background-image: none !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  border-color: #8B2635 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: 0 8px 22px rgba(139, 38, 53, .28) !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active,
+.filters .filter-btn.filter-btn-donate.active {
+  background: linear-gradient(135deg, #8B2635, #C0392B) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active .donate-filter-text {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+</style>
+
+</head><body><header class="header">
 <div class="header-inner container">
 <a aria-label="На главную" class="logo" href="index.html">
 <div class="logo-icon-wrap">
@@ -1137,7 +1186,7 @@ body.dark-theme #emergencyProductModal .egm-img {
 <p class="footer-copy">© 2026 Быкова Светлана Владимировна. Все права защищены.</p>
 <p class="footer-legal">ИП Быкова Светлана Владимировна, ИНН 384800642846, ОГРНИП 326385000015200.</p>
 </div>
-</footer><script src="script.js?v=buttons-cookie-donate-fix-20260709"></script><div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;">
+</footer><script src="script.js?v=direct-buttons-fix-20260709-2"></script><div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:9999;">
 <div style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">×</div>
 <img id="modalImg" style="max-width:80%;max-height:80%;border-radius:12px;"/>
 </div>

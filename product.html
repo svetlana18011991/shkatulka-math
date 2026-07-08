@@ -5,9 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Материал — Шкатулка математических интерактивов</title>
 <meta name="description" content="Страница материала из каталога Шкатулки математических интерактивов: описание, изображения, цена и ссылка на покупку или скачивание."/>
-<link rel="stylesheet" href="style.css?v=details-donate-final-20260709"/>
+<link rel="stylesheet" href="style.css?v=direct-buttons-fix-20260709-2"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+
+<style id="catalog-buttons-direct-fix">
+#productsGrid .card-details-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 42px !important;
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  background: #fff6f3 !important;
+  background-image: none !important;
+  color: #8B2635 !important;
+  -webkit-text-fill-color: #8B2635 !important;
+  border: 1px solid rgba(139, 38, 53, .28) !important;
+  font-weight: 800 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-shadow: none !important;
+  text-decoration: none !important;
+}
+
+#productsGrid .card-details-btn:hover,
+#productsGrid .card-details-btn:focus,
+#productsGrid .card-details-btn:focus-visible {
+  background: #8B2635 !important;
+  background-image: none !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  border-color: #8B2635 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: 0 8px 22px rgba(139, 38, 53, .28) !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active,
+.filters .filter-btn.filter-btn-donate.active {
+  background: linear-gradient(135deg, #8B2635, #C0392B) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.filters .filter-btn[data-filter="donate"].active .donate-filter-text,
+.filters .filter-btn.filter-btn-donate.active .donate-filter-text {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+</style>
+
 </head>
 <body>
 <header class="header">
@@ -69,7 +118,7 @@
 <p class="footer-legal">ИП Быкова Светлана Владимировна, ИНН 384800642846, ОГРНИП 326385000015200.</p>
 </div>
 </footer>
-<script src="script.js?v=buttons-cookie-donate-fix-20260709"></script>
+<script src="script.js?v=direct-buttons-fix-20260709-2"></script>
 <script src="product-page.js?v=catalog-sort-metrika-20260709"></script>
 
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление об использовании cookie">
