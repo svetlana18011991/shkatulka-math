@@ -141,10 +141,10 @@ function forceCatalogButtonsVisibility() {
     btn.onblur = base;
   });
 
-  const donateButtons = document.querySelectorAll('.filter-btn-donate, .filter-btn[data-filter="donate"]');
-  donateButtons.forEach(btn => {
-    const text = btn.querySelector('.donate-filter-text') || btn;
-    const isActive = btn.classList.contains('active') || activeCatalogFilter === 'donate';
+  const specialFilterButtons = document.querySelectorAll('.filter-btn-donate, .filter-btn-training, .filter-btn[data-filter="donate"], .filter-btn[data-filter="training"]');
+  specialFilterButtons.forEach(btn => {
+    const text = btn.querySelector('.donate-filter-text, .training-filter-text') || btn;
+    const isActive = btn.classList.contains('active');
 
     if (isActive) {
       btn.style.setProperty('background', 'linear-gradient(135deg, #8B2635, #C0392B)', 'important');
@@ -354,6 +354,49 @@ function renderDonateSection() {
 }
 
 
+function renderTrainingSection() {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+
+  currentProducts = [];
+  grid.innerHTML = `
+    <div class="donate-catalog-panel training-catalog-panel">
+      <div class="training-catalog-grid">
+        <div class="training-catalog-cover">
+          <img src="images/praktikum-ai-cover.png" alt="Обложка практикума «ИИ в работе учителя»" loading="lazy">
+        </div>
+
+        <div class="training-catalog-content">
+          <p class="section-label">Мини-практикум для учителей и преподавателей</p>
+          <h2 class="section-title">«ИИ в работе учителя»</h2>
+          <p class="training-catalog-lead">Практикум о том, как превратить обычную идею и диалог с ChatGPT в реальные учебные материалы — от первого запроса до готовой разработки.</p>
+
+          <ul class="training-catalog-list">
+            <li><strong>2 подробных видеоурока</strong> с демонстрацией реального рабочего процесса;</li>
+            <li>создание с нуля <strong>интерактивной разработки, рабочего листа и рабочей тетради</strong>;</li>
+            <li><strong>готовые промпты, файлы и примеры</strong>, которые можно адаптировать под свой предмет;</li>
+            <li>разбор <strong>публикации HTML-материала</strong> в интернете;</li>
+            <li><strong>закрытый чат участников</strong> и бессрочный доступ к материалам.</li>
+          </ul>
+
+          <div class="training-catalog-price">
+            <strong>2 500 ₽</strong>
+            <span>разовая оплата · доступ бессрочно</span>
+          </div>
+
+          <div class="training-catalog-actions">
+            <a class="btn btn-primary training-buy-btn" href="https://payform.ru/aocvaHM/" target="_blank" rel="noopener">Купить практикум</a>
+            <a class="btn btn-outline training-details-btn" href="praktikum.html">Подробнее о практикуме</a>
+          </div>
+
+          <p class="training-catalog-note">После оплаты вы получаете доступ к закрытому сайту с уроками и материалами.</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
 function renderProducts(products, hasSearch = false) {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
@@ -531,6 +574,11 @@ function applyCatalogFilters() {
   updateDonateNavState();
   if (activeCatalogFilter === 'donate') {
     renderDonateSection();
+    return;
+  }
+
+  if (activeCatalogFilter === 'training') {
+    renderTrainingSection();
     return;
   }
 
