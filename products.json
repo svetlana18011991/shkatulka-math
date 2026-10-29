@@ -1161,6 +1161,23 @@
       "gallery": [],
       "downloadFile": "",
       "tags": []
+    },
+    {
+      "title": "Действие вычитание",
+      "grade": [
+        "5"
+      ],
+      "price": 0,
+      "description": "🎓 Класс: 5\n📚 Тема: действие вычитание\n🧩 Количество заданий: 9\n🎮 Формат: интерактивная игра-пазл\nСсылка на игру: https://view.genially.com/6ac937e1dab714c24cb79285",
+      "inside": [],
+      "buyLink": "",
+      "image": "/images/6пь.jpg",
+      "gallery": [],
+      "downloadFile": "",
+      "tags": [
+        "5",
+        "действие вычитание"
+      ]
     }
   ]
 }
