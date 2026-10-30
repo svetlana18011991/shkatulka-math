@@ -1107,7 +1107,11 @@
       "inside": [],
       "buyLink": "https://payform.ru/l5cTXJE/",
       "image": "/images/Сборник задач ОГЭ_ Математика 1–19.png",
-      "gallery": [],
+      "gallery": [
+        "/images/ам.jpg",
+        "/images/12а.jpg",
+        "/images/амвамва.jpg"
+      ],
       "downloadFile": "",
       "tags": [
         "ОГЭ",
