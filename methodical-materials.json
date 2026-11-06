@@ -2,9 +2,9 @@
   "items": [
     {
       "id": "oge-algebra-variant-1",
-      "title": "Пятиминутка ОГЭ. Вариант 1",
+      "title": "Пятиминутка ОГЭ по алгебре. Вариант 1",
       "category": "pyatiminutki",
-      "description": "Бесплатный материал по алгебре для первой части ОГЭ. В архиве: PDF с заданиями, интерактивный вариант для работы на экране и ключи с ответами.",
+      "description": "Задания по алгебре из первой части ОГЭ. В архиве: PDF для печати, интерактивный HTML-вариант и ключи с ответами.",
       "composition": [
         "PDF с заданиями",
         "Интерактивный вариант (HTML)",
@@ -13,7 +13,9 @@
       "downloadFile": "downloads/oge-algebra-variant-1.rar",
       "format": "RAR",
       "publishDate": "2026-11-06",
-      "pageUrl": "pyatiminutka-oge-variant-1.html"
+      "pageUrl": "pyatiminutka-oge-variant-1.html",
+      "section": "algebra",
+      "variantNumber": 1
     }
   ]
 }
