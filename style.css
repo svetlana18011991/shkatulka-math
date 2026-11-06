@@ -5797,14 +5797,45 @@ body.dark-theme .review-card--new .review-topic {
 .oge-list-row+.oge-list-row{border-top:1px solid #f0e3de;}
 .oge-list-row:nth-child(even){background:#fffcfa;}
 .oge-list-row__title{display:flex;flex-direction:column;gap:4px;}
-.oge-list-row__title>a{color:var(--primary);font-family:var(--font-head);font-size:1.25rem;font-weight:700;line-height:1.3;}
-.oge-list-row__title>a:hover{text-decoration:underline;text-underline-offset:3px;}
+.oge-list-row__title>strong{color:var(--primary);font-family:var(--font-head);font-size:1.25rem;font-weight:700;line-height:1.3;}
 .oge-list-row__title small{color:#95868a;font-size:.71rem;font-weight:700;letter-spacing:.02em;}
 .oge-list-row__description{color:#655d64;font-size:.89rem;line-height:1.7;margin:0;overflow-wrap:anywhere;}
 .oge-list-row__actions{display:flex;align-items:center;gap:16px;justify-content:flex-end;}
-.oge-list-row__detail{color:var(--primary);font-weight:700;font-size:.79rem;white-space:nowrap;text-decoration:underline;text-underline-offset:4px;}
 .oge-list-row__download{display:inline-flex;align-items:center;gap:8px;justify-content:center;white-space:nowrap;background:linear-gradient(105deg,#8B2635,#bc332d);color:#fff !important;border-radius:50px;padding:11px 17px;font-size:.81rem;font-weight:800;box-shadow:0 6px 14px rgba(139,38,53,.15);transition:transform .2s,box-shadow .2s;}
 .oge-list-row__download:hover{transform:translateY(-2px);box-shadow:0 9px 18px rgba(139,38,53,.24);}
 .oge-list-empty{padding:22px 24px;color:#847778;font-size:.9rem;line-height:1.65;margin:0;}
 @media(max-width:1020px){.oge-list-row{grid-template-columns:minmax(120px,165px) minmax(0,1fr);gap:10px 17px;}.oge-list-row__actions{grid-column:2;justify-content:flex-start;}.kopilka-teaser__panel{flex-wrap:wrap;}.kopilka-teaser__panel .btn{white-space:normal;}}
 @media(max-width:610px){.oge-list-page .oge-list-intro{padding:40px 0;}.oge-list-intro h1{font-size:2.25rem;}.oge-list-jump a{padding:10px 14px;}.oge-list-row{grid-template-columns:1fr;gap:10px;padding:20px;}.oge-list-row__actions{grid-column:1;flex-wrap:wrap;justify-content:space-between;}.oge-list-row__download{font-size:.8rem;}.oge-list-row__description{line-height:1.6;}.oge-list-section__symbol{width:44px;height:44px;font-size:19px;}.kopilka-teaser__panel{padding:22px;}}
+
+
+/* ЕГЭ в методической копилке — 2026-11-06 */
+.kopilka-categories--expanded{grid-template-columns:repeat(2,minmax(0,1fr));}
+.kopilka-categories--expanded .kopilka-category{min-height:235px;padding:27px 29px;}
+.kopilka-categories--expanded .kopilka-category--gold{grid-column:1/-1;min-height:180px;}
+.kopilka-category__group{display:block;margin-top:13px;color:#a57e38;text-transform:uppercase;letter-spacing:.075em;font-size:.71rem;font-weight:800;}
+.kopilka-categories--expanded .kopilka-category h3{margin-top:7px;}
+.ege-filter-section{background:#fff;padding-top:38px!important;padding-bottom:28px!important;}
+.ege-results-section{background:#fffaf7;padding-top:30px!important;}
+.ege-filter-panel{max-width:1130px;background:#fff;border:1px solid #e9d9d3;border-radius:22px;padding:25px 28px 23px;box-shadow:0 12px 32px rgba(139,38,53,.055);}
+.ege-filter-panel__header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px;}
+.ege-filter-panel__header h2{font-family:var(--font-head);font-size:clamp(1.45rem,2.2vw,1.85rem);color:var(--primary);margin-top:4px;}
+.ege-filter-fieldset{border:0;padding:0;margin:0 0 20px;min-width:0;}
+.ege-filter-fieldset legend{font-size:.9rem;font-weight:800;color:#4c3a3e;margin-bottom:11px;padding:0;}
+.ege-filter-hint{font-weight:500;color:#928286;}
+.ege-level-options,.ege-mode-options,.ege-task-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.ege-option,.ege-task-button{font-family:inherit;font-size:.88rem;cursor:pointer;background:#fff;border:1px solid #e8d6ce;color:#725e63;border-radius:999px;padding:9px 17px;font-weight:700;transition:background .18s,color .18s,border-color .18s,transform .18s;}
+.ege-option:hover,.ege-task-button:hover{border-color:#b77a7f;color:var(--primary);}
+.ege-option.is-active,.ege-task-button.is-active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 4px 9px rgba(139,38,53,.12);}
+.ege-task-button{min-width:44px;min-height:42px;padding:8px 11px;border-radius:12px;}
+.ege-task-button:disabled{opacity:.38;cursor:not-allowed;background:#f6f2f0;color:#999;border-color:#eee;box-shadow:none;}
+.ege-option:focus-visible,.ege-task-button:focus-visible,.ege-reset:focus-visible,.oge-list-row__download:focus-visible{outline:3px solid #d39c42;outline-offset:3px;}
+.ege-filter-example{font-size:.8rem;color:#89777a;line-height:1.6;margin-top:10px;max-width:780px;}
+.ege-filter-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:13px 16px;border-radius:13px;background:#faf1e9;color:#76444d;font-size:.82rem;font-weight:700;}
+.ege-reset{background:transparent;border:1px solid #ddc7c0;border-radius:999px;padding:9px 13px;color:var(--primary);cursor:pointer;font-size:.79rem;font-weight:800;white-space:nowrap;}
+.ege-reset:hover{background:#fff1ef;}
+.ege-result-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.ege-result-tags span{padding:3px 8px;background:#fff4e6;border:1px solid #f0dfc5;border-radius:999px;color:#815d31;font-size:.72rem;font-weight:700;}
+.ege-filter-panel--compact{margin-bottom:23px;padding:19px 23px;}
+.ege-filter-panel--compact .ege-filter-fieldset{margin:0;}
+@media(max-width:800px){.kopilka-categories--expanded{grid-template-columns:1fr 1fr;}.ege-filter-panel{padding:22px;}}
+@media(max-width:610px){.kopilka-categories--expanded{grid-template-columns:1fr;}.kopilka-categories--expanded .kopilka-category--gold{grid-column:auto;}.ege-filter-panel{padding:18px 16px;}.ege-filter-panel__header{align-items:start;}.ege-filter-panel__header h2{font-size:1.42rem;}.ege-task-button{min-width:41px;min-height:41px;}.ege-level-options,.ege-mode-options{gap:7px;}.ege-option{font-size:.79rem;padding:9px 12px;}.ege-filter-summary{align-items:flex-start;flex-direction:column;}.ege-reset{padding:9px;}}

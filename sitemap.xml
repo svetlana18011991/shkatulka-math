@@ -135,6 +135,7 @@
     <priority>0.65</priority>
   </url>
   <url><loc>https://shkatulka.sistema-math.ru/kopilka.html</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://shkatulka.sistema-math.ru/pyatiminutka-oge-variant-1.html</loc><lastmod>2026-11-06</lastmod><changefreq>monthly</changefreq><priority>0.80</priority></url>
   <url><loc>https://shkatulka.sistema-math.ru/pyatiminutki-oge.html</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://shkatulka.sistema-math.ru/pyatiminutki-ege.html</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://shkatulka.sistema-math.ru/varianty-ege.html</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>
 </urlset>
