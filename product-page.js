@@ -30,7 +30,10 @@
 
 
   function productPageUrl(product) {
-    return 'product.html?id=' + encodeURIComponent(slugify(product && product.title ? product.title : 'material'));
+    const slug = slugify(product && product.title ? product.title : 'material');
+    const index = product && product._shktOriginalIndex;
+    return 'product.html?id=' + encodeURIComponent(slug)
+      + (Number.isInteger(index) ? '&index=' + index : '');
   }
 
   function isPaidProduct(product) {
@@ -143,7 +146,7 @@
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', location.origin + location.pathname + '?id=' + encodeURIComponent(slugify(title)));
+    canonical.setAttribute('href', location.origin + location.pathname + productPageUrl(product).replace('product.html', ''));
   }
 
   function renderRelatedCard(product) {
@@ -317,14 +320,15 @@
     try {
       const response = await fetch('products.json?t=' + Date.now());
       const data = await response.json();
-      const products = data.items || (Array.isArray(data) ? data : []);
+      const rawProducts = data.items || (Array.isArray(data) ? data : []);
+      const products = rawProducts.map((p, i) => Object.assign({}, p, { _shktOriginalIndex: i }));
 
       let product = null;
-      if (indexParam !== null && products[Number(indexParam)]) {
-        product = products[Number(indexParam)];
-      } else {
-        product = products.find(p => slugify(p.title) === id);
+      if (indexParam !== null && /^\d+$/.test(indexParam)) {
+        const candidate = products[Number(indexParam)];
+        if (candidate && slugify(candidate.title) === id) product = candidate;
       }
+      if (!product) product = products.find(p => slugify(p.title) === id);
 
       if (!product) {
         const n = Number(id);

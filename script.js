@@ -307,7 +307,10 @@ function productSlug(product, index) {
 }
 
 function productPageUrl(product, index) {
-  return 'product.html?id=' + encodeURIComponent(productSlug(product, index));
+  const originalIndex = Number.isInteger(product && product._shktOriginalIndex)
+    ? product._shktOriginalIndex : index;
+  return 'product.html?id=' + encodeURIComponent(productSlug(product, index))
+    + '&index=' + encodeURIComponent(originalIndex);
 }
 
 function renderDonateSection() {
