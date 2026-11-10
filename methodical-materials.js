@@ -94,7 +94,7 @@
     var initialTasks=(search.get('tasks')||'').split(',').map(Number).filter(function(n){return Number.isSafeInteger(n)&&n>=1&&n<=21;});
     chosen=Array.from(new Set(initialTasks)).sort(function(a,b){return a-b;});
     level=['profile','basic'].includes(search.get('level'))?search.get('level'):'all';
-    match=search.get('match')==='exact'?'exact':'contains';
+    match=['contains','any','exact'].includes(search.get('match'))?search.get('match'):'contains';
     function syncButtons(){
       document.querySelectorAll('[data-ege-level]').forEach(function(b){var on=b.dataset.egeLevel===level;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
       document.querySelectorAll('[data-ege-match]').forEach(function(b){var on=b.dataset.egeMatch===match;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
@@ -105,7 +105,7 @@
       var qs=new URLSearchParams();
       if(level!=='all')qs.set('level',level);
       if(chosen.length)qs.set('tasks',chosen.join(','));
-      if(chosen.length&&match==='exact')qs.set('match','exact');
+      if(chosen.length&&match!=='contains')qs.set('match',match);
       try{window.history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs.toString():'')+location.hash);}catch(e){/* file:// and embedded previews may block history changes */}
     }
     function render(){
@@ -114,6 +114,7 @@
         var nums=taskNumbersFor(m);
         if(!chosen.length)return true;
         if(match==='exact')return chosen.length===nums.length&&chosen.every(function(n){return nums.includes(n);});
+        if(match==='any')return chosen.some(function(n){return nums.includes(n);});
         return chosen.every(function(n){return nums.includes(n);});
       });
       filtered.sort(function(a,b){var lA=levelFor(a),lB=levelFor(b);return lA.localeCompare(lB)||(numberFor(a)||Number.MAX_SAFE_INTEGER)-(numberFor(b)||Number.MAX_SAFE_INTEGER);});
