@@ -5839,3 +5839,44 @@ body.dark-theme .review-card--new .review-topic {
 .ege-filter-panel--compact .ege-filter-fieldset{margin:0;}
 @media(max-width:800px){.kopilka-categories--expanded{grid-template-columns:1fr 1fr;}.ege-filter-panel{padding:22px;}}
 @media(max-width:610px){.kopilka-categories--expanded{grid-template-columns:1fr;}.kopilka-categories--expanded .kopilka-category--gold{grid-column:auto;}.ege-filter-panel{padding:18px 16px;}.ege-filter-panel__header{align-items:start;}.ege-filter-panel__header h2{font-size:1.42rem;}.ege-task-button{min-width:41px;min-height:41px;}.ege-level-options,.ege-mode-options{gap:7px;}.ege-option{font-size:.79rem;padding:9px 12px;}.ege-filter-summary{align-items:flex-start;flex-direction:column;}.ege-reset{padding:9px;}}
+
+
+/* Компактная шапка копилки: все пять разделов доступны с первого экрана. */
+.kopilka-hero--compact {padding:45px 0 49px;}
+.kopilka-hero--compact .kopilka-hero__inner {display:block;}
+.kopilka-hero--compact .kopilka-hero__content {max-width:none;}
+.kopilka-hero--compact h1 {font-size:clamp(2.65rem,4.3vw,3.65rem);line-height:1.13;margin:10px 0 12px;}
+.kopilka-hero--compact .kopilka-hero__lead {max-width:930px;margin:0;font-size:1.03rem;line-height:1.65;}
+.kopilka-shortcuts {margin-top:24px;}
+.kopilka-shortcuts__heading {margin:0 0 12px;color:#8b2635;font-size:.83rem;font-weight:800;letter-spacing:.065em;text-transform:uppercase;}
+.kopilka-shortcuts__grid {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+.kopilka-shortcut {position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;min-height:145px;padding:16px 15px 16px;border-radius:17px;border:1px solid rgba(139,38,53,.16);background:rgba(255,255,255,.94);box-shadow:0 8px 23px rgba(139,38,53,.045);color:var(--primary);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+.kopilka-shortcut:hover {transform:translateY(-3px);border-color:rgba(139,38,53,.4);box-shadow:0 12px 26px rgba(139,38,53,.1);}
+.kopilka-shortcut:focus-visible {outline:3px solid #c9973a;outline-offset:3px;}
+.kopilka-shortcut__icon {width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:11px;background:#f6eaed;color:var(--primary);font-size:1.12rem;margin-bottom:2px;}
+.kopilka-shortcut__group {display:block;color:#a17737;font-size:.69rem;letter-spacing:.045em;text-transform:uppercase;font-weight:800;}
+.kopilka-shortcut strong {display:block;padding-right:14px;font-size:.92rem;line-height:1.36;font-weight:800;}
+.kopilka-shortcut__arrow {position:absolute;bottom:19px;right:13px;color:#ad6870;font-size:.8rem;}
+.kopilka-shortcut--gold {background:#fffaf0;border-color:#ead1a8;}
+.kopilka-shortcut--gold .kopilka-shortcut__icon {background:#f8e8c7;color:#a17624;}
+.kopilka-page .kopilka-main.section {padding-top:50px;}
+@media(max-width:1100px) {
+  .kopilka-shortcuts__grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+  .kopilka-shortcut {min-height:134px;}
+}
+@media(max-width:700px) {
+  .kopilka-hero--compact {padding:33px 0 36px;}
+  .kopilka-hero--compact h1 {font-size:clamp(2.3rem,9vw,3rem);}
+  .kopilka-hero--compact .kopilka-hero__lead {font-size:.96rem;line-height:1.6;}
+  .kopilka-shortcuts {margin-top:20px;}
+  .kopilka-shortcuts__grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+  .kopilka-shortcut {min-height:137px;padding:13px 12px;}
+  .kopilka-shortcut strong {font-size:.85rem;}
+  .kopilka-shortcut__group {font-size:.65rem;}
+  .kopilka-page .kopilka-main.section {padding-top:40px;}
+}
+@media(max-width:360px) {
+  .kopilka-shortcuts__grid {grid-template-columns:1fr;}
+  .kopilka-shortcut {min-height:90px;padding-left:62px;justify-content:center;}
+  .kopilka-shortcut__icon {position:absolute;left:12px;top:21px;}
+}
