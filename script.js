@@ -959,3 +959,34 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
   setTimeout(forceCatalogButtonsVisibility, 500);
 });
+
+
+// Настольное меню «Полезное» и вложенная «Методическая копилка»:
+// открытие при наведении, нативное раскрытие касанием и клавиатурой.
+(function initUsefulKopilkaHover() {
+  var hoverDevice = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var menus = document.querySelectorAll('.nav .nav-useful, .nav .nav-kopilka-subnav');
+  menus.forEach(function(menu) {
+    menu.addEventListener('mouseenter', function() {
+      if (hoverDevice.matches) menu.open = true;
+    });
+    menu.addEventListener('mouseleave', function() {
+      if (hoverDevice.matches) menu.open = false;
+    });
+    var trigger = menu.querySelector(':scope > summary');
+    if (trigger) trigger.addEventListener('click', function(event) {
+      // На компьютере меню уже открывается по наведению: клик не должен закрывать его.
+      if (hoverDevice.matches) { event.preventDefault(); menu.open = true; }
+    });
+    menu.addEventListener('keydown', function(event) {
+      if (event.key !== 'Escape') return;
+      event.stopPropagation();
+      menu.open = false;
+      if (trigger) trigger.focus();
+    });
+  });
+  document.addEventListener('click', function(event) {
+    if (event.target.closest('.nav-useful')) return;
+    menus.forEach(function(menu) { menu.open = false; });
+  });
+})();
