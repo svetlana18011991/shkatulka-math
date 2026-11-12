@@ -255,6 +255,10 @@
             </div>
           ` : ''}
 
+          <section class="site-video-reviews product-page-videos" hidden aria-label="Видеообзоры товара">
+            <h2 class="site-video-reviews__heading">Видеообзор</h2>
+            <div class="site-video-reviews__list"></div>
+          </section>
           <div class="product-page-bottom">
             <div class="product-page-price">${isPaid ? product.price + ' ₽' : 'Бесплатно'}</div>
             ${actionHref ? `<a class="btn btn-primary product-page-action" href="${actionHref}" target="_blank" rel="noopener">${actionText}</a>` : ''}
@@ -274,6 +278,12 @@
         </section>
       ` : ''}
     `;
+
+    const videoSection = root.querySelector('.product-page-videos');
+    const hasVideo = window.SiteVideoReviews && window.SiteVideoReviews.render(videoSection.querySelector('.site-video-reviews__list'), product);
+    videoSection.hidden = !hasVideo;
+    videoSection.querySelector('.site-video-reviews__heading').textContent =
+      window.SiteVideoReviews && window.SiteVideoReviews.collect(product).length > 1 ? 'Видеообзоры' : 'Видеообзор';
 
     document.querySelectorAll('.product-page-thumb').forEach(btn => {
       btn.addEventListener('click', () => {

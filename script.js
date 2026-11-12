@@ -785,6 +785,10 @@ function initAnimatedCounters() {
             <h3>Что внутри:</h3>
             <ul class="fpm-list"></ul>
           </div>
+          <section class="site-video-reviews fpm-video" hidden aria-label="Видеообзоры товара">
+            <h3 class="site-video-reviews__heading">Видеообзор</h3>
+            <div class="site-video-reviews__list"></div>
+          </section>
           <div class="fpm-bottom">
             <div class="fpm-price"></div>
             <a class="fpm-buy" target="_blank" rel="noopener">Купить</a>
@@ -814,6 +818,13 @@ function initAnimatedCounters() {
     m.querySelector('.fpm-title').textContent = product.title || '';
     m.querySelector('.fpm-desc').innerHTML = linkify(product.description || '');
     m.querySelector('.fpm-list').innerHTML = (product.inside || []).map(x => '<li>' + linkify(x) + '</li>').join('');
+
+    const videoSection = m.querySelector('.fpm-video');
+    const videoList = videoSection.querySelector('.site-video-reviews__list');
+    const hasVideo = window.SiteVideoReviews && window.SiteVideoReviews.render(videoList, product);
+    videoSection.hidden = !hasVideo;
+    videoSection.querySelector('.site-video-reviews__heading').textContent =
+      window.SiteVideoReviews && window.SiteVideoReviews.collect(product).length > 1 ? 'Видеообзоры' : 'Видеообзор';
 
     const isPaid = isPaidProduct(product);
     const hasDownloadFile = hasFileForDownload(product);
@@ -859,7 +870,11 @@ function initAnimatedCounters() {
 
   function close() {
     const m = document.getElementById('finalProductModal');
-    if (m) m.classList.remove('open');
+    if (m) {
+      m.classList.remove('open');
+      const videoList = m.querySelector('.site-video-reviews__list');
+      if (videoList) videoList.replaceChildren();
+    }
     document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
   }

@@ -6096,3 +6096,27 @@ body.dark-theme .nav-kopilka-subnav__inner {background:var(--white);border-color
 .mobile-kopilka-subnav__choices {display:flex;gap:12px;margin-top:3px;}
 .mobile-nav .mobile-kopilka-subnav__choices a {flex:1;max-width:110px;padding:7px 12px;text-align:center;border:1px solid rgba(139,38,53,.15);border-radius:9px;font-weight:700;color:var(--primary);}
 .mobile-nav .mobile-kopilka-subnav__choices a:hover {padding-left:12px;background:var(--primary-light);}
+
+
+/* Видеообзоры товаров и редакторов — скрыты, пока медиа не указаны в CMS. */
+.site-video-reviews[hidden], .editor-modal__video[hidden] { display: none !important; }
+.site-video-reviews { min-width: 0; margin: 16px 0 8px; }
+.site-video-reviews__heading, .editor-modal__video h3 {
+  color: #8B2635; font-size: 1.1rem; font-weight: 700; margin: 0 0 12px;
+}
+.site-video-reviews__list, .editor-modal__video-body { min-width: 0; display: grid; gap: 16px; }
+.site-video-review { min-width: 0; }
+.site-video-review__title { color: #51364b; font-size: .95rem; line-height: 1.4; margin: 0 0 8px; }
+.site-video-review__player {
+  display: block; box-sizing: border-box; width: 100%; aspect-ratio: 16 / 9;
+  height: auto; border: 0; border-radius: 14px; background: #171726;
+  box-shadow: 0 6px 18px rgba(24, 18, 44, .12);
+}
+.site-video-review__link { display: inline-block; color: #8B2635; text-decoration: underline; font-weight: 700; }
+#finalProductModal .fpm-video { flex: none; padding: 12px 0; border-top: 1px solid rgba(139,38,53,.13); }
+.product-page-videos { width: 100%; margin: 22px 0; }
+.editor-modal__video .site-video-review__player { max-width: 100%; }
+@media (max-width: 720px) {
+  .site-video-review__player { border-radius: 10px; }
+  #finalProductModal .fpm-video { padding: 10px 0; }
+}

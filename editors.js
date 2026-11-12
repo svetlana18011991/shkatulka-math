@@ -98,86 +98,10 @@
     });
   }
 
-  function getEmbedUrl(input) {
-    let value = String(input || '').trim();
-    // Поддерживается и скопированный код iframe: берётся только src, не HTML.
-    if (value.startsWith('<')) {
-      const parsed = new DOMParser().parseFromString(value,'text/html');
-      value = parsed.querySelector('iframe[src]')?.getAttribute('src') || '';
-      if (value.startsWith('//')) value = 'https:' + value;
-    }
-    const url = safeUrl(value);
-    if (!url) return null;
-    const host = url.hostname.toLowerCase().replace(/^www\./,'');
-    let match;
-    if (host === 'youtu.be') {
-      const id = url.pathname.split('/').filter(Boolean)[0];
-      if (/^[\w-]{11}$/.test(id || '')) return 'https://www.youtube-nocookie.com/embed/' + id;
-    }
-    if (['youtube.com','m.youtube.com','youtube-nocookie.com'].includes(host)) {
-      let id = url.searchParams.get('v');
-      if (!id) {
-        match = url.pathname.match(/^\/(?:embed|shorts|live)\/([\w-]{11})/);
-        id = match?.[1];
-      }
-      if (/^[\w-]{11}$/.test(id || '')) return 'https://www.youtube-nocookie.com/embed/' + id;
-    }
-    if (host === 'rutube.ru') {
-      match = url.pathname.match(/^\/(?:video|play\/embed)\/([\w-]+)/);
-      if (match) return 'https://rutube.ru/play/embed/' + match[1];
-    }
-    if (['vk.com','vkvideo.ru','m.vk.com','m.vkvideo.ru'].includes(host)) {
-      const oid = url.searchParams.get('oid');
-      const id = url.searchParams.get('id');
-      if (/^-?\d+$/.test(oid || '') && /^\d+$/.test(id || ''))
-        return 'https://vk.com/video_ext.php?oid=' + oid + '&id=' + id;
-      match = url.pathname.match(/video(-?\d+)_(\d+)/);
-      if (match) return 'https://vk.com/video_ext.php?oid=' + match[1] + '&id=' + match[2];
-    }
-    if (host === 'player.vimeo.com' || host === 'vimeo.com') {
-      match = url.pathname.match(/(?:video\/)?(\d+)/);
-      if (match) return 'https://player.vimeo.com/video/' + match[1];
-    }
-    return null;
-  }
-
   function showVideo(item) {
-    videoBody.replaceChildren(); // останавливает воспроизведение при смене или закрытии
-    videoSection.hidden = true;
-    const input = String(item.videoReview || '').trim() || String(item.videoReviewFile || '').trim();
-    if (!input) return;
-    let videoUrl = input;
-    if (videoUrl.startsWith('<')) {
-      const parsed = new DOMParser().parseFromString(videoUrl,'text/html');
-      videoUrl = parsed.querySelector('iframe[src]')?.getAttribute('src') || '';
-      if (videoUrl.startsWith('//')) videoUrl = 'https:' + videoUrl;
-    }
-    const url = safeUrl(videoUrl);
-    const embed = getEmbedUrl(input);
-    if (embed) {
-      const frame = document.createElement('iframe');
-      frame.src = embed;
-      frame.title = 'Видеообзор редактора';
-      frame.loading = 'lazy';
-      frame.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share';
-      frame.allowFullscreen = true;
-      frame.referrerPolicy = 'strict-origin-when-cross-origin';
-      videoBody.append(frame);
-    } else if (url && /\.(mp4|webm|ogg)(?:$|[?#])/i.test(url.pathname)) {
-      const player = document.createElement('video');
-      player.src = url.href;
-      player.controls = true;
-      player.preload = 'metadata';
-      player.playsInline = true;
-      videoBody.append(player);
-    } else if (url) {
-      const link = makeElement('a',null,'Смотреть видеообзор по ссылке ↗');
-      link.href = url.href;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      videoBody.append(link);
-    } else return;
-    videoSection.hidden = false;
+    videoSection.hidden = !window.SiteVideoReviews.render(videoBody, item);
+    videoSection.querySelector('h3').textContent =
+      window.SiteVideoReviews.collect(item).length > 1 ? 'Видеообзоры' : 'Видеообзор';
   }
 
   function openModal(item) {
