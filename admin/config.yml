@@ -28,8 +28,8 @@ collections:
               - { label: "Ссылка на оплату", name: "buyLink", widget: "string", required: false }
               - { label: "Главное фото", name: "image", widget: "image", required: false }
               - { label: "Галерея (доп. фото)", name: "gallery", widget: "list", field: { label: "Файл", name: "media", widget: "image" }, required: false }
+              - { label: "Видеообзор — загрузить с компьютера", name: "videoReviewFile", widget: "file", required: false, choose_url: false, accept: "video/mp4,video/webm,.mp4,.webm", media_folder: "/videos", public_folder: "/videos", hint: "Нажмите «Обзор» и загрузите MP4 или WebM с компьютера. После выбора нажмите «Сохранить» вверху страницы. Файл сохраняется в /videos/. В GitHub нельзя загрузить файл больше 100 МБ." }
               - { label: "Видеообзор — ссылка", name: "videoReview", widget: "string", required: false, hint: "Ссылка YouTube, VK Видео, Rutube, Vimeo или на видеофайл MP4/WebM. Обзор появится в подробностях товара." }
-              - { label: "Видеообзор — загрузить файл", name: "videoReviewFile", widget: "file", required: false, hint: "Вместо ссылки можно выбрать MP4/WebM. Для больших файлов используйте ссылку: GitHub не принимает файлы размером более 100 МБ." }
               - label: "Дополнительные видеообзоры (при необходимости)"
                 name: "videoReviews"
                 widget: "list"
@@ -39,7 +39,7 @@ collections:
                 fields:
                   - { label: "Подпись к видео", name: "title", widget: "string", required: false }
                   - { label: "Ссылка на видео", name: "url", widget: "string", required: false }
-                  - { label: "Или файл видео", name: "file", widget: "file", required: false }
+                  - { label: "Или загрузить видео с компьютера", name: "file", widget: "file", required: false, choose_url: false, accept: "video/mp4,video/webm,.mp4,.webm", media_folder: "/videos", public_folder: "/videos" }
               - { label: "Файл для скачивания", name: "downloadFile", widget: "file", required: false }
               - { label: "Теги", name: "tags", widget: "list", required: false }
 
@@ -61,8 +61,8 @@ collections:
               - { label: "Стоимость в рублях", name: "price", widget: "number", value_type: "int", min: 0, required: false, hint: "Пустое поле — стоимость пока не указана. 0 — бесплатно." }
               - { label: "Описание", name: "description", widget: "text", required: false }
               - { label: "Ссылка на покупку", name: "buyLink", widget: "string", required: false, hint: "Адрес страницы оплаты, начинающийся с https://" }
+              - { label: "Видеообзор — загрузить с компьютера", name: "videoReviewFile", widget: "file", required: false, choose_url: false, accept: "video/mp4,video/webm,.mp4,.webm", media_folder: "/videos", public_folder: "/videos", hint: "Нажмите «Обзор» и загрузите MP4 или WebM с компьютера. Затем нажмите «Сохранить» вверху страницы. Для видео больше 100 МБ понадобится внешнее хранилище." }
               - { label: "Видеообзор — ссылка", name: "videoReview", widget: "string", required: false, hint: "Вставьте ссылку с YouTube, VK Видео, Rutube, Vimeo или прямую ссылку на MP4 / WebM. Видео появится в окне редактора." }
-              - { label: "Видеообзор — файл", name: "videoReviewFile", widget: "file", required: false, hint: "Можно загрузить MP4 / WebM вместо ссылки. Крупные видео лучше размещать по ссылке: GitHub ограничивает размер файлов." }
               - label: "Дополнительные видеообзоры (при необходимости)"
                 name: "videoReviews"
                 widget: "list"
@@ -72,7 +72,7 @@ collections:
                 fields:
                   - { label: "Подпись к видео", name: "title", widget: "string", required: false }
                   - { label: "Ссылка на видео", name: "url", widget: "string", required: false }
-                  - { label: "Или файл видео", name: "file", widget: "file", required: false }
+                  - { label: "Или загрузить видео с компьютера", name: "file", widget: "file", required: false, choose_url: false, accept: "video/mp4,video/webm,.mp4,.webm", media_folder: "/videos", public_folder: "/videos" }
 
   - name: "methodical"
     label: "Методическая копилка"
