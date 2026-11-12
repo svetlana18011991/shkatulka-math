@@ -31,6 +31,27 @@ collections:
               - { label: "Файл для скачивания", name: "downloadFile", widget: "file", required: false }
               - { label: "Теги", name: "tags", widget: "list", required: false }
 
+  - name: "game_editors"
+    label: "Обучение и инструменты — редакторы игр"
+    files:
+      - label: "Редакторы"
+        name: "editors"
+        file: "editors.json"
+        fields:
+          - label: "Список редакторов"
+            name: "items"
+            widget: "list"
+            collapsed: true
+            summary: '{{fields.title}}'
+            fields:
+              - { label: "Название редактора", name: "title", widget: "string" }
+              - { label: "Фоновая картинка / обложка", name: "image", widget: "image", required: false, hint: "Изображение для карточки и окна с подробностями." }
+              - { label: "Стоимость в рублях", name: "price", widget: "number", value_type: "int", min: 0, required: false, hint: "Пустое поле — стоимость пока не указана. 0 — бесплатно." }
+              - { label: "Описание", name: "description", widget: "text", required: false }
+              - { label: "Ссылка на покупку", name: "buyLink", widget: "string", required: false, hint: "Адрес страницы оплаты, начинающийся с https://" }
+              - { label: "Видеообзор — ссылка", name: "videoReview", widget: "string", required: false, hint: "Вставьте ссылку с YouTube, VK Видео, Rutube, Vimeo или прямую ссылку на MP4 / WebM. Видео появится в окне редактора." }
+              - { label: "Видеообзор — файл", name: "videoReviewFile", widget: "file", required: false, hint: "Можно загрузить MP4 / WebM вместо ссылки. Крупные видео лучше размещать по ссылке: GitHub ограничивает размер файлов." }
+
   - name: "methodical"
     label: "Методическая копилка"
     media_folder: "downloads"
