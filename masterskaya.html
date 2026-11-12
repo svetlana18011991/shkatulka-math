@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="style.css?v=masterskaya-2026-11-12">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Raleway:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+/* Обложки обоих направлений: широкий формат 2:1 без отступов и обрезания текста. */
+.workshop-choice__art { height:auto; aspect-ratio:2 / 1; }
+.workshop-choice__art--course img,
+.workshop-choice__art--editors img { display:block; width:100%; height:100%; object-fit:cover; padding:0; }
+</style>
 </head>
 <body class="workshop-page">
 <header class="header">
@@ -41,8 +47,8 @@
 <section class="workshop-options" id="workshop-options"><div class="container">
   <div class="workshop-heading"><span>Направления</span><h2>Что вас интересует?</h2><p>Выберите практикум для обучения или редакторы для создания собственных игр.</p></div>
   <div class="workshop-choice-grid">
-    <article class="workshop-choice"><div class="workshop-choice__art workshop-choice__art--course"><img src="images/praktikum-ai-cover.png" alt="Обложка практикума «ИИ в работе учителя»" loading="lazy"></div><div class="workshop-choice__body"><span class="workshop-choice__tag">Обучение</span><h3>Практикум</h3><p>«ИИ в работе учителя» — от идеи до готовой интерактивной разработки и рабочих материалов.</p><a href="praktikum.html" class="workshop-choice__link">Перейти к практикуму <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>
-    <article class="workshop-choice"><div class="workshop-choice__art workshop-choice__art--editors"><span class="workshop-choice__emoji" aria-hidden="true">🧩</span><span>Создавайте свои игры</span></div><div class="workshop-choice__body"><span class="workshop-choice__tag">Инструменты</span><h3>Редакторы</h3><p>Редакторы учебных игр, которые можно использовать для создания собственных заданий. Первый — «Переливашки».</p><a href="redaktory.html" class="workshop-choice__link">Смотреть редакторы <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>
+    <article class="workshop-choice"><div class="workshop-choice__art workshop-choice__art--course"><img src="images/oblozhka-ii-v-rabote-uchitelya.webp" alt="Практикум «ИИ в работе учителя»" loading="lazy" width="1200" height="600"></div><div class="workshop-choice__body"><span class="workshop-choice__tag">Обучение</span><h3>Практикум</h3><p>«ИИ в работе учителя» — от идеи до готовой интерактивной разработки и рабочих материалов.</p><a href="praktikum.html" class="workshop-choice__link">Перейти к практикуму <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>
+    <article class="workshop-choice"><div class="workshop-choice__art workshop-choice__art--editors"><img src="images/oblozhka-redaktory-igr.webp" alt="Редакторы для создания собственных учебных игр" loading="lazy" width="1200" height="600"></div><div class="workshop-choice__body"><span class="workshop-choice__tag">Инструменты</span><h3>Редакторы</h3><p>Редакторы учебных игр, которые можно использовать для создания собственных заданий. Первый — «Переливашки».</p><a href="redaktory.html" class="workshop-choice__link">Смотреть редакторы <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></article>
   </div>
 </div></section>
 </main>
