@@ -206,7 +206,12 @@
     items.forEach(item => {
       if (!item || typeof item.title !== 'string' || !item.title.trim()) return;
       const article = makeElement('article', 'editor-card');
-      const imageBox = makeElement('div', 'editor-card__cover');
+      const imageBox = makeElement('button', 'editor-card__cover');
+      imageBox.type = 'button';
+      imageBox.setAttribute('aria-label', `Подробнее о редакторе «${item.title}»`);
+      imageBox.setAttribute('aria-haspopup', 'dialog');
+      imageBox.setAttribute('aria-controls', 'editorModal');
+      imageBox.addEventListener('click', event => openModal(item, event.currentTarget));
       imageBox.append(makeImage(item.image, item.title) || makePlaceholder());
       const body = makeElement('div', 'editor-card__body');
       const tag = makeElement('span','editor-card__eyebrow','Редактор игры');
@@ -220,7 +225,7 @@
       const more = makeElement('button','editor-card__more','Подробнее');
       more.type = 'button';
       more.setAttribute('aria-label', `Подробнее о редакторе «${item.title}»`);
-      more.addEventListener('click', () => openModal(item));
+      more.addEventListener('click', event => openModal(item, event.currentTarget));
       bottom.append(cost,more);
       body.append(tag,heading,descr,bottom);
       article.append(imageBox,body);
@@ -235,8 +240,8 @@
       window.SiteVideoReviews.collect(item).length > 1 ? 'Видеообзоры' : 'Видеообзор';
   }
 
-  function openModal(item) {
-    restoreFocus = document.activeElement;
+  function openModal(item, opener) {
+    restoreFocus = opener || document.activeElement;
     title.textContent = item.title;
     description.textContent = String(item.description || '').trim() || 'Описание появится здесь.';
     renderGallery(item);
