@@ -4018,6 +4018,7 @@ body.dark-theme .home-about-teaser {
 }
 
 .product-page-gallery {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -6148,6 +6149,7 @@ body.dark-theme .nav-useful__inner {background:var(--white);border-color:rgba(25
 .site-video-review__link { display: inline-block; color: #8B2635; text-decoration: underline; font-weight: 700; }
 #finalProductModal .fpm-video { flex: none; padding: 12px 0; border-top: 1px solid rgba(139,38,53,.13); }
 .product-page-videos { width: 100%; margin: 22px 0; }
+.product-page-gallery .product-page-videos { margin: 6px 0 0; }
 .editor-modal__video .site-video-review__player { max-width: 100%; }
 @media (max-width: 720px) {
   .site-video-review__player { border-radius: 10px; }

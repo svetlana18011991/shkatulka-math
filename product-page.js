@@ -241,6 +241,10 @@
               ${gallery.map((src, i) => `<button type="button" class="product-page-thumb ${i === 0 ? 'active' : ''}" data-src="${src}"><img src="${src}" alt="Фото материала ${i + 1}"></button>`).join('')}
             </div>
           ` : ''}
+          <section class="site-video-reviews product-page-videos" hidden aria-label="Видеообзоры товара">
+            <h2 class="site-video-reviews__heading">Видеообзор</h2>
+            <div class="site-video-reviews__list"></div>
+          </section>
         </div>
 
         <div class="product-page-info">
@@ -255,10 +259,6 @@
             </div>
           ` : ''}
 
-          <section class="site-video-reviews product-page-videos" hidden aria-label="Видеообзоры товара">
-            <h2 class="site-video-reviews__heading">Видеообзор</h2>
-            <div class="site-video-reviews__list"></div>
-          </section>
           <div class="product-page-bottom">
             <div class="product-page-price">${isPaid ? product.price + ' ₽' : 'Бесплатно'}</div>
             ${actionHref ? `<a class="btn btn-primary product-page-action" href="${actionHref}" target="_blank" rel="noopener">${actionText}</a>` : ''}
