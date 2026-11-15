@@ -976,11 +976,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Настольное меню «Полезное» и вложенная «Методическая копилка»:
+// Настольное меню «Полезное»:
 // открытие при наведении, нативное раскрытие касанием и клавиатурой.
-(function initUsefulKopilkaHover() {
+(function initUsefulHover() {
   var hoverDevice = window.matchMedia('(hover: hover) and (pointer: fine)');
-  var menus = document.querySelectorAll('.nav .nav-useful, .nav .nav-kopilka-subnav');
+  var menus = document.querySelectorAll('.nav .nav-useful');
   menus.forEach(function(menu) {
     menu.addEventListener('mouseenter', function() {
       if (hoverDevice.matches) menu.open = true;

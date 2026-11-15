@@ -6057,47 +6057,6 @@ body.dark-theme .nav-workshop-menu__inner { background:var(--white); border-colo
 body.dark-theme .nav-useful__inner {background:var(--white);border-color:rgba(255,179,92,.2);}
 
 
-/* Выпадающие разделы Методической копилки внутри меню «Полезное». */
-.nav .nav-kopilka-subnav {position:relative;min-width:0;}
-.nav .nav-kopilka-subnav__trigger {display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:9px;font-size:.83rem;font-weight:650;color:var(--text);white-space:nowrap;cursor:pointer;list-style:none;}
-.nav .nav-kopilka-subnav__trigger::-webkit-details-marker {display:none;}
-.nav .nav-kopilka-subnav__trigger::marker {content:'';}
-.nav .nav-kopilka-subnav__trigger > i:first-child {color:var(--gold);width:17px;text-align:center;flex-shrink:0;}
-.nav .nav-kopilka-subnav__trigger .nav-kopilka-subnav__arrow {margin-left:auto;color:var(--gold);font-size:.7rem;transition:transform .18s;}
-.nav .nav-kopilka-subnav:hover .nav-kopilka-subnav__trigger,
-.nav .nav-kopilka-subnav:focus-within .nav-kopilka-subnav__trigger,
-.nav .nav-kopilka-subnav[open] .nav-kopilka-subnav__trigger,
-.nav .nav-kopilka-subnav.is-active .nav-kopilka-subnav__trigger {color:var(--primary);background:var(--primary-light);}
-.nav .nav-kopilka-subnav:hover .nav-kopilka-subnav__arrow,
-.nav .nav-kopilka-subnav:focus-within .nav-kopilka-subnav__arrow,
-.nav .nav-kopilka-subnav[open] .nav-kopilka-subnav__arrow {transform:rotate(90deg);}
-.nav .nav-kopilka-subnav__trigger:focus-visible {outline:2px solid var(--gold);outline-offset:2px;}
-.nav .nav-kopilka-subnav__menu {position:absolute;top:-9px;left:100%;width:270px;padding-left:9px;z-index:150;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-6px);transition:opacity .18s ease,visibility .18s,transform .18s ease;}
-.nav .nav-kopilka-subnav:hover .nav-kopilka-subnav__menu,
-.nav .nav-kopilka-subnav:focus-within .nav-kopilka-subnav__menu,
-.nav .nav-kopilka-subnav[open] .nav-kopilka-subnav__menu {opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0);}
-.nav .nav-kopilka-subnav__inner {padding:10px;background:var(--white);border:1px solid rgba(139,38,53,.13);border-radius:15px;box-shadow:0 18px 35px rgba(44,21,26,.15);}
-.nav .nav-kopilka-subnav__menu a {font-weight:650;}
-.nav .nav-kopilka-subnav__group {padding:9px 8px 10px;border-top:1px solid rgba(139,38,53,.1);}
-.nav .nav-kopilka-subnav__group > span {display:block;margin-bottom:8px;font-size:.8rem;font-weight:800;color:var(--primary);}
-.nav .nav-kopilka-subnav__choices {display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.nav .nav-kopilka-subnav__choices a {display:flex;justify-content:center;padding:8px 4px;border:1px solid rgba(139,38,53,.15);background:var(--primary-light);font-size:.8rem;}
-.nav .nav-kopilka-subnav__free {border-top:1px solid rgba(139,38,53,.1);margin-top:1px;}
-body.dark-theme .nav-kopilka-subnav__inner {background:var(--white);border-color:rgba(255,179,92,.2);}
-
-/* На узком экране те же разделы раскрываются по нажатию, без hover. */
-.mobile-kopilka-subnav {margin:3px 0 5px;}
-.mobile-useful .mobile-kopilka-subnav > summary {padding:8px 4px;display:flex;gap:9px;justify-content:space-between;align-items:center;font-size:.91rem;font-weight:700;color:var(--text);}
-.mobile-useful .mobile-kopilka-subnav > summary i {font-size:.68rem;}
-.mobile-useful .mobile-kopilka-subnav[open] > summary i {transform:rotate(180deg);}
-.mobile-kopilka-subnav__links {margin:3px 0 6px 7px;padding-left:13px;border-left:2px solid rgba(201,151,58,.3);}
-.mobile-useful .mobile-kopilka-subnav__group {padding:7px 3px;}
-.mobile-useful .mobile-kopilka-subnav__group > span {font-size:.86rem;font-weight:800;color:var(--primary);}
-.mobile-kopilka-subnav__choices {display:flex;gap:12px;margin-top:3px;}
-.mobile-nav .mobile-kopilka-subnav__choices a {flex:1;max-width:110px;padding:7px 12px;text-align:center;border:1px solid rgba(139,38,53,.15);border-radius:9px;font-weight:700;color:var(--primary);}
-.mobile-nav .mobile-kopilka-subnav__choices a:hover {padding-left:12px;background:var(--primary-light);}
-
-
 /* Видеообзоры товаров и редакторов — скрыты, пока медиа не указаны в CMS. */
 .site-video-reviews[hidden], .editor-modal__video[hidden] { display: none !important; }
 .site-video-reviews { min-width: 0; margin: 16px 0 8px; }
