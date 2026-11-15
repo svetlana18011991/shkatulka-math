@@ -7,7 +7,13 @@
       "section": "algebra",
       "variantNumber": 1,
       "level": "profile",
-      "taskNumbers": [],
+      "taskNumbers": [
+        "6",
+        "8",
+        "9",
+        "10",
+        "12"
+      ],
       "description": "Задания по алгебре из первой части ОГЭ. В архиве: PDF для печати, интерактивный HTML-вариант и ключи с ответами.",
       "composition": [
         "PDF с заданиями",

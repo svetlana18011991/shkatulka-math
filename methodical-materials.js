@@ -1,5 +1,6 @@
 /* Методическая копилка: загрузка публикаций из methodical-materials.json.
-   ОГЭ: category=pyatiminutki | varianty, section=algebra|geometry|other.
+   ОГЭ: category=pyatiminutki | varianty, section=algebra|geometry|other,
+        taskNumbers=["1",...,"19"] для пятиминуток.
    ЕГЭ: category=pyatiminutki-ege | varianty-ege, level=profile|basic,
         taskNumbers=["5","6","7"] (для пятиминуток), variantNumber=1,2...
 */
@@ -19,42 +20,35 @@
   function levelLabel(level){return level==='profile'?'Профильный':level==='basic'?'Базовый':'Уровень не указан';}
   function taskNumbersFor(m){
     if(!Array.isArray(m.taskNumbers))return [];
-    var out=[];
-    m.taskNumbers.forEach(function(x){var n=Number(x);if(Number.isSafeInteger(n)&&n>=1&&n<=21&&!out.includes(n))out.push(n);});
+    var out=[],maximum=m.category==='pyatiminutki'?19:21;
+    m.taskNumbers.forEach(function(x){var n=Number(x);if(Number.isSafeInteger(n)&&n>=1&&n<=maximum&&!out.includes(n))out.push(n);});
     return out.sort(function(a,b){return a-b;});
   }
   function detailLink(m){return safeLink(m.pageUrl)||('material.html?id='+encodeURIComponent(m.id||''));}
   function makeRow(m,kind){
-    var category=kind==='oge'?'ОГЭ':'ЕГЭ';
+    var isOge=kind==='oge-five',category=isOge?'ОГЭ':'ЕГЭ';
     var level=levelFor(m),section=sectionFor(m),number=numberFor(m),label=number?'Вариант '+number:(m.title||'Без номера');
     var row=el('article','oge-list-row');row.setAttribute('role','listitem');
     var titleBlock=el('div','oge-list-row__title');
     titleBlock.appendChild(el('strong',null,label));
-    var sub=kind==='oge'?({'algebra':'Алгебра','geometry':'Геометрия','other':'Разное'})[section]+' · ОГЭ':'ЕГЭ · '+levelLabel(level);
+    var sub=isOge?({'algebra':'Алгебра','geometry':'Геометрия','other':'Разное'})[section]+' · ОГЭ':'ЕГЭ · '+levelLabel(level);
     titleBlock.appendChild(el('small',null,sub));row.appendChild(titleBlock);
     var text=el('div','ege-row-content');
     text.appendChild(el('p','oge-list-row__description',m.description||'Тренировочный материал по математике.'));
-    if(kind==='ege-five'){
+    if(kind==='ege-five'||isOge){
       var nums=taskNumbersFor(m);
       if(nums.length){var tags=el('div','ege-result-tags');tags.setAttribute('aria-label','Номера заданий');nums.forEach(function(n){tags.appendChild(el('span',null,'№ '+n));});text.appendChild(tags);}
+      else if(isOge){var note=el('div','ege-result-tags');note.appendChild(el('span',null,'Номера заданий пока не указаны'));text.appendChild(note);}
     }
     row.appendChild(text);
     var actions=el('div','oge-list-row__actions'),file=safeLink(m.downloadFile);
-    if(file){var btn=el('a','oge-list-row__download');btn.href=file;btn.download='';btn.setAttribute('aria-label','Скачать архив: '+category+', '+label+', '+(kind==='oge'?sub:levelLabel(level)));icon(btn,'download');btn.appendChild(document.createTextNode(' Скачать архив'));actions.appendChild(btn);}
+    if(file){var btn=el('a','oge-list-row__download');btn.href=file;btn.download='';btn.setAttribute('aria-label','Скачать архив: '+category+', '+label+', '+(isOge?sub:levelLabel(level)));icon(btn,'download');btn.appendChild(document.createTextNode(' Скачать архив'));actions.appendChild(btn);}
     row.appendChild(actions);return row;
   }
   function replaceList(node,rows,emptyText){
     if(!node)return;
     if(!rows.length){node.replaceChildren(el('p','oge-list-empty',emptyText));return;}
     node.replaceChildren.apply(node,rows);
-  }
-  function renderFiveminutes(items){
-    ['algebra','geometry','other'].forEach(function(section){
-      var node=document.querySelector('[data-material-group="'+section+'"]');if(!node)return;
-      var chosen=items.filter(function(m){return m&&m.category==='pyatiminutki'&&sectionFor(m)===section;});
-      chosen.sort(function(a,b){return (numberFor(a)||Number.MAX_SAFE_INTEGER)-(numberFor(b)||Number.MAX_SAFE_INTEGER);});
-      replaceList(node,chosen.map(function(m){return makeRow(m,'oge');}),'Пока нет опубликованных вариантов. Скоро здесь появятся материалы для скачивания.');
-    });
   }
   function makeCard(m){
     var card=el('article','kopilka-material-card');card.appendChild(el('span','kopilka-pill','ОГЭ · Тренировочный вариант · Бесплатно'));
@@ -76,59 +70,60 @@
     if(comp.length){root.appendChild(el('h2','kopilka-detail-subheading','В архиве'));var ul=el('ul','kopilka-composition');comp.forEach(function(t){ul.appendChild(el('li',null,typeof t==='string'?t:(t&&t.entry)||''));});root.appendChild(ul);}
     var actions=el('div','kopilka-detail-actions'),file=safeLink(m.downloadFile);
     if(file){var dl=el('a','btn btn-primary','Скачать архив бесплатно');dl.href=file;dl.download='';actions.appendChild(dl);}
-    var back=el('a','btn btn-outline','К списку материалов');back.href=m.category==='varianty'?'kopilka.html#varianty':m.category==='pyatiminutki-ege'?'pyatiminutki-ege.html':m.category==='varianty-ege'?'varianty-ege.html':'pyatiminutki-oge.html#'+sectionFor(m);actions.appendChild(back);root.appendChild(actions);
+    var back=el('a','btn btn-outline','К списку материалов');back.href=m.category==='varianty'?'kopilka.html#varianty':m.category==='pyatiminutki-ege'?'pyatiminutki-ege.html':m.category==='varianty-ege'?'varianty-ege.html':'pyatiminutki-oge.html'+(taskNumbersFor(m).length?'?tasks='+taskNumbersFor(m).join(','):'');actions.appendChild(back);root.appendChild(actions);
     document.title=(m.title||'Материал')+' — Методическая копилка | Шкатулка';var desc=document.querySelector('meta[name="description"]');if(desc)desc.content=m.description||'';
     var canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://shkatulka.sistema-math.ru/material.html?id='+encodeURIComponent(m.id);
   }
-  function bindChoiceButtons(selector,callback){
-    var elements=Array.from(document.querySelectorAll(selector));
+  function bindChoiceButtons(selector,callback,root){
+    var elements=Array.from((root||document).querySelectorAll(selector));
     elements.forEach(function(btn){btn.addEventListener('click',function(){elements.forEach(function(b){b.classList.toggle('is-active',b===btn);b.setAttribute('aria-pressed',b===btn?'true':'false');});callback(btn);});});
   }
-  function egeFiveMinutes(items){
-    var node=document.getElementById('ege-five-list');if(!node)return;
-    var all=items.filter(function(m){return m&&m.category==='pyatiminutki-ege';});
-    var buttons=Array.from(document.querySelectorAll('[data-task]'));
+  function fiveMinutes(items,exam){
+    var root=document.getElementById(exam+'-filter'),node=document.getElementById(exam+'-five-list');if(!root||!node)return;
+    var isOge=exam==='oge',category=isOge?'pyatiminutki':'pyatiminutki-ege',examLabel=isOge?'ОГЭ':'ЕГЭ',maximum=isOge?19:21;
+    var all=items.filter(function(m){return m&&m.category===category;});
+    var buttons=Array.from(root.querySelectorAll('[data-task]'));
     var chosen=[],level='all',match='contains';
-    var count=document.getElementById('ege-count'),selected=document.getElementById('ege-selected');
+    var count=document.getElementById(exam+'-count'),selected=document.getElementById(exam+'-selected');
     var search=new URLSearchParams(location.search);
-    var initialTasks=(search.get('tasks')||'').split(',').map(Number).filter(function(n){return Number.isSafeInteger(n)&&n>=1&&n<=21;});
+    var initialTasks=(search.get('tasks')||'').split(',').map(Number).filter(function(n){return Number.isSafeInteger(n)&&n>=1&&n<=maximum;});
     chosen=Array.from(new Set(initialTasks)).sort(function(a,b){return a-b;});
-    level=['profile','basic'].includes(search.get('level'))?search.get('level'):'all';
+    level=!isOge&&['profile','basic'].includes(search.get('level'))?search.get('level'):'all';
     match=['contains','any','exact'].includes(search.get('match'))?search.get('match'):'contains';
     function syncButtons(){
-      document.querySelectorAll('[data-ege-level]').forEach(function(b){var on=b.dataset.egeLevel===level;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
-      document.querySelectorAll('[data-ege-match]').forEach(function(b){var on=b.dataset.egeMatch===match;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
-      buttons.forEach(function(b){var n=Number(b.dataset.task);var disabled=(level==='profile'&&n>19);b.disabled=disabled;var on=chosen.includes(n);b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
+      root.querySelectorAll('[data-ege-level]').forEach(function(b){var on=b.dataset.egeLevel===level;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
+      root.querySelectorAll('[data-'+exam+'-match]').forEach(function(b){var on=b.getAttribute('data-'+exam+'-match')===match;b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
+      buttons.forEach(function(b){var n=Number(b.dataset.task);var disabled=(!isOge&&level==='profile'&&n>19);b.disabled=disabled;var on=chosen.includes(n);b.classList.toggle('is-active',on);b.setAttribute('aria-pressed',on?'true':'false');});
     }
     function updateUrl(){
       if(!window.history||!window.history.replaceState)return;
       var qs=new URLSearchParams();
-      if(level!=='all')qs.set('level',level);
+      if(!isOge&&level!=='all')qs.set('level',level);
       if(chosen.length)qs.set('tasks',chosen.join(','));
       if(chosen.length&&match!=='contains')qs.set('match',match);
       try{window.history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs.toString():'')+location.hash);}catch(e){/* file:// and embedded previews may block history changes */}
     }
     function render(){
       var filtered=all.filter(function(m){
-        if(level!=='all'&&levelFor(m)!==level)return false;
+        if(!isOge&&level!=='all'&&levelFor(m)!==level)return false;
         var nums=taskNumbersFor(m);
         if(!chosen.length)return true;
         if(match==='exact')return chosen.length===nums.length&&chosen.every(function(n){return nums.includes(n);});
         if(match==='any')return chosen.some(function(n){return nums.includes(n);});
         return chosen.every(function(n){return nums.includes(n);});
       });
-      filtered.sort(function(a,b){var lA=levelFor(a),lB=levelFor(b);return lA.localeCompare(lB)||(numberFor(a)||Number.MAX_SAFE_INTEGER)-(numberFor(b)||Number.MAX_SAFE_INTEGER);});
-      replaceList(node,filtered.map(function(m){return makeRow(m,'ege-five');}),!all.length?'Пока нет опубликованных пятиминуток ЕГЭ. Здесь появятся первые архивы после добавления.':'По выбранным условиям материалов нет. Попробуйте другие номера заданий или нажмите «Сбросить».');
+      filtered.sort(function(a,b){var levels=isOge?0:levelFor(a).localeCompare(levelFor(b));return levels||(numberFor(a)||Number.MAX_SAFE_INTEGER)-(numberFor(b)||Number.MAX_SAFE_INTEGER);});
+      replaceList(node,filtered.map(function(m){return makeRow(m,exam+'-five');}),!all.length?'Пока нет опубликованных пятиминуток '+examLabel+'. Здесь появятся первые архивы после добавления.':'По выбранным условиям материалов нет. Попробуйте другие номера заданий или нажмите «Сбросить».');
       if(count)count.textContent='Найдено: '+filtered.length;
       if(selected)selected.textContent=chosen.length?'Задания: '+chosen.map(function(n){return '№ '+n;}).join(', '):'Задания не выбраны — показаны все материалы';
       syncButtons();
       updateUrl();
     }
     buttons.forEach(function(b){b.addEventListener('click',function(){var n=Number(b.dataset.task);if(chosen.includes(n))chosen=chosen.filter(function(x){return x!==n;});else chosen.push(n);chosen.sort(function(a,b){return a-b;});render();});});
-    bindChoiceButtons('[data-ege-level]',function(b){level=b.dataset.egeLevel; if(level==='profile')chosen=chosen.filter(function(n){return n<=19;});render();});
-    bindChoiceButtons('[data-ege-match]',function(b){match=b.dataset.egeMatch;render();});
-    var reset=document.getElementById('ege-reset');if(reset)reset.addEventListener('click',function(){level='all';match='contains';chosen=[];render();});
-    if(level==='profile')chosen=chosen.filter(function(n){return n<=19;});
+    if(!isOge)bindChoiceButtons('[data-ege-level]',function(b){level=b.dataset.egeLevel; if(level==='profile')chosen=chosen.filter(function(n){return n<=19;});render();},root);
+    bindChoiceButtons('[data-'+exam+'-match]',function(b){match=b.getAttribute('data-'+exam+'-match');render();},root);
+    var reset=document.getElementById(exam+'-reset');if(reset)reset.addEventListener('click',function(){level='all';match='contains';chosen=[];render();});
+    if(!isOge&&level==='profile')chosen=chosen.filter(function(n){return n<=19;});
     render();
   }
   function egeVariants(items){
@@ -139,6 +134,6 @@
   }
   fetch('methodical-materials.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('Materials unavailable');return r.json();}).then(function(payload){
     var items=Array.isArray(payload.items)?payload.items:[];
-    renderFiveminutes(items);renderFullVariants(items);renderDetail(items);egeFiveMinutes(items);egeVariants(items);
+    renderFullVariants(items);renderDetail(items);fiveMinutes(items,'oge');fiveMinutes(items,'ege');egeVariants(items);
   }).catch(function(err){console.warn('Методическая копилка: '+err.message);});
 })();
