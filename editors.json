@@ -8,7 +8,11 @@
       "buyLink": "https://payform.ru/awd0zTI/",
       "videoReviewFile": "/videos/lv_0_20261112084744.mp4",
       "videoReview": "",
-      "videoReviews": []
+      "videoReviews": [],
+      "gallery": [
+        "/images/editors/perelivashki-game.webp",
+        "/images/editors/perelivashki-question.webp"
+      ]
     },
     {
       "title": "Учебные гонки",
@@ -18,7 +22,11 @@
       "buyLink": "https://payform.ru/ded0XAL/",
       "videoReviewFile": "/videos/lv_0_20261112093553.mp4",
       "videoReview": "",
-      "videoReviews": []
+      "videoReviews": [],
+      "gallery": [
+        "/images/editors/uchebnye-gonki-game.webp",
+        "/images/editors/uchebnye-gonki-question.webp"
+      ]
     },
     {
       "title": "Игровой автомат",
@@ -28,7 +36,11 @@
       "buyLink": "https://payform.ru/hud0Ypx/",
       "videoReviewFile": "/videos/lv_0_20261112234152.mp4",
       "videoReview": "",
-      "videoReviews": []
+      "videoReviews": [],
+      "gallery": [
+        "/images/editors/igrovoy-avtomat-game.webp",
+        "/images/editors/igrovoy-avtomat-question.webp"
+      ]
     }
   ]
 }
