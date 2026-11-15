@@ -3638,6 +3638,13 @@ body.dark-theme .home-about-teaser {
 
 .home-reviews .reviews-grid {
   margin-top: 28px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 768px) {
+  .home-reviews .reviews-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .home-reviews .home-popular-actions {
