@@ -41,6 +41,27 @@
       "format": "ZIP",
       "publishDate": "2026-11-10",
       "pageUrl": ""
+    },
+    {
+      "id": "variant2",
+      "title": "Вариант 2",
+      "category": "pyatiminutki",
+      "section": "geometry",
+      "variantNumber": 2,
+      "level": "profile",
+      "taskNumbers": [
+        "15",
+        "16",
+        "17",
+        "18",
+        "19"
+      ],
+      "description": "Пятиминутка по геометрии. Включает в себя задания 15, 16, 17, 18, 19",
+      "composition": [],
+      "downloadFile": "downloads/Вариант 2.rar",
+      "format": "ZIP",
+      "publishDate": "",
+      "pageUrl": ""
     }
   ]
 }
