@@ -83,6 +83,44 @@
     return el;
   }
 
+  // Преобразуем URL в описаниях в безопасные, заметные ссылки.
+  function setDescriptionWithLinks(element, value) {
+    const text = String(value || '').trim() || 'Описание появится здесь.';
+    const fragment = document.createDocumentFragment();
+    const pattern = /https?:\/\/[^\s<>"']+/gi;
+    let last = 0;
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      fragment.append(document.createTextNode(text.slice(last, match.index)));
+      const raw = match[0];
+      const urlText = raw.replace(/[.,!?;:)}\]»]+$/g, '');
+      const trailing = raw.slice(urlText.length);
+      const url = safeUrl(urlText);
+      if (url && urlText) {
+        const link = document.createElement('a');
+        link.href = url.href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = urlText;
+        link.style.color = '#8b2635';
+        link.style.fontWeight = '700';
+        link.style.textDecoration = 'underline';
+        link.style.textUnderlineOffset = '3px';
+        link.style.backgroundColor = 'rgba(139,38,53,0.10)';
+        link.style.borderRadius = '3px';
+        link.style.padding = '1px 3px';
+        link.style.overflowWrap = 'anywhere';
+        fragment.append(link);
+      } else {
+        fragment.append(document.createTextNode(urlText));
+      }
+      if (trailing) fragment.append(document.createTextNode(trailing));
+      last = match.index + raw.length;
+    }
+    fragment.append(document.createTextNode(text.slice(last)));
+    element.replaceChildren(fragment);
+  }
+
   function collectImages(item) {
     const images = [];
     const seen = new Set();
@@ -218,7 +256,10 @@
       const heading = makeElement('h3',null,item.title);
       const short = String(item.description || '').trim();
       const excerpt = short.length > 155 ? short.slice(0,152).trimEnd() + '…' : short;
-      const descr = makeElement('p','editor-card__description', excerpt || 'Описание появится здесь.');
+      const descr = makeElement('p','editor-card__description');
+      // Не превращаем обрезанный URL в нерабочую ссылку.
+      if (short.length > 155) descr.textContent = excerpt;
+      else setDescriptionWithLinks(descr, excerpt);
       const bottom = makeElement('div','editor-card__bottom');
       const cost = makeElement('span','editor-card__price',priceText(item.price) || 'Цена уточняется');
       if (!priceText(item.price)) cost.classList.add('editor-card__price--unknown');
@@ -243,7 +284,7 @@
   function openModal(item, opener) {
     restoreFocus = opener || document.activeElement;
     title.textContent = item.title;
-    description.textContent = String(item.description || '').trim() || 'Описание появится здесь.';
+    setDescriptionWithLinks(description, item.description);
     renderGallery(item);
     priceEl.textContent = priceText(item.price);
     const url = safeUrl(item.buyLink);
