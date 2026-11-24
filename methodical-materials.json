@@ -62,6 +62,23 @@
       "format": "ZIP",
       "publishDate": "",
       "pageUrl": ""
+    },
+    {
+      "id": "ege-prof-v2",
+      "title": "Вариант 2",
+      "category": "pyatiminutki-ege",
+      "section": "geometry",
+      "variantNumber": 2,
+      "level": "profile",
+      "taskNumbers": [
+        "2"
+      ],
+      "description": "Все прототипы банка ФИПИ задание 2, векторы.",
+      "composition": [],
+      "downloadFile": "downloads/Вариант 2 векторы.rar",
+      "format": "RAR",
+      "publishDate": "2026-11-24",
+      "pageUrl": ""
     }
   ]
 }
